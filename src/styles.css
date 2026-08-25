@@ -3,9 +3,9 @@
     --bg-alt:#131313;
     --card:#161616;
     --border:#2a2a2a;
-    --text:#f2f2f2;
-    --text-dim:#9c9c9c;
-    --text-faint:#6b6b6b;
+    --text:#f5f5f5;
+    --text-dim:#c8c8c8;
+    --text-faint:#9b9b9b;
     --white:#ffffff;
     --maxw:1080px;
   }
@@ -57,7 +57,7 @@
   .hero h1 span{color:var(--text-faint);}
   .hero p.lead{
     font-size:18px; color:var(--text-dim); max-width:620px; margin-bottom:36px;
-    font-weight:300;
+    font-weight:400;
   }
   .tags{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px;}
   .tag{
@@ -90,7 +90,7 @@
   .section-num{font-size:13px; color:var(--text-faint); letter-spacing:2px; margin-bottom:14px;}
   .section-head h2{font-size:clamp(28px,4vw,42px); font-weight:900; letter-spacing:-0.5px; margin-bottom:14px;}
   .section-head .role{font-size:14px; color:var(--text-dim);}
-  .section-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin-top:18px; font-weight:300;}
+  .section-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin-top:18px; font-weight:400;}
 
   .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--border); margin:40px 0; border:1px solid var(--border);}
   .stat{background:var(--bg); padding:22px 18px;}
@@ -108,9 +108,9 @@
   }
   .my-part .mp-label{font-size:12px; letter-spacing:2px; color:var(--text-faint); font-weight:700; margin-bottom:12px;}
   .my-part h3{font-size:19px; font-weight:700; letter-spacing:-0.3px; margin-bottom:14px;}
-  .my-part p{font-size:15px; color:var(--text-dim); font-weight:300; margin-bottom:18px;}
+  .my-part p{font-size:15px; color:var(--text-dim); font-weight:400; margin-bottom:18px;}
   .my-part ul{list-style:none; display:grid; gap:11px;}
-  .my-part li{font-size:14px; color:var(--text-dim); font-weight:300; line-height:1.65; padding-left:18px; position:relative;}
+  .my-part li{font-size:14px; color:var(--text-dim); font-weight:400; line-height:1.65; padding-left:18px; position:relative;}
   .my-part li::before{content:"—"; position:absolute; left:0; color:var(--text-faint);}
   .my-part li b{color:var(--text); font-weight:500;}
 
@@ -127,20 +127,20 @@
   .detail-list{margin:36px 0; display:grid; gap:0; border-top:1px solid var(--border);}
   .detail-row{display:grid; grid-template-columns:140px 1fr; gap:24px; padding:20px 0; border-bottom:1px solid var(--border);}
   .detail-row dt{font-size:13px; color:var(--text-faint); font-weight:700;}
-  .detail-row dd{font-size:15px; color:var(--text-dim); font-weight:300;}
+  .detail-row dd{font-size:15px; color:var(--text-dim); font-weight:400;}
 
   /* SOS specific table */
   .table-wrap{margin:36px 0; overflow-x:auto; -webkit-overflow-scrolling:touch;}
   .price-table{width:100%; border-collapse:collapse; font-size:14px; min-width:520px;}
   .price-table th,.price-table td{border:1px solid var(--border); padding:12px 14px; text-align:left;}
   .price-table th{background:var(--card); font-weight:700; color:var(--text-dim); font-size:12px; letter-spacing:0.5px;}
-  .price-table td{color:var(--text-dim); font-weight:300;}
+  .price-table td{color:var(--text-dim); font-weight:400;}
   .price-table tr td:first-child{color:var(--text); font-weight:500;}
 
   /* CONTACT / FOOTER */
   footer{padding:90px 0 60px;}
   footer h2{font-size:clamp(30px,5vw,48px); font-weight:900; margin-bottom:20px; letter-spacing:-0.5px;}
-  footer p{color:var(--text-dim); max-width:520px; margin-bottom:36px; font-weight:300;}
+  footer p{color:var(--text-dim); max-width:520px; margin-bottom:36px; font-weight:400;}
   .contact-links{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:60px;}
   .foot-bottom{border-top:1px solid var(--border); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
   .foot-bottom span{font-size:13px; color:var(--text-faint);}
