@@ -106,14 +106,17 @@ function table(t) {
   const body = (t.rows || [])
     .map((r) => `          <tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`)
     .join("\n");
-  return `      <table class="price-table">
-        <thead>
-          <tr>${head}</tr>
-        </thead>
-        <tbody>
+  // 좁은 화면에서 열이 뭉개지지 않도록 스크롤 컨테이너로 감싼다
+  return `      <div class="table-wrap">
+        <table class="price-table">
+          <thead>
+            <tr>${head}</tr>
+          </thead>
+          <tbody>
 ${body}
-        </tbody>
-      </table>`;
+          </tbody>
+        </table>
+      </div>`;
 }
 
 const DEFAULT_BLOCKS = ["myPart", "gallery", "wideShot", "stats", "videos", "details", "table", "buttons"];

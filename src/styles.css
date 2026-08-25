@@ -130,7 +130,8 @@
   .detail-row dd{font-size:15px; color:var(--text-dim); font-weight:300;}
 
   /* SOS specific table */
-  .price-table{width:100%; border-collapse:collapse; margin:36px 0; font-size:14px;}
+  .table-wrap{margin:36px 0; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .price-table{width:100%; border-collapse:collapse; font-size:14px; min-width:520px;}
   .price-table th,.price-table td{border:1px solid var(--border); padding:12px 14px; text-align:left;}
   .price-table th{background:var(--card); font-weight:700; color:var(--text-dim); font-size:12px; letter-spacing:0.5px;}
   .price-table td{color:var(--text-dim); font-weight:300;}

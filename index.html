@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>최지환 — Game Designer Portfolio</title>
-<meta name="description" content="최지환의 게임 기획 포트폴리오 — BELIEF, SOS: Sands Of Sin, 엘브네아(Elvenea)">
+<meta name="description" content="최지환의 게임 기획 포트폴리오 — BELIEF, SOS: Sands Of Sin, 엘브네아(Elvenea), 좀비고등학교 게임 분석">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -145,7 +145,8 @@
   .detail-row dd{font-size:15px; color:var(--text-dim); font-weight:300;}
 
   /* SOS specific table */
-  .price-table{width:100%; border-collapse:collapse; margin:36px 0; font-size:14px;}
+  .table-wrap{margin:36px 0; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .price-table{width:100%; border-collapse:collapse; font-size:14px; min-width:520px;}
   .price-table th,.price-table td{border:1px solid var(--border); padding:12px 14px; text-align:left;}
   .price-table th{background:var(--card); font-weight:700; color:var(--text-dim); font-size:12px; letter-spacing:0.5px;}
   .price-table td{color:var(--text-dim); font-weight:300;}
@@ -188,6 +189,7 @@
       <a href="#belief">BELIEF</a>
       <a href="#sos">SOS</a>
       <a href="#elvenea">엘브네아</a>
+      <a href="#zombiehigh">좀비고</a>
       <a href="#contact">연락처</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
@@ -224,7 +226,7 @@
         </div>
         <div>
           <div class="meta-label">진행 프로젝트</div>
-          <div class="meta-value">BELIEF (AI 해커톤)<br>SOS: Sands Of Sin (팀 프로젝트)</div>
+          <div class="meta-value">BELIEF (AI 해커톤)<br>SOS: Sands Of Sin (팀 프로젝트)<br>좀비고등학교 게임 분석 (개인 작업)</div>
         </div>
         <div>
           <div class="meta-label">개발 경험</div>
@@ -344,16 +346,18 @@
         </div>
       </div>
 
-      <table class="price-table">
-        <thead>
-          <tr><th>출시가 시나리오</th><th>손익분기 판매량</th><th>전략적 판단</th></tr>
-        </thead>
-        <tbody>
+      <div class="table-wrap">
+        <table class="price-table">
+          <thead>
+            <tr><th>출시가 시나리오</th><th>손익분기 판매량</th><th>전략적 판단</th></tr>
+          </thead>
+          <tbody>
           <tr><td>$14.99</td><td>약 56,500부</td><td>가격 저항 최소, 분기점 판매량 가장 높음</td></tr>
           <tr><td>$17.99 (권장)</td><td>약 47,000부</td><td>가격 대비 할인 인식, 현실적 목표</td></tr>
           <tr><td>$19.99</td><td>약 42,400부</td><td>Hades급 포지셔닝, 품질 신뢰도 우선 필요</td></tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
 
       <div class="cta-row">
         <a class="btn btn-outline" href="files/SOS_마케팅기획_포트폴리오_최지환.pdf" target="_blank" rel="noopener">포트폴리오 전체 보기 (PDF) ↗</a>
@@ -436,6 +440,81 @@
 
       <div class="cta-row">
         <a class="btn btn-outline" href="files/엘브네아_소개포트폴리오.pdf" target="_blank" rel="noopener">프로젝트 소개 포트폴리오 보기 (PDF) ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZOMBIEHIGH -->
+  <section class="project reveal" id="zombiehigh">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-num">04 — GAME ANALYSIS</div>
+        <h2>좀비고등학교 <span style="color:var(--text-faint); font-weight:400; font-size:0.55em;">Analysis &amp; Proposal</span></h2>
+        <div class="role">MDA 프레임워크 기반 게임 분석 + 콘텐츠·이벤트 기획 제안 · 개인 작업 · 2026</div>
+        <p class="section-lead">4~5년간 플레이해온 유저 관점에서 12년째 서비스 중인 라이브 게임을 MDA(Mechanics–Dynamics–Aesthetics) 프레임워크로 분해하고, 분석에서 도출한 문제를 실제로 푸는 신규 콘텐츠 2건을 기획서로 제안한 개인 작업입니다.</p>
+      </div>
+
+      <div class="my-part">
+        <div class="mp-label">MY PART</div>
+        <h3>게임 분석 · 콘텐츠 제안 — 개인 작업 전체</h3>
+        <p>분석에서 끝내지 않고 제안까지 이어지도록 구성했습니다. 규칙에서 출발해 플레이 양상을 거쳐 재미에 도달하는 MDA 순서로 게임을 분해한 뒤, 그 과정에서 가장 약한 축으로 진단된 지점을 겨냥해 콘텐츠 기획서를 썼습니다. ‘무엇이 문제인가’와 ‘그래서 무엇을 만들 것인가’를 같은 근거 위에 올려두는 것이 목표였습니다.</p>
+        <ul>
+          <li><b>재미의 축을 5개로 나눠 완성도 차이를 진단</b> — Expression·Fellowship은 광장이라는 공간에서 이미 강하게 발현되는 반면, 성장 시스템이 담당해야 할 Challenge는 ‘전투력 자체가 크게 오르지 않는’ 규칙 때문에 반복 파밍이 도전이 아닌 노동으로 체감될 여지가 있다고 봤습니다.</li>
+          <li><b>스킨이 전투력과 분리된 규칙이 만드는 문화를 추적</b> — 파워가 아닌 정체성 경쟁이 되고, 그 결과 광장에서 코디를 전시·구경하는 활동이 자생합니다. 원래 미니게임 공간으로도 설계된 광장이 전시 활동에 편중되는 현상까지 같은 규칙으로 설명했습니다.</li>
+          <li><b>리부트 시스템 심화 분석 — 의도는 타당, 보상 설계가 문제</b> 구작 노후화를 막고 장기 행동 동기를 확보하려는 시즌제·초기화 구조 자체는 합리적이라고 판단했습니다. 다만 보상을 성장 재화 한 축에만 의존하게 설계해 기존 유저의 참여 유인이 사라지고 매칭 풀이 무너진 것으로 봤고, 좋은 의도도 보상이 한 축에 몰리면 실패한다는 것을 사례로 정리했습니다.</li>
+          <li><b>제안 ① 단독 소탕전 — 파티 매칭 장벽과 엔드콘텐츠 편중을 한 번에</b> 파티 없이 혼자 도전하는 랭킹형 솔로 레이드입니다. 웨이브마다 공격·생존·유틸 중 버프 1개를 고르는 로그라이트 구조로 매번 다른 빌드가 나오게 하고, 난이도 3단계와 주간 갱신으로 반복 도전 동기를 만들었습니다.</li>
+          <li><b>제안 ② 광장 낚시터 &amp; 로비 꾸미기 — 피로도를 비전투 콘텐츠로 분산</b> 1회 10~15초의 저압박 루프로 코디·사진 활동 사이사이 즐길 거리를 채우고, 2021년 종료된 ‘커스텀룸’의 후속으로 ‘내 공간을 꾸미는’ 자기표현 축을 하나 더 만들어 반복되는 스킨 판매에 대한 피로를 우회하도록 설계했습니다.</li>
+          <li><b>제안서에 밸런싱·리스크·도입 순서까지 포함</b> — 신규 콘텐츠가 기존 파티 레이드의 대체재가 되지 않도록 보상 재화를 분리하고, 실패해도 부분 보상으로 이탈을 막고, 클리어 타임 랭킹인 만큼 어뷰징 방지 로직을 설계 단계에서 함께 고려했습니다. 확률형 요소는 관련 법령에 따른 사전 고지를 전제로 했고, 낚시 → 로비 꾸미기 → BM 연동의 3단계 도입 순서를 제안해 1단계만으로도 반응 검증이 가능하도록 했습니다.</li>
+        </ul>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="num">MDA</div><div class="lbl">분석 프레임워크</div></div>
+        <div class="stat"><div class="num">5축</div><div class="lbl">재미 요소 진단</div></div>
+        <div class="stat"><div class="num">2건</div><div class="lbl">신규 콘텐츠 제안</div></div>
+        <div class="stat"><div class="num">3단계</div><div class="lbl">도입 로드맵</div></div>
+      </div>
+
+      <div class="detail-list">
+        <div class="detail-row">
+          <dt>분석 대상</dt>
+          <dd>좀비고등학교 — 도트 그래픽 2D 액션 게임(어썸피스) · 2014년 출시 후 12년째 서비스 중인 라이브 서비스 게임</dd>
+        </div>
+        <div class="detail-row">
+          <dt>분석 방법</dt>
+          <dd>MDA 프레임워크 — 규칙(Mechanics) → 플레이 양상(Dynamics) → 재미(Aesthetics) 순서로 분해. 정량 수치는 공개 정보를 참조하고, 커뮤니티 논의는 검증 가능한 구조적 이슈 위주로 정리</dd>
+        </div>
+        <div class="detail-row">
+          <dt>제안 ① 단독 소탕전</dt>
+          <dd>파티 없이 도전하는 랭킹형 솔로 레이드 — 웨이브별 버프 선택(공격·생존·유틸)으로 매번 다른 빌드, 난이도 3단계 · 주간 갱신, 개인 기록 기반 랭킹보드</dd>
+        </div>
+        <div class="detail-row">
+          <dt>제안 ② 광장 낚시터 &amp; 로비 꾸미기</dt>
+          <dd>1회 10~15초 저압박 낚시 루프 + 종료된 커스텀룸의 후속인 공간 꾸미기 — 성장과 무관한 비전투 생활 콘텐츠로 반복 피로도 분산</dd>
+        </div>
+        <div class="detail-row">
+          <dt>산출물</dt>
+          <dd>게임 분석 리포트(6쪽), 단독 소탕전 콘텐츠 기획서(4쪽, 와이어프레임 포함), 광장 낚시터 이벤트 기획서(4쪽, 와이어프레임 포함) — 전부 개인 작성</dd>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="price-table">
+          <thead>
+            <tr><th>난이도</th><th>입장 조건</th><th>도전 횟수</th><th>보상</th></tr>
+          </thead>
+          <tbody>
+          <tr><td>노멀</td><td>레벨 제한 없음</td><td>주 3회</td><td>기본 보상</td></tr>
+          <tr><td>하드</td><td>권장 전투력 이상</td><td>주 2회</td><td>상급 보상 + 주간 랭킹 반영</td></tr>
+          <tr><td>나이트메어</td><td>권장 전투력 최상위</td><td>주 1회</td><td>최상급 보상 + 시즌 랭킹 반영 + 한정 칭호</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="files/좀비고_게임분석리포트.pdf" target="_blank" rel="noopener">게임 분석 리포트 (PDF) ↗</a>
+        <a class="btn btn-outline" href="files/좀비고_단독소탕전_기획서.pdf" target="_blank" rel="noopener">단독 소탕전 기획서 (PDF) ↗</a>
+        <a class="btn btn-outline" href="files/좀비고_광장낚시터_기획서.pdf" target="_blank" rel="noopener">광장 낚시터 기획서 (PDF) ↗</a>
       </div>
     </div>
   </section>
