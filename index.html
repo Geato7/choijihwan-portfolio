@@ -113,6 +113,18 @@
   .gallery figure{position:relative;}
   .gallery figcaption{font-size:12px; color:var(--text-faint); margin-top:8px;}
 
+  .my-part{
+    border:1px solid var(--border); border-left:3px solid var(--white);
+    border-radius:6px; background:var(--card); padding:28px 30px; margin:40px 0;
+  }
+  .my-part .mp-label{font-size:12px; letter-spacing:2px; color:var(--text-faint); font-weight:700; margin-bottom:12px;}
+  .my-part h3{font-size:19px; font-weight:700; letter-spacing:-0.3px; margin-bottom:14px;}
+  .my-part p{font-size:15px; color:var(--text-dim); font-weight:300; margin-bottom:18px;}
+  .my-part ul{list-style:none; display:grid; gap:11px;}
+  .my-part li{font-size:14px; color:var(--text-dim); font-weight:300; line-height:1.65; padding-left:18px; position:relative;}
+  .my-part li::before{content:"—"; position:absolute; left:0; color:var(--text-faint);}
+  .my-part li b{color:var(--text); font-weight:500;}
+
   .wide-shot{margin:36px 0;}
   .wide-shot img{border:1px solid var(--border); border-radius:6px; width:100%;}
   .wide-shot figcaption{font-size:12px; color:var(--text-faint); margin-top:8px;}
@@ -158,6 +170,7 @@
     .detail-row{grid-template-columns:1fr; gap:6px;}
     .hero{padding:140px 0 70px;}
     section.project{padding:70px 0;}
+    .my-part{padding:22px 20px;}
   }
 </style>
 </head>
@@ -199,7 +212,7 @@
         <span class="tag">Notion 기획 문서화</span>
       </div>
       <div class="cta-row">
-        <a class="btn btn-primary" href="mailto:choijihwan123@gmail.com">이메일로 연락하기</a>
+        <a class="btn btn-primary" href="#contact">세부 연락처 ↓</a>
         <a class="btn btn-outline" href="#belief">프로젝트 보기 ↓</a>
       </div>
 
@@ -218,7 +231,7 @@
         </div>
         <div>
           <div class="meta-label">연락처</div>
-          <div class="meta-value">choijihwan123@gmail.com<br>서울특별시 동대문구</div>
+          <div class="meta-value">010-9968-9860<br>choijihwan123@gmail.com<br>서울특별시 동대문구</div>
         </div>
       </div>
     </div>
@@ -236,6 +249,27 @@
           대신 정보를 적절한 장소에 퍼뜨리거나 특정 인물에게 전달해, NPC가 성격·관계·기존 믿음을 바탕으로
           스스로 판단하고 행동하도록 유도하는 전략 시뮬레이션입니다.
         </p>
+      </div>
+
+      <div class="my-part">
+        <div class="mp-label">MY PART</div>
+        <h3>콘텐츠 기획 · 프로젝트 관리(PM)</h3>
+        <p>
+          3인 팀에서 전체 게임 기획(시나리오 · 시스템 · 콘텐츠)을 설계하고, 이를 팀원이 바로 작업할 수 있는
+          단위로 쪼개 전달하는 것이 제 핵심 역할이었습니다. 해커톤 기간 안에 플레이어블 빌드를 완성하는 것이
+          목표였기에, &lsquo;좋은 기획&rsquo;보다 &lsquo;팀이 실제로 따라갈 수 있는 구조&rsquo;를 만드는 데 무게를 뒀습니다.
+        </p>
+        <ul>
+          <li><b>정보 시스템을 두 갈래로 단순화</b> — 소문처럼 퍼지는 확산형(SPREAD)과 특정 인물이 받아야 하는
+            전달형(DELIVER). 카드 형태만 보면 사용법이 정해지도록 설계해 플레이어의 학습 비용을 줄였습니다.</li>
+          <li><b>콘텐츠 직접 설계</b> — 스테이지 4개, NPC 19명 전원 프로필(성격 · 관계 · 기존 믿음),
+            정보 카드 30장(10개 카테고리 × 3장), 신뢰 단계 5단계 표준, 피날레 메커니즘</li>
+          <li><b>미션 클리어 조건을 OR 로직으로</b> 설계해 플레이어가 한 가지 공략에만 묶이지 않도록 했습니다.</li>
+          <li><b>직군별 기획서 분리 전달</b> — 아트에는 스테이지 · NPC · 카드 콘텐츠 기획서를, 개발에는
+            턴 진행 · 카드 판정 · 신뢰 상태 전이 로직을 담은 시스템 기획서를 전달하고,
+            구현 중 발견된 이슈를 기획으로 피드백받아 반영했습니다.</li>
+          <li><b>PM 업무</b> — 노션 기획 허브(7개 DB) 구축, SFX 소싱, 팀 일정 조율</li>
+        </ul>
       </div>
 
       <div class="gallery">
@@ -295,6 +329,31 @@
         </p>
       </div>
 
+      <div class="my-part">
+        <div class="mp-label">MY PART</div>
+        <h3>가격 전략 · 광고 전략 — 개인 단독 담당</h3>
+        <p>
+          6인 팀 프로젝트에서 마케팅 · BM 파트를 혼자 맡아 계획서 전체를 설계하고 작성했습니다.
+          포지셔닝 문장(&ldquo;긴장감 있는 자원 관리 + 퍼즐적 전투 + 사후세계 세계관&rdquo;)을 먼저 확정하고,
+          이후의 모든 가격 · 광고 판단을 그 문장에서 역산하는 방식으로 짰습니다.
+        </p>
+        <ul>
+          <li><b>가격은 감이 아니라 계산으로</b> — 경쟁작 5종(Hades · Dead Cells · Slay the Spire ·
+            Darkest Dungeon · Rogue: Genesia)의 가격 분포에서 준거 가격과 품질 의심 하한선을 잡고,
+            신규 IP임을 감안해 $17.99~$19.99 구간으로 결론지었습니다.</li>
+          <li><b>손익분기점 직접 산출</b> — 9인 12개월 인건비에 간접비 · 기회비용을 반영해 실질 개발비를 잡고,
+            고정비와 Steam 수수료 30%를 제외한 공헌 마진 기준으로 출시가별 분기 판매량을 계산했습니다.</li>
+          <li><b>DLC · 에디션 구조 설계</b> — 기본판을 인위적으로 잘라 파는 캡티브 프로덕트를 지양하고,
+            OST · 아트북을 기본판 구매자에게 의미 있는 보완재로 구성했습니다.</li>
+          <li><b>세일 스케줄링(스키밍)</b> — 출시 1개월 정가 유지 → 3개월 20% → 6개월 30% → 1년 40~50%.
+            비정기 임의 할인은 준거 가격을 무너뜨리므로 공식 세일 기간으로 한정했습니다.</li>
+          <li><b>제약을 먼저 인정한 광고 전략</b> — 퍼블리셔도 예산도 없는 인디 팀이라는 조건에서
+            유료 광고보다 PR이 비용 대비 효과가 높다고 판단해 PR을 1순위로 재배치했습니다.</li>
+          <li><b>측정 가능한 목표 설정</b> — 인지도 → 정보 제공 → 호의적 태도 → 선호도 → 구매 전환의
+            5단계로 광고 목표를 나누고, &lsquo;출시 3개월 전 위시리스트 5,000개&rsquo;처럼 검증 가능한 수치로 잡았습니다.</li>
+        </ul>
+      </div>
+
       <div class="detail-list">
         <div class="detail-row">
           <dt>장르</dt>
@@ -340,6 +399,23 @@
           저는 전투 · AI · UI 관리 시스템을 C#으로 직접 스크립팅하고, 대화 시스템부터 사운드 연출까지
           플레이 경험 전반의 구현을 담당했습니다.
         </p>
+      </div>
+
+      <div class="my-part">
+        <div class="mp-label">MY PART</div>
+        <h3>시스템 구현 — Unity C# 스크립팅</h3>
+        <p>
+          기획과 아트가 나뉜 3인 팀에서 저는 게임이 실제로 &lsquo;돌아가게&rsquo; 만드는 쪽을 맡았습니다.
+          전투 · AI · UI 관리 시스템을 C#으로 직접 스크립팅하고, 대화 시스템 구축부터 사운드 · 이펙트 연출과
+          빌드 안정화까지 플레이 경험 전반의 구현을 책임졌습니다.
+        </p>
+        <ul>
+          <li><b>전투 · AI · UI 관리 시스템</b>을 C#으로 스크립팅해 액션 어드벤처의 기본 루프를 구현</li>
+          <li><b>Pixel Crushers 기반 대화 시스템</b>을 구축해 메인 퀘스트 진행과 연결</li>
+          <li><b>오디오 · 이펙트 연출과 파티클 시스템 최적화</b>로 연출과 성능의 균형을 조정</li>
+          <li><b>유니티짱(Unity-chan) 보이스 로컬라이제이션</b> 적용</li>
+          <li><b>빌드 디버깅 및 안정화</b> — 졸업전시 출품 빌드를 문제 없이 시연 가능한 상태로 마무리</li>
+        </ul>
       </div>
 
       <figure class="wide-shot">
@@ -404,7 +480,8 @@
       <h2>더 이야기하고 싶어요</h2>
       <p>포트폴리오에 대한 질문이나 협업 제안은 언제든 이메일로 편하게 연락 주세요.</p>
       <div class="contact-links">
-        <a class="btn btn-primary" href="mailto:choijihwan123@gmail.com">choijihwan123@gmail.com</a>
+        <a class="btn btn-primary" href="tel:01099689860">010-9968-9860</a>
+        <a class="btn btn-outline" href="mailto:choijihwan123@gmail.com">choijihwan123@gmail.com</a>
       </div>
       <div class="foot-bottom">
         <span>© 2026 최지환. All projects and documents on this site are original work.</span>
