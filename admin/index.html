@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>포트폴리오 편집기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a; --panel:#131313; --card:#191919; --border:#2c2c2c;
+    --text:#f2f2f2; --dim:#a0a0a0; --faint:#6b6b6b;
+    --accent:#4c9aff; --ok:#3fb950; --warn:#d29922; --err:#f85149;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Noto Sans KR',-apple-system,sans-serif;
+    font-size:14px; line-height:1.6; height:100vh; display:flex; flex-direction:column; overflow:hidden;
+  }
+  button{font-family:inherit; cursor:pointer;}
+  input,textarea{font-family:inherit; font-size:13px;}
+
+  /* ---------- 상단 바 ---------- */
+  .topbar{
+    display:flex; align-items:center; gap:12px; padding:12px 18px;
+    background:var(--panel); border-bottom:1px solid var(--border); flex-shrink:0; flex-wrap:wrap;
+  }
+  .topbar h1{font-size:15px; font-weight:700; margin-right:auto;}
+  .topbar h1 span{color:var(--faint); font-weight:400; font-size:13px; margin-left:8px;}
+  .btn{
+    border:1px solid var(--border); background:var(--card); color:var(--text);
+    padding:8px 14px; border-radius:6px; font-size:13px; font-weight:500; transition:.15s;
+  }
+  .btn:hover{border-color:var(--dim);}
+  .btn-primary{background:#fff; color:#0a0a0a; border-color:#fff; font-weight:700;}
+  .btn-primary:hover{background:#dcdcdc;}
+  .btn-primary:disabled{opacity:.45; cursor:not-allowed;}
+  .btn-sm{padding:4px 9px; font-size:12px;}
+  .btn-danger{color:var(--err); border-color:#40201f;}
+
+  #status{font-size:12px; color:var(--dim); min-width:0;}
+  #status.ok{color:var(--ok);} #status.err{color:var(--err);} #status.warn{color:var(--warn);}
+
+  /* ---------- 레이아웃 ---------- */
+  .main{display:grid; grid-template-columns:minmax(380px,1fr) 1fr; flex:1; min-height:0;}
+  .pane{overflow-y:auto; min-height:0;}
+  .form-pane{border-right:1px solid var(--border); padding:0 0 80px;}
+  .preview-pane{background:#0d0d0d; display:flex; flex-direction:column;}
+  .preview-head{
+    padding:8px 14px; border-bottom:1px solid var(--border); font-size:12px; color:var(--faint);
+    display:flex; align-items:center; gap:10px; flex-shrink:0;
+  }
+  .preview-head select{
+    background:var(--card); color:var(--text); border:1px solid var(--border);
+    border-radius:5px; padding:4px 8px; font-size:12px; font-family:inherit;
+  }
+  #preview{flex:1; border:none; background:#0a0a0a; width:100%;}
+  .frame-wrap{flex:1; display:flex; justify-content:center; overflow:auto; background:#060606;}
+  .frame-wrap.mobile #preview{max-width:400px; border-left:1px solid var(--border); border-right:1px solid var(--border);}
+
+  /* ---------- 폼 ---------- */
+  .group{border-bottom:1px solid var(--border);}
+  .group > summary{
+    padding:14px 18px; font-weight:700; font-size:13.5px; cursor:pointer; list-style:none;
+    display:flex; align-items:center; gap:8px; background:var(--panel);
+  }
+  .group > summary::-webkit-details-marker{display:none;}
+  .group > summary::before{content:"▸"; color:var(--faint); font-size:11px; transition:.15s;}
+  .group[open] > summary::before{transform:rotate(90deg);}
+  .group > summary:hover{background:#181818;}
+  .group .body{padding:6px 18px 20px;}
+  .group .tag-count{margin-left:auto; font-size:11px; color:var(--faint); font-weight:400;}
+
+  .field{margin:14px 0;}
+  .field > label{display:block; font-size:12px; color:var(--dim); margin-bottom:5px; font-weight:500;}
+  .field .hint{font-size:11px; color:var(--faint); margin-top:4px;}
+  input[type=text], textarea{
+    width:100%; background:var(--card); color:var(--text); border:1px solid var(--border);
+    border-radius:6px; padding:9px 11px; resize:vertical;
+  }
+  input[type=text]:focus, textarea:focus{outline:none; border-color:var(--accent);}
+  textarea{min-height:76px; line-height:1.65;}
+
+  .row{display:flex; gap:8px; align-items:flex-start;}
+  .row > *{flex:1; min-width:0;}
+  .row > .shrink{flex:0 0 auto;}
+
+  .item{
+    border:1px solid var(--border); border-radius:8px; padding:12px 13px;
+    margin-bottom:10px; background:var(--card);
+  }
+  .item-head{display:flex; align-items:center; gap:6px; margin-bottom:8px;}
+  .item-head .idx{font-size:11px; color:var(--faint); font-weight:700; margin-right:auto;}
+  .item .field{margin:9px 0;}
+  .item .field:first-of-type{margin-top:0;}
+
+  .add-btn{
+    width:100%; border:1px dashed var(--border); background:none; color:var(--dim);
+    padding:9px; border-radius:8px; font-size:12.5px;
+  }
+  .add-btn:hover{border-color:var(--accent); color:var(--accent);}
+
+  .sub-title{
+    font-size:12px; font-weight:700; color:var(--dim); margin:22px 0 9px;
+    padding-top:14px; border-top:1px solid var(--border); letter-spacing:.3px;
+  }
+  .blocks-order{display:flex; flex-wrap:wrap; gap:6px;}
+  .chip{
+    display:flex; align-items:center; gap:5px; background:var(--card);
+    border:1px solid var(--border); border-radius:999px; padding:4px 6px 4px 11px; font-size:12px;
+  }
+  .chip button{background:none; border:none; color:var(--faint); font-size:11px; padding:2px 3px;}
+  .chip button:hover{color:var(--text);}
+  .chip.empty{opacity:.45;}
+
+  table.grid{width:100%; border-collapse:collapse; font-size:12.5px;}
+  table.grid td{padding:2px;}
+  table.grid input{padding:6px 8px;}
+
+  /* ---------- 토큰 모달 ---------- */
+  .modal-bg{
+    position:fixed; inset:0; background:rgba(0,0,0,.7); display:none;
+    align-items:center; justify-content:center; z-index:50; padding:20px;
+  }
+  .modal-bg.on{display:flex;}
+  .modal{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:26px; max-width:520px; width:100%; max-height:85vh; overflow-y:auto;
+  }
+  .modal h2{font-size:16px; margin-bottom:10px;}
+  .modal p{font-size:13px; color:var(--dim); margin-bottom:14px;}
+  .modal ol{font-size:12.5px; color:var(--dim); margin:0 0 16px 18px; line-height:1.9;}
+  .modal code{background:var(--card); padding:2px 6px; border-radius:4px; font-size:12px; color:var(--text);}
+  .modal input{width:100%; background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:10px 12px; margin-bottom:8px;}
+  .notice{
+    background:#1d1a10; border:1px solid #3d3418; border-radius:6px;
+    padding:10px 12px; font-size:12px; color:#e0c675; margin-bottom:16px; line-height:1.6;
+  }
+  .modal-actions{display:flex; gap:8px; justify-content:flex-end; margin-top:6px;}
+
+  @media (max-width: 900px){
+    .main{grid-template-columns:1fr; grid-template-rows:1fr;}
+    .preview-pane{display:none;}
+    body.show-preview .form-pane{display:none;}
+    body.show-preview .preview-pane{display:flex;}
+    .topbar h1 span{display:none;}
+  }
+  @media (min-width: 901px){ #toggleView{display:none;} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>포트폴리오 편집기 <span id="repoName"></span></h1>
+  <span id="status">불러오는 중…</span>
+  <button class="btn btn-sm" id="toggleView">미리보기</button>
+  <button class="btn" id="reloadBtn" title="저장한 내용을 버리고 다시 불러옵니다">되돌리기</button>
+  <button class="btn" id="downloadBtn">파일로 저장</button>
+  <button class="btn btn-primary" id="saveBtn" disabled>사이트에 반영</button>
+</div>
+
+<div class="main">
+  <div class="pane form-pane" id="form"></div>
+  <div class="pane preview-pane">
+    <div class="preview-head">
+      <span>미리보기 — 실제 사이트와 동일하게 그려집니다</span>
+      <select id="viewMode" style="margin-left:auto">
+        <option value="desktop">데스크톱</option>
+        <option value="mobile">모바일</option>
+      </select>
+    </div>
+    <div class="frame-wrap" id="frameWrap"><iframe id="preview" title="미리보기"></iframe></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="tokenModal">
+  <div class="modal">
+    <h2>GitHub 토큰 등록</h2>
+    <p>웹에서 바로 사이트에 반영하려면 GitHub 토큰이 한 번 필요합니다.</p>
+    <div class="notice">
+      토큰은 <b>이 브라우저에만</b> 저장되고 서버로 전송되지 않습니다.
+      공용 PC에서는 등록하지 말고 &lsquo;파일로 저장&rsquo;을 쓰세요.
+    </div>
+    <ol>
+      <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--accent)">토큰 만들기 페이지</a>를 엽니다</li>
+      <li>Repository access → <code>Only select repositories</code> → 이 저장소만 선택</li>
+      <li>Permissions → Repository permissions → <code>Contents</code> 를 <code>Read and write</code> 로</li>
+      <li>Generate token 후 <code>github_pat_…</code> 값을 아래에 붙여넣기</li>
+    </ol>
+    <input type="password" id="tokenInput" placeholder="github_pat_… 또는 ghp_…" autocomplete="off">
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="tokenClear">삭제</button>
+      <button class="btn" id="tokenCancel">닫기</button>
+      <button class="btn btn-primary" id="tokenSave">등록</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { renderPage } from "../src/template.js";
+
+/* ===================== 설정 ===================== */
+const OWNER = "Geato7";
+const REPO  = "choijihwan-portfolio";
+const BRANCH = "main";
+const FILE  = "content.json";
+const TOKEN_KEY = "portfolio_editor_token";
+
+const BLOCK_LABELS = {
+  myPart: "중점 작업", gallery: "이미지 갤러리", wideShot: "큰 이미지",
+  stats: "숫자 지표", videos: "영상", details: "표(항목-설명)",
+  table: "표(행렬)", buttons: "버튼",
+};
+const ALL_BLOCKS = Object.keys(BLOCK_LABELS);
+
+/* ===================== 상태 ===================== */
+let content = null;
+let css = "";
+let originalJson = "";
+const $ = (id) => document.getElementById(id);
+const statusEl = $("status");
+
+function setStatus(msg, kind = "") {
+  statusEl.textContent = msg;
+  statusEl.className = kind;
+}
+
+/* ===================== 로드 ===================== */
+async function load() {
+  setStatus("불러오는 중…");
+  const bust = "?t=" + Date.now();
+  const [c, s] = await Promise.all([
+    fetch("../content.json" + bust).then((r) => r.json()),
+    fetch("../src/styles.css" + bust).then((r) => r.text()),
+  ]);
+  content = c;
+  css = s;
+  $("repoName").textContent = OWNER + "/" + REPO;
+  // renderForm 이 빈 블록/기본값을 채워 넣으므로, 그 뒤에 기준값을 잡아야
+  // 아무것도 안 고쳤는데 '수정됨'으로 뜨지 않는다.
+  renderForm();
+  originalJson = JSON.stringify(content);
+  renderPreview();
+  setStatus(localStorage.getItem(TOKEN_KEY) ? "준비됨" : "토큰 미등록 — 파일로 저장만 가능", localStorage.getItem(TOKEN_KEY) ? "ok" : "warn");
+  $("saveBtn").disabled = false;
+}
+
+/* ===================== 미리보기 ===================== */
+let previewTimer;
+function renderPreview() {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(() => {
+    try {
+      $("preview").srcdoc = renderPage(content, css);
+    } catch (e) {
+      setStatus("미리보기 오류: " + e.message, "err");
+    }
+  }, 250);
+}
+
+function changed() {
+  renderPreview();
+  const dirty = JSON.stringify(content) !== originalJson;
+  setStatus(dirty ? "수정됨 — 아직 반영 전" : "변경 없음", dirty ? "warn" : "");
+}
+
+/* ===================== 폼 위젯 ===================== */
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (v !== null && v !== undefined) n.setAttribute(k, v);
+  }
+  // 배열을 인자로 넘겨도 되도록 깊게 편다 (중첩 배열 → 텍스트 노드로 깨지는 것 방지)
+  for (const kid of kids.flat(Infinity)) {
+    if (kid == null || kid === false) continue;
+    n.append(kid.nodeType ? kid : document.createTextNode(kid));
+  }
+  return n;
+}
+
+function field(label, obj, key, { multiline = false, hint = "", placeholder = "" } = {}) {
+  const input = multiline
+    ? el("textarea", { placeholder })
+    : el("input", { type: "text", placeholder });
+  input.value = obj?.[key] ?? "";
+  if (multiline) input.style.minHeight = (String(obj?.[key] ?? "").length > 160 ? 120 : 76) + "px";
+  input.addEventListener("input", () => { obj[key] = input.value; changed(); });
+  return el("div", { class: "field" },
+    el("label", {}, label),
+    input,
+    hint ? el("div", { class: "hint" }, hint) : null
+  );
+}
+
+function iconBtn(text, title, onclick) {
+  return el("button", { class: "btn btn-sm shrink", title, onclick }, text);
+}
+
+// 배열 편집기: 항목 추가/삭제/순서변경 + 항목별 폼
+function listEditor(arr, makeFields, makeNew, { addLabel = "항목 추가", titleOf = null } = {}) {
+  const wrap = el("div");
+  const redraw = () => {
+    wrap.textContent = "";
+    arr.forEach((item, i) => {
+      const box = el("div", { class: "item" });
+      box.append(el("div", { class: "item-head" },
+        el("span", { class: "idx" }, titleOf ? `${i + 1}. ${titleOf(item)}` : `${i + 1}`),
+        iconBtn("↑", "위로", () => { if (i > 0) { [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]]; redraw(); changed(); } }),
+        iconBtn("↓", "아래로", () => { if (i < arr.length - 1) { [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]]; redraw(); changed(); } }),
+        el("button", { class: "btn btn-sm btn-danger shrink", title: "삭제",
+          onclick: () => { if (confirm("이 항목을 삭제할까요?")) { arr.splice(i, 1); redraw(); changed(); } } }, "삭제")
+      ));
+      makeFields(item, box, i);
+      wrap.append(box);
+    });
+    wrap.append(el("button", { class: "add-btn", onclick: () => { arr.push(makeNew()); redraw(); changed(); } }, "+ " + addLabel));
+  };
+  redraw();
+  return wrap;
+}
+
+// 문자열 배열(태그, 여러 줄) 편집기
+function stringList(arr, placeholder, addLabel) {
+  const wrap = el("div");
+  const redraw = () => {
+    wrap.textContent = "";
+    arr.forEach((v, i) => {
+      const input = el("input", { type: "text", placeholder });
+      input.value = v;
+      input.addEventListener("input", () => { arr[i] = input.value; changed(); });
+      wrap.append(el("div", { class: "row", style: "margin-bottom:6px" },
+        input,
+        iconBtn("↑", "위로", () => { if (i > 0) { [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]]; redraw(); changed(); } }),
+        iconBtn("↓", "아래로", () => { if (i < arr.length - 1) { [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]]; redraw(); changed(); } }),
+        el("button", { class: "btn btn-sm btn-danger shrink", onclick: () => { arr.splice(i, 1); redraw(); changed(); } }, "×")
+      ));
+    });
+    wrap.append(el("button", { class: "add-btn", onclick: () => { arr.push(""); redraw(); changed(); } }, "+ " + addLabel));
+  };
+  redraw();
+  return wrap;
+}
+
+function group(title, countText, ...children) {
+  return el("details", { class: "group" },
+    el("summary", {}, title, countText ? el("span", { class: "tag-count" }, countText) : null),
+    el("div", { class: "body" }, children)
+  );
+}
+
+/* ===================== 이미지 업로드 ===================== */
+async function uploadImage(file, targetObj, key, refreshLabel) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) { openTokenModal(); return; }
+  if (file.size > 4 * 1024 * 1024) {
+    if (!confirm(`${(file.size / 1048576).toFixed(1)}MB 입니다. 사이트가 느려질 수 있어요. 그래도 올릴까요?`)) return;
+  }
+  const safe = file.name.normalize("NFC").replace(/\s+/g, "_");
+  const path = `assets/uploads/${safe}`;
+  setStatus(`이미지 업로드 중… (${safe})`);
+  try {
+    const buf = new Uint8Array(await file.arrayBuffer());
+    let bin = "";
+    for (let i = 0; i < buf.length; i += 8192) bin += String.fromCharCode(...buf.subarray(i, i + 8192));
+    const sha = await getSha(path);
+    await ghPut(path, btoa(bin), `이미지 추가: ${safe}`, sha);
+    targetObj[key] = path;
+    refreshLabel();
+    changed();
+    setStatus("이미지 업로드 완료 — 사이트 반영은 [사이트에 반영] 버튼", "ok");
+  } catch (e) {
+    setStatus("업로드 실패: " + e.message, "err");
+  }
+}
+
+function imageField(label, obj, key) {
+  const f = field(label, obj, key, { hint: "예: assets/belief/01_title.jpg" });
+  const input = f.querySelector("input");
+  const picker = el("input", { type: "file", accept: "image/*", style: "display:none" });
+  picker.addEventListener("change", () => {
+    if (picker.files[0]) uploadImage(picker.files[0], obj, key, () => { input.value = obj[key]; });
+    picker.value = "";
+  });
+  f.append(el("div", { style: "margin-top:6px" },
+    el("button", { class: "btn btn-sm", onclick: () => picker.click() }, "이미지 파일 올리기"), picker));
+  return f;
+}
+
+/* ===================== 폼 조립 ===================== */
+function renderForm() {
+  const form = $("form");
+  form.textContent = "";
+
+  /* 사이트 */
+  form.append(group("사이트 정보", "",
+    field("브라우저 탭 제목", content.site, "title"),
+    field("검색엔진 설명문", content.site, "description", { multiline: true }),
+    field("좌측 상단 로고 텍스트", content.site, "logo"),
+  ));
+
+  /* 히어로 */
+  const h = content.hero;
+  form.append(group("첫 화면 (소개)", "",
+    field("작은 머리말", h, "eyebrow"),
+    el("div", { class: "row" }, field("이름", h, "name"), field("직함", h, "subtitle")),
+    field("소개 문장", h, "lead", { multiline: true }),
+    el("div", { class: "sub-title" }, "태그"),
+    stringList(h.tags, "예: 콘텐츠 기획", "태그 추가"),
+    el("div", { class: "sub-title" }, "버튼"),
+    listEditor(h.buttons,
+      (b, box) => {
+        box.append(field("버튼 글씨", b, "label"));
+        box.append(field("링크", b, "href", { hint: "#contact 처럼 # 로 시작하면 같은 페이지 안에서 이동합니다" }));
+        box.append(styleToggle(b));
+      },
+      () => ({ label: "새 버튼", href: "#contact", style: "outline", newTab: false }),
+      { addLabel: "버튼 추가", titleOf: (b) => b.label }),
+    el("div", { class: "sub-title" }, "요약 정보 (4칸)"),
+    listEditor(h.meta,
+      (m, box) => {
+        box.append(field("항목 이름", m, "label"));
+        box.append(el("div", { class: "field" }, el("label", {}, "내용 (줄바꿈 단위)"), stringList(m.lines, "내용", "줄 추가")));
+      },
+      () => ({ label: "새 항목", lines: [""] }),
+      { addLabel: "칸 추가", titleOf: (m) => m.label }),
+  ));
+
+  /* 프로젝트 */
+  content.projects.forEach((p, pi) => {
+    form.append(projectGroup(p, pi));
+  });
+
+  form.append(el("div", { style: "padding:16px 18px" },
+    el("button", { class: "add-btn", onclick: () => {
+      content.projects.push(newProject());
+      renderForm(); changed();
+    } }, "+ 프로젝트 추가")));
+
+  /* 연락처 */
+  const c = content.contact;
+  form.append(group("연락처 (맨 아래)", "",
+    field("제목", c, "heading"),
+    field("설명", c, "text", { multiline: true }),
+    el("div", { class: "row" }, field("전화번호", c, "phone"), field("이메일", c, "email")),
+    field("저작권 문구", c, "copyright"),
+  ));
+}
+
+function styleToggle(b) {
+  const wrap = el("div", { class: "field" });
+  const mk = (val, label) => {
+    const btn = el("button", { class: "btn btn-sm" + (b.style === val ? " btn-primary" : ""), onclick: () => {
+      b.style = val;
+      [...wrap.querySelectorAll("button")].forEach((x, i) => x.className = "btn btn-sm" + ((i === 0) === (val === "primary") ? " btn-primary" : ""));
+      changed();
+    } }, label);
+    return btn;
+  };
+  const newTab = el("label", { style: "display:flex; align-items:center; gap:6px; font-size:12px; color:var(--dim); margin-left:10px" });
+  const cb = el("input", { type: "checkbox" });
+  cb.checked = !!b.newTab;
+  cb.addEventListener("change", () => { b.newTab = cb.checked; changed(); });
+  newTab.append(cb, "새 탭에서 열기");
+  wrap.append(el("label", {}, "모양"),
+    el("div", { style: "display:flex; align-items:center; gap:6px" }, mk("primary", "강조(흰 버튼)"), mk("outline", "기본(테두리)"), newTab));
+  return wrap;
+}
+
+function ensureBlocks(p) {
+  if (!Array.isArray(p.blocks)) p.blocks = [...ALL_BLOCKS];
+  for (const b of ALL_BLOCKS) if (!p.blocks.includes(b)) p.blocks.push(b);
+}
+
+function blockHasContent(p, key) {
+  const v = p[key];
+  if (key === "myPart") return !!(v && v.heading);
+  if (key === "wideShot") return !!(v && v.src);
+  if (key === "table") return !!(v && v.headers && v.headers.length);
+  return Array.isArray(v) && v.length > 0;
+}
+
+function blockOrderUI(p) {
+  ensureBlocks(p);
+  const wrap = el("div", { class: "blocks-order" });
+  const redraw = () => {
+    wrap.textContent = "";
+    p.blocks.forEach((key, i) => {
+      const empty = !blockHasContent(p, key);
+      wrap.append(el("span", { class: "chip" + (empty ? " empty" : ""), title: empty ? "내용이 없어 표시되지 않습니다" : "" },
+        BLOCK_LABELS[key] || key,
+        el("button", { title: "앞으로", onclick: () => { if (i > 0) { [p.blocks[i - 1], p.blocks[i]] = [p.blocks[i], p.blocks[i - 1]]; redraw(); changed(); } } }, "◀"),
+        el("button", { title: "뒤로", onclick: () => { if (i < p.blocks.length - 1) { [p.blocks[i + 1], p.blocks[i]] = [p.blocks[i], p.blocks[i + 1]]; redraw(); changed(); } } }, "▶")
+      ));
+    });
+  };
+  redraw();
+  return wrap;
+}
+
+function projectGroup(p, pi) {
+  ensureBlocks(p);
+  const mp = p.myPart || (p.myPart = { heading: "", intro: "", bullets: [] });
+  if (!Array.isArray(mp.bullets)) mp.bullets = [];
+  for (const k of ["gallery", "stats", "videos", "details", "buttons"]) if (!Array.isArray(p[k])) p[k] = [];
+
+  const body = [
+    el("div", { class: "row" },
+      field("제목", p, "title"),
+      field("작은 영문 제목", p, "titleSub", { placeholder: "없으면 비워두기" })),
+    el("div", { class: "row" },
+      field("메뉴에 표시할 이름", p, "navLabel"),
+      field("번호/분류", p, "num", { placeholder: "01 — HACKATHON" })),
+    field("한 줄 역할 소개", p, "role", { multiline: true }),
+    field("프로젝트 설명", p, "lead", { multiline: true }),
+    field("주소용 id", p, "id", { hint: "영문 소문자. 바꾸면 메뉴 링크도 함께 바뀝니다" }),
+
+    el("div", { class: "sub-title" }, "블록 순서 (◀ ▶ 로 이동)"),
+    blockOrderUI(p),
+
+    el("div", { class: "sub-title" }, "중점 작업 (MY PART)"),
+    field("소제목", mp, "heading", { hint: "비워두면 이 블록 전체가 사라집니다" }),
+    field("도입 문단", mp, "intro", { multiline: true }),
+    listEditor(mp.bullets,
+      (b, box) => {
+        box.append(field("굵게 표시할 앞부분", b, "strong"));
+        box.append(field("이어지는 설명", b, "text", { multiline: true }));
+      },
+      () => ({ strong: "", text: "" }),
+      { addLabel: "항목 추가", titleOf: (b) => b.strong || "(제목 없음)" }),
+
+    el("div", { class: "sub-title" }, "이미지 갤러리 (2열)"),
+    listEditor(p.gallery,
+      (g, box) => {
+        box.append(imageField("이미지 경로", g, "src"));
+        box.append(field("설명(캡션)", g, "caption"));
+        box.append(field("대체 텍스트", g, "alt", { hint: "이미지가 안 보일 때 표시되는 글" }));
+      },
+      () => ({ src: "", alt: "", caption: "" }),
+      { addLabel: "이미지 추가", titleOf: (g) => g.caption || g.src }),
+
+    el("div", { class: "sub-title" }, "큰 이미지 (가로 전체)"),
+    ...(() => {
+      if (!p.wideShot) p.wideShot = { src: "", alt: "", caption: "" };
+      return [imageField("이미지 경로", p.wideShot, "src"),
+        field("설명(캡션)", p.wideShot, "caption"),
+        field("대체 텍스트", p.wideShot, "alt")];
+    })(),
+
+    el("div", { class: "sub-title" }, "숫자 지표"),
+    listEditor(p.stats,
+      (s, box) => box.append(el("div", { class: "row" }, field("숫자", s, "num"), field("설명", s, "label"))),
+      () => ({ num: "", label: "" }),
+      { addLabel: "지표 추가", titleOf: (s) => s.num }),
+
+    el("div", { class: "sub-title" }, "영상 (유튜브)"),
+    listEditor(p.videos,
+      (v, box) => {
+        box.append(field("유튜브 ID", v, "youtubeId", { hint: "youtu.be/XwLnETlrPq8 → XwLnETlrPq8 부분만" }));
+        box.append(field("영상 아래 표시할 이름", v, "label"));
+      },
+      () => ({ youtubeId: "", label: "", title: "" }),
+      { addLabel: "영상 추가", titleOf: (v) => v.label || v.youtubeId }),
+
+    el("div", { class: "sub-title" }, "표 (항목 — 설명)"),
+    listEditor(p.details,
+      (d, box) => {
+        box.append(field("항목", d, "term"));
+        box.append(field("설명", d, "desc", { multiline: true }));
+      },
+      () => ({ term: "", desc: "" }),
+      { addLabel: "행 추가", titleOf: (d) => d.term }),
+
+    el("div", { class: "sub-title" }, "표 (행렬형)"),
+    gridEditor(p),
+
+    el("div", { class: "sub-title" }, "버튼"),
+    listEditor(p.buttons,
+      (b, box) => {
+        box.append(field("버튼 글씨", b, "label"));
+        box.append(field("링크", b, "href", { hint: "files/파일이름.pdf 또는 https://…" }));
+        box.append(styleToggle(b));
+      },
+      () => ({ label: "", href: "", style: "outline", newTab: true }),
+      { addLabel: "버튼 추가", titleOf: (b) => b.label }),
+
+    el("div", { class: "sub-title" }, "프로젝트 삭제"),
+    el("button", { class: "btn btn-danger", onclick: () => {
+      if (confirm(`'${p.title}' 프로젝트를 통째로 삭제할까요?`)) {
+        content.projects.splice(pi, 1); renderForm(); changed();
+      }
+    } }, "이 프로젝트 삭제"),
+  ];
+
+  const g = group(`프로젝트 — ${p.title}`, "", body);
+  const summary = g.querySelector("summary");
+  summary.append(
+    iconBtn("↑", "위로", (e) => { e.stopPropagation(); if (pi > 0) { const a = content.projects; [a[pi - 1], a[pi]] = [a[pi], a[pi - 1]]; renderForm(); changed(); } }),
+    iconBtn("↓", "아래로", (e) => { e.stopPropagation(); const a = content.projects; if (pi < a.length - 1) { [a[pi + 1], a[pi]] = [a[pi], a[pi + 1]]; renderForm(); changed(); } })
+  );
+  return g;
+}
+
+function gridEditor(p) {
+  const wrap = el("div");
+  const redraw = () => {
+    wrap.textContent = "";
+    const t = p.table;
+    if (!t || !t.headers) {
+      wrap.append(el("button", { class: "add-btn", onclick: () => {
+        p.table = { headers: ["", "", ""], rows: [["", "", ""]] }; redraw(); changed();
+      } }, "+ 표 만들기"));
+      return;
+    }
+    const tbl = el("table", { class: "grid" });
+    const headRow = el("tr");
+    t.headers.forEach((hv, ci) => {
+      const inp = el("input", { type: "text", placeholder: "머리글" });
+      inp.value = hv;
+      inp.style.fontWeight = "700";
+      inp.addEventListener("input", () => { t.headers[ci] = inp.value; changed(); });
+      headRow.append(el("td", {}, inp));
+    });
+    headRow.append(el("td", { style: "width:34px" }));
+    tbl.append(headRow);
+
+    t.rows.forEach((row, ri) => {
+      const tr = el("tr");
+      t.headers.forEach((_, ci) => {
+        const inp = el("input", { type: "text" });
+        inp.value = row[ci] ?? "";
+        inp.addEventListener("input", () => { row[ci] = inp.value; changed(); });
+        tr.append(el("td", {}, inp));
+      });
+      tr.append(el("td", {}, el("button", { class: "btn btn-sm btn-danger",
+        onclick: () => { t.rows.splice(ri, 1); redraw(); changed(); } }, "×")));
+      tbl.append(tr);
+    });
+    wrap.append(tbl);
+    wrap.append(el("div", { class: "row", style: "margin-top:8px" },
+      el("button", { class: "add-btn", onclick: () => { t.rows.push(t.headers.map(() => "")); redraw(); changed(); } }, "+ 행 추가"),
+      el("button", { class: "add-btn", onclick: () => { t.headers.push(""); t.rows.forEach((r) => r.push("")); redraw(); changed(); } }, "+ 열 추가"),
+      el("button", { class: "btn btn-sm btn-danger shrink", onclick: () => {
+        if (confirm("표 전체를 삭제할까요?")) { p.table = null; redraw(); changed(); }
+      } }, "표 삭제")));
+  };
+  redraw();
+  return wrap;
+}
+
+function newProject() {
+  return {
+    id: "project-" + (content.projects.length + 1),
+    navLabel: "새 프로젝트", num: "", title: "새 프로젝트", titleSub: "",
+    role: "", lead: "", blocks: [...ALL_BLOCKS],
+    myPart: { heading: "", intro: "", bullets: [] },
+    gallery: [], wideShot: null, stats: [], videos: [], details: [], table: null, buttons: [],
+  };
+}
+
+/* ===================== GitHub 저장 ===================== */
+function ghHeaders() {
+  return {
+    Authorization: "Bearer " + localStorage.getItem(TOKEN_KEY),
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+}
+
+async function getSha(path) {
+  const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURI(path)}?ref=${BRANCH}`, { headers: ghHeaders() });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(`${r.status} ${(await r.json()).message || ""}`);
+  return (await r.json()).sha;
+}
+
+async function ghPut(path, base64, message, sha) {
+  const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURI(path)}`, {
+    method: "PUT",
+    headers: { ...ghHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ message, content: base64, branch: BRANCH, ...(sha ? { sha } : {}) }),
+  });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    throw new Error(`${r.status} ${err.message || "요청 실패"}`);
+  }
+  return r.json();
+}
+
+function toBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
+  return btoa(bin);
+}
+
+async function save() {
+  if (!localStorage.getItem(TOKEN_KEY)) { openTokenModal(); return; }
+  const json = JSON.stringify(content, null, 2) + "\n";
+  $("saveBtn").disabled = true;
+  setStatus("저장 중…");
+  try {
+    const sha = await getSha(FILE);
+    await ghPut(FILE, toBase64(json), "내용 수정 (웹 에디터)", sha);
+    originalJson = JSON.stringify(content);
+    setStatus("저장 완료 — 20초쯤 뒤 사이트에 반영됩니다", "ok");
+  } catch (e) {
+    setStatus("저장 실패: " + e.message, "err");
+    if (String(e.message).startsWith("401") || String(e.message).startsWith("403")) openTokenModal();
+  } finally {
+    $("saveBtn").disabled = false;
+  }
+}
+
+/* ===================== 토큰 모달 ===================== */
+function openTokenModal() {
+  $("tokenInput").value = localStorage.getItem(TOKEN_KEY) || "";
+  $("tokenModal").classList.add("on");
+}
+$("tokenSave").onclick = () => {
+  const v = $("tokenInput").value.trim();
+  if (v) localStorage.setItem(TOKEN_KEY, v);
+  $("tokenModal").classList.remove("on");
+  setStatus(v ? "토큰 등록됨" : "토큰 미등록", v ? "ok" : "warn");
+};
+$("tokenClear").onclick = () => {
+  localStorage.removeItem(TOKEN_KEY);
+  $("tokenInput").value = "";
+  $("tokenModal").classList.remove("on");
+  setStatus("토큰 삭제됨 — 파일로 저장만 가능", "warn");
+};
+$("tokenCancel").onclick = () => $("tokenModal").classList.remove("on");
+$("tokenModal").onclick = (e) => { if (e.target === $("tokenModal")) $("tokenModal").classList.remove("on"); };
+
+/* ===================== 상단 버튼 ===================== */
+$("saveBtn").onclick = save;
+$("downloadBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(content, null, 2) + "\n"], { type: "application/json" });
+  const a = el("a", { href: URL.createObjectURL(blob), download: "content.json" });
+  document.body.append(a); a.click(); a.remove();
+  setStatus("content.json 내려받음 — 저장소에 올리면 반영됩니다", "ok");
+};
+$("reloadBtn").onclick = () => {
+  if (JSON.stringify(content) !== originalJson && !confirm("수정한 내용이 사라집니다. 계속할까요?")) return;
+  load();
+};
+$("toggleView").onclick = () => {
+  document.body.classList.toggle("show-preview");
+  $("toggleView").textContent = document.body.classList.contains("show-preview") ? "편집으로" : "미리보기";
+};
+$("viewMode").onchange = (e) => {
+  $("frameWrap").classList.toggle("mobile", e.target.value === "mobile");
+};
+window.addEventListener("beforeunload", (e) => {
+  if (JSON.stringify(content) !== originalJson) { e.preventDefault(); e.returnValue = ""; }
+});
+
+// 토큰 등록 진입점 (상태 표시 클릭)
+statusEl.style.cursor = "pointer";
+statusEl.title = "GitHub 토큰 등록/삭제";
+statusEl.onclick = openTokenModal;
+
+load().catch((e) => setStatus("불러오기 실패: " + e.message, "err"));
+</script>
+
+</body>
+</html>
