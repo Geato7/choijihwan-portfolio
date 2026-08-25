@@ -113,6 +113,10 @@
   .gallery figure{position:relative;}
   .gallery figcaption{font-size:12px; color:var(--text-faint); margin-top:8px;}
 
+  .wide-shot{margin:36px 0;}
+  .wide-shot img{border:1px solid var(--border); border-radius:6px; width:100%;}
+  .wide-shot figcaption{font-size:12px; color:var(--text-faint); margin-top:8px;}
+
   .video-row{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:36px 0;}
   .video-box{border:1px solid var(--border); border-radius:6px; overflow:hidden; background:var(--card);}
   .video-box .ratio{position:relative; padding-top:56.25%;}
@@ -210,7 +214,7 @@
         </div>
         <div>
           <div class="meta-label">개발 경험</div>
-          <div class="meta-value">엘브네아 — Unity 3D 액션 RPG<br>졸업전시 프로젝트</div>
+          <div class="meta-value">엘브네아 — Unity 3D 액션 어드벤처<br>졸업전시 프로젝트</div>
         </div>
         <div>
           <div class="meta-label">연락처</div>
@@ -329,14 +333,43 @@
       <div class="section-head">
         <div class="section-num">03 — GRADUATION PROJECT</div>
         <h2>엘브네아 <span style="color:var(--text-faint); font-weight:400; font-size:0.55em;">Elvenea</span></h2>
-        <div class="role">Unity 3D 액션 RPG · 시스템 구현 · 졸업전시 프로젝트</div>
+        <div class="role">잊힌 낙원을 찾아서 · Unity 3D 액션 어드벤처 · 시스템 구현 담당 · 팀 &lsquo;화석 피라미드&rsquo; 3인 · 졸업전시 작품</div>
         <p class="section-lead">
-          전투·AI·UI 관리 시스템을 C#으로 직접 스크립팅하고, 대화 시스템부터 사운드 연출까지
-          플레이 경험 전반을 책임진 팀 개발 프로젝트입니다.
+          빛의 신 &lsquo;엘리에르&rsquo;가 봉인되고 어둠의 화신 &lsquo;카르엘&rsquo;에 의해 세계가 감정과 기억을 잃은 침묵에 빠진 뒤,
+          감응 능력을 지닌 유일한 존재가 탑을 정화하며 정령들과 감정을 공명해 나가는 판타지 액션 어드벤처입니다.
+          저는 전투 · AI · UI 관리 시스템을 C#으로 직접 스크립팅하고, 대화 시스템부터 사운드 연출까지
+          플레이 경험 전반의 구현을 담당했습니다.
         </p>
       </div>
 
+      <figure class="wide-shot">
+        <img src="assets/elvenea/main_visual.jpg" alt="엘브네아 메인 화면 — 숲속 유적과 크리스탈 제단" loading="lazy">
+        <figcaption>메인 화면 — 숲의 정령족 &lsquo;실바네&rsquo;의 감성을 담은 유적 배경</figcaption>
+      </figure>
+
+      <div class="stat-row">
+        <div class="stat"><div class="num">3인</div><div class="lbl">팀 &lsquo;화석 피라미드&rsquo;</div></div>
+        <div class="stat"><div class="num">Unity</div><div class="lbl">PC / C# 스크립팅</div></div>
+        <div class="stat"><div class="num">싱글</div><div class="lbl">메인 퀘스트 기반 진행</div></div>
+        <div class="stat"><div class="num">2025</div><div class="lbl">졸업전시 출품</div></div>
+      </div>
+
+      <div class="video-row">
+        <div class="video-box">
+          <div class="ratio"><iframe src="https://www.youtube-nocookie.com/embed/D06cSGH_yWs" title="엘브네아 프로젝트 소개 영상" allowfullscreen loading="lazy"></iframe></div>
+          <div class="video-label">프로젝트 소개 영상</div>
+        </div>
+        <div class="video-box">
+          <div class="ratio"><iframe src="https://www.youtube-nocookie.com/embed/L0Iu7vGDqYE" title="엘브네아 프로젝트 구현 영상" allowfullscreen loading="lazy"></iframe></div>
+          <div class="video-label">프로젝트 구현 영상</div>
+        </div>
+      </div>
+
       <div class="detail-list">
+        <div class="detail-row">
+          <dt>장르 / 플랫폼</dt>
+          <dd>액션 어드벤처 · PC (Unity 기반 제작) · 싱글 플레이 / 메인 퀘스트 진행</dd>
+        </div>
         <div class="detail-row">
           <dt>담당 업무</dt>
           <dd>전투 · AI · UI 관리 시스템 C# 스크립팅</dd>
@@ -357,6 +390,10 @@
           <dt>기타</dt>
           <dd>빌드 디버깅 및 안정화</dd>
         </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-outline" href="files/엘브네아_소개포트폴리오.pdf" target="_blank" rel="noopener">프로젝트 소개 포트폴리오 보기 (PDF) ↗</a>
       </div>
     </div>
   </section>
