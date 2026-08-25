@@ -11,19 +11,13 @@
 └── .github/workflows/deploy.yml ← main 푸시 시 자동 배포
 ```
 
-## 배포
+## 배포 상태
 
-1. GitHub에서 **Public** 저장소를 새로 만든다 (README/`.gitignore` 체크 해제, 빈 저장소로).
-2. 이 폴더에서 원격을 연결하고 푸시한다.
+**https://geato7.github.io/choijihwan-portfolio/** — 배포 완료.
 
-   ```bash
-   git remote add origin https://github.com/Geato7/choijihwan-portfolio.git
-   git push -u origin main
-   ```
-
-3. 저장소 **Settings → Pages → Build and deployment → Source** 를 **GitHub Actions** 로 선택한다.
-   (`deploy.yml`이 이미 있으므로 브랜치 선택은 필요 없다.)
-4. Actions 탭에서 워크플로가 초록불이 되면 `https://Geato7.github.io/choijihwan-portfolio/` 로 접속된다.
+`main`에 푸시하면 `.github/workflows/deploy.yml`이 자동으로 다시 배포한다.
+Settings에서 손댈 것은 없다 (Pages Source = GitHub Actions로 이미 설정됨,
+워크플로의 `enablement: true`가 꺼져 있어도 다시 켠다).
 
 ## 수정 후 재배포
 
