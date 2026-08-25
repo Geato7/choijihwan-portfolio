@@ -6,7 +6,7 @@
 .
 ├── index.html                  ← 사이트 본체 (수정은 이 파일만)
 ├── assets/belief/              ← BELIEF 스크린샷 4장
-├── files/                      ← 다운로드용 포트폴리오 원본(.docx)
+├── files/                      ← 포트폴리오 PDF (브라우저에서 바로 열림)
 ├── .nojekyll                   ← Jekyll 빌드 우회 (경로 그대로 서빙)
 └── .github/workflows/deploy.yml ← main 푸시 시 자동 배포
 ```
