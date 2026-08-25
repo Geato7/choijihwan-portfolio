@@ -12,8 +12,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script>
+  // 첫 페인트 전에 테마를 정한다 (새로고침 때 흰 화면이 번쩍이는 것 방지)
+  (function(){
+    try{
+      var saved = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+    }catch(e){
+      document.documentElement.setAttribute('data-theme','dark');
+    }
+  })();
+</script>
 <style>
-:root{
+/* ---------------------------------------------------------------
+   테마 — 기본은 다크. <html data-theme="light"> 면 라이트.
+   색을 바꿀 땐 아래 두 블록의 값만 고치면 사이트 전체에 반영된다.
+   --------------------------------------------------------------- */
+  :root, :root[data-theme="dark"]{
+    color-scheme:dark;
     --bg:#0a0a0a;
     --bg-alt:#131313;
     --card:#161616;
@@ -21,13 +37,37 @@
     --text:#f5f5f5;
     --text-dim:#d7d7d7;
     --text-faint:#b2b2b2;
-    --white:#ffffff;
+    --nav-bg:rgba(10,10,10,0.85);
+    --solid:#ffffff;          /* 강조 버튼 배경 */
+    --solid-text:#0a0a0a;     /* 강조 버튼 글씨 */
+    --solid-hover:#dcdcdc;
+    --hover-text:#ffffff;     /* 메뉴 hover */
+    --accent-line:#ffffff;    /* MY PART 왼쪽 선 */
+  }
+  :root[data-theme="light"]{
+    color-scheme:light;
+    --bg:#ffffff;
+    --bg-alt:#f7f7f8;
+    --card:#f5f5f6;
+    --border:#e3e3e5;
+    --text:#16171a;
+    --text-dim:#45474d;
+    --text-faint:#5c5e64;
+    --nav-bg:rgba(255,255,255,0.85);
+    --solid:#16171a;
+    --solid-text:#ffffff;
+    --solid-hover:#34363c;
+    --hover-text:#16171a;
+    --accent-line:#16171a;
+  }
+  :root{
     --maxw:1080px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
     background:var(--bg);
+    transition:background-color .25s ease, color .25s ease;
     color:var(--text);
     font-family:'Noto Sans KR', -apple-system, sans-serif;
     line-height:1.7;
@@ -40,7 +80,8 @@
   /* NAV */
   header.nav{
     position:fixed; top:0; left:0; right:0; z-index:100;
-    background:rgba(10,10,10,0.85);
+    /* 모바일 드롭다운(.nav-links)이 헤더 높이를 기준으로 붙는다 */
+    background:var(--nav-bg);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--border);
   }
@@ -51,7 +92,21 @@
   .logo{font-weight:900; font-size:16px; letter-spacing:0.5px;}
   .nav-links{display:flex; gap:28px; font-size:14px; color:var(--text-dim);}
   .nav-links a{transition:color .2s;}
-  .nav-links a:hover{color:var(--white);}
+  .nav-links a:hover{color:var(--hover-text);}
+  .nav-actions{display:flex; align-items:center; gap:10px;}
+  .theme-toggle{
+    width:34px; height:34px; flex-shrink:0;
+    background:none; border:1px solid var(--border); border-radius:8px;
+    color:var(--text-dim); cursor:pointer; font-size:15px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    transition:color .2s, border-color .2s;
+  }
+  .theme-toggle:hover{color:var(--text); border-color:var(--text-faint);}
+  .theme-toggle svg{width:17px; height:17px; display:block;}
+  .theme-toggle .icon-moon{display:none;}
+  :root[data-theme="light"] .theme-toggle .icon-sun{display:none;}
+  :root[data-theme="light"] .theme-toggle .icon-moon{display:block;}
+
   .nav-toggle{display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer;}
   .nav-toggle span{width:22px; height:2px; background:var(--text);}
 
@@ -85,8 +140,8 @@
     padding:13px 24px; border-radius:8px; font-size:14px; font-weight:700;
     transition:all .2s; border:1px solid transparent;
   }
-  .btn-primary{background:var(--white); color:#0a0a0a;}
-  .btn-primary:hover{background:#dcdcdc;}
+  .btn-primary{background:var(--solid); color:var(--solid-text);}
+  .btn-primary:hover{background:var(--solid-hover);}
   .btn-outline{border-color:var(--border); color:var(--text);}
   .btn-outline:hover{border-color:var(--text-dim);}
 
@@ -118,7 +173,7 @@
   .gallery figcaption{font-size:12px; color:var(--text-faint); margin-top:8px;}
 
   .my-part{
-    border:1px solid var(--border); border-left:3px solid var(--white);
+    border:1px solid var(--border); border-left:3px solid var(--accent-line);
     border-radius:6px; background:var(--card); padding:28px 30px; margin:40px 0;
   }
   .my-part .mp-label{font-size:12px; letter-spacing:2px; color:var(--text-faint); font-weight:700; margin-bottom:12px;}
@@ -164,8 +219,8 @@
   .reveal.in{opacity:1; transform:translateY(0);}
 
   @media (max-width: 760px){
-    .nav-links{position:fixed; top:57px; left:0; right:0; background:var(--bg); flex-direction:column; gap:0; border-bottom:1px solid var(--border); max-height:0; overflow:hidden; transition:max-height .25s ease;}
-    .nav-links.open{max-height:280px;}
+    .nav-links{position:absolute; top:100%; left:0; right:0; background:var(--bg); flex-direction:column; gap:0; border-bottom:1px solid var(--border); max-height:0; overflow:hidden; transition:max-height .25s ease;}
+    .nav-links.open{max-height:460px;}   /* 메뉴 항목이 늘어나도 잘리지 않도록 여유 있게 */
     .nav-links a{padding:16px 28px; border-top:1px solid var(--border);}
     .nav-toggle{display:flex;}
     .meta-grid{grid-template-columns:repeat(2,1fr); row-gap:20px;}
@@ -192,9 +247,20 @@
       <a href="#zombiehigh">좀비고</a>
       <a href="#contact">연락처</a>
     </nav>
-    <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="밝은 화면 / 어두운 화면 전환" title="밝게 / 어둡게">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"></circle>
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"></path>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"></path>
+        </svg>
+      </button>
+      <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -543,6 +609,14 @@
   const navLinks = document.getElementById('navLinks');
   navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // 테마 전환 — 선택은 이 브라우저에 기억된다
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
 
   // scroll reveal
   const io = new IntersectionObserver((entries) => {

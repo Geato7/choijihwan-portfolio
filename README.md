@@ -84,6 +84,18 @@ python -m http.server 8000
 | `table` | 행렬형 표 |
 | `buttons` | 버튼 줄 |
 
+## 테마 (다크 / 라이트)
+
+우측 상단 버튼으로 전환한다. **기본은 다크**이고, 방문자가 고른 값은 그 브라우저에
+기억된다. 색은 [`src/styles.css`](src/styles.css) 맨 위 두 블록에만 정의돼 있다.
+
+- `:root, :root[data-theme="dark"]` — 다크 팔레트
+- `:root[data-theme="light"]` — 라이트 팔레트
+
+기본을 시스템 설정(OS의 다크모드 여부)에 맞추고 싶으면 `src/template.js` 의
+`<head>` 안 초기화 스크립트에서 저장값이 없을 때 `matchMedia('(prefers-color-scheme: dark)')`
+결과를 쓰도록 바꾸면 된다.
+
 ## 이미지 · PDF 교체
 
 - `assets/`, `files/` 에 파일을 올리고 `content.json` 의 경로만 맞추면 된다.
