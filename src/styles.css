@@ -189,8 +189,13 @@
   .foot-bottom{border-top:1px solid var(--border); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
   .foot-bottom span{font-size:13px; color:var(--text-faint);}
 
-  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
-  .reveal.in{opacity:1; transform:translateY(0);}
+  /* 등장 애니메이션.
+     숨김 상태(opacity:0)는 <html class="js"> 일 때만 적용한다.
+     자바스크립트가 꺼져 있거나 스크립트가 실행되지 못하면 js 클래스가 붙지 않으므로
+     내용이 처음부터 그냥 보인다 — 프로젝트 섹션이 통째로 사라지는 사고를 막는다. */
+  .reveal{transition:opacity .6s ease, transform .6s ease;}
+  html.js .reveal{opacity:0; transform:translateY(16px);}
+  html.js .reveal.in{opacity:1; transform:translateY(0);}
 
   @media (max-width: 760px){
     .nav-links{position:absolute; top:100%; left:0; right:0; background:var(--bg); flex-direction:column; gap:0; border-bottom:1px solid var(--border); max-height:0; overflow:hidden; transition:max-height .25s ease;}

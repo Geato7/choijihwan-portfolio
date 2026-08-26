@@ -224,12 +224,24 @@ export function renderPage(content, css) {
 <script>
   // 첫 페인트 전에 테마를 정한다 (새로고침 때 흰 화면이 번쩍이는 것 방지)
   (function(){
+    var el = document.documentElement;
     try{
       var saved = localStorage.getItem('theme');
-      document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+      el.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
     }catch(e){
-      document.documentElement.setAttribute('data-theme','dark');
+      el.setAttribute('data-theme','dark');
     }
+    // 등장 애니메이션의 '숨김' 상태는 이 클래스가 있을 때만 걸린다.
+    // 스크립트가 아예 실행되지 못하면 클래스가 없으니 내용이 그대로 보인다.
+    el.className += (el.className ? ' ' : '') + 'js';
+
+    // 아래쪽 스크립트가 오류로 죽어 관찰자가 안 붙는 경우를 대비한 안전장치.
+    // 정상 동작하면 __revealReady 가 true 라서 아무 일도 하지 않는다.
+    setTimeout(function(){
+      if (window.__revealReady) return;
+      var items = document.querySelectorAll('.reveal');
+      for (var i = 0; i < items.length; i++) items[i].classList.add('in');
+    }, 2000);
   })();
 </script>
 <style>
@@ -286,11 +298,17 @@ ${footer(contact)}
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
 
-  // scroll reveal
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  // scroll reveal — 실패하면 애니메이션을 포기하고 전부 보여준다
+  try {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    window.__revealReady = true;
+  } catch (err) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    window.__revealReady = true;
+  }
 </script>
 
 </body>
