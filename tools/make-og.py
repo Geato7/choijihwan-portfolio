@@ -5,6 +5,11 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import json
+
+# 사이트 본문과 같은 값을 쓴다 — 두 곳에 따로 적어두면 반드시 어긋난다
+with open(os.path.join(ROOT, "content.json"), encoding="utf-8") as fp:
+    HERO = json.load(fp)["hero"]
 
 OUT = ROOT
 W, H = 1200, 630
@@ -65,13 +70,13 @@ f_name = font(104, "Black")
 f_sub = font(37, "Medium")
 
 y = 214
-tracked(d, (X, y), "GAME DESIGNER PORTFOLIO", f_eyebrow, FAINT, 3.4)
+tracked(d, (X, y), HERO["eyebrow"].upper(), f_eyebrow, FAINT, 3.4)
 
 y += 52
-d.text((X, y), "최지환", font=f_name, fill=WHITE)
+d.text((X, y), HERO["name"], font=f_name, fill=WHITE)
 
 y += 138
-d.text((X, y), "Content · System Designer", font=f_sub, fill=DIM)
+d.text((X, y), HERO["subtitle"], font=f_sub, fill=DIM)
 
 path = os.path.join(OUT, "og-image.png")
 img.save(path, optimize=True)
