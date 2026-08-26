@@ -154,6 +154,39 @@ ${body}
   </section>`;
 }
 
+// 프로젝트 카드 인덱스 — 히어로 바로 아래. 긴 페이지의 목차 역할을 한다.
+function projectIndex(projects, title) {
+  if (projects.length < 2) return "";
+  const cards = projects
+    .map((p) => {
+      // 썸네일은 따로 지정하지 않으면 큰 이미지 → 갤러리 첫 장 순으로 자동 선택
+      const thumb = p.thumb || (p.wideShot && p.wideShot.src) || (p.gallery && p.gallery[0] && p.gallery[0].src) || "";
+      // "05 — TEAM PROJECT" 에서 분류만 떼어낸다 (이미지 없는 카드에 쓴다)
+      const kind = String(p.num || "").split("—").pop().trim();
+      const inner = thumb
+        ? `<img src="${attr(thumb)}" alt="" loading="lazy">`
+        : `<span class="pcard-noimg">${esc(kind || p.title)}</span>`;
+      return `        <a class="pcard" href="#${attr(p.id)}">
+          <span class="pcard-thumb">${inner}</span>
+          <span class="pcard-body">
+${has(p.num) ? `            <span class="pcard-num">${esc(p.num)}</span>\n` : ""}            <span class="pcard-title">${esc(p.title)}</span>
+            <span class="pcard-sum">${esc(p.cardSummary || p.role)}</span>
+          </span>
+        </a>`;
+    })
+    .join("\n");
+
+  return `  <!-- PROJECT INDEX -->
+  <section class="index-sec reveal" id="projects">
+    <div class="wrap">
+      <h2 class="index-title">${esc(title)}</h2>
+      <div class="index-grid">
+${cards}
+      </div>
+    </div>
+  </section>`;
+}
+
 function hero(h, firstProjectId) {
   const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
   const buttons = (h.buttons || []).map((b) => {
@@ -276,6 +309,8 @@ ${navLinks}
 <main>
 
 ${hero(h, projects[0]?.id)}
+
+${projectIndex(projects, site.projectsIndexTitle || "프로젝트")}
 
 ${projects.map(project).join("\n\n")}
 

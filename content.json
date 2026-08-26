@@ -5,7 +5,8 @@
     "description": "최지환의 게임 기획 포트폴리오 — BELIEF, SOS: Sands Of Sin, 엘브네아(Elvenea), 좀비고등학교 게임 분석, 부서진 요람(BROKEN CRADLE)",
     "logo": "최지환",
     "homeNavLabel": "소개",
-    "contactNavLabel": "연락처"
+    "contactNavLabel": "연락처",
+    "projectsIndexTitle": "프로젝트 한눈에 보기"
   },
   "hero": {
     "eyebrow": "Game Designer Portfolio",
@@ -29,7 +30,7 @@
       },
       {
         "label": "프로젝트 보기 ↓",
-        "href": "#belief",
+        "href": "#projects",
         "style": "outline",
         "newTab": false
       }
@@ -47,6 +48,7 @@
         "lines": [
           "BELIEF (AI 해커톤)",
           "SOS: Sands Of Sin (팀 프로젝트)",
+          "부서진 요람 (팀 프로젝트)",
           "좀비고등학교 게임 분석 (개인 작업)"
         ]
       },
@@ -177,7 +179,8 @@
           "style": "outline",
           "newTab": true
         }
-      ]
+      ],
+      "cardSummary": "정보를 퍼뜨려 NPC의 믿음을 움직이는 전략 시뮬레이션 — 콘텐츠 기획 · PM"
     },
     {
       "id": "sos",
@@ -272,7 +275,8 @@
           "style": "outline",
           "newTab": true
         }
-      ]
+      ],
+      "cardSummary": "경쟁작 가격 분포와 손익분기점으로 설계한 마케팅 계획서 — 가격 · 광고 전략 단독 담당"
     },
     {
       "id": "elvenea",
@@ -386,7 +390,8 @@
           "style": "outline",
           "newTab": true
         }
-      ]
+      ],
+      "cardSummary": "Unity 3D 액션 어드벤처 졸업작품 — 전투 · AI · UI 시스템 C# 구현"
     },
     {
       "id": "zombiehigh",
@@ -523,7 +528,8 @@
           "style": "outline",
           "newTab": true
         }
-      ]
+      ],
+      "cardSummary": "12년차 라이브 게임을 MDA로 분석하고 신규 콘텐츠 2건 제안 — 개인 작업"
     },
     {
       "id": "broken-cradle",
@@ -722,7 +728,8 @@
           "style": "primary",
           "newTab": true
         }
-      ]
+      ],
+      "cardSummary": "7일간의 생존 딜레마를 그린 심리 노벨 어드벤처 — 시나리오 · 대사 427줄 · 레벨 디자인"
     }
   ],
   "contact": {
