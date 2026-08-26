@@ -412,6 +412,7 @@
       "lead": "4~5년간 플레이해온 유저 관점에서 12년째 서비스 중인 라이브 게임을 MDA(Mechanics–Dynamics–Aesthetics) 프레임워크로 분해하고, 분석에서 도출한 문제를 실제로 푸는 신규 콘텐츠 2건을 기획서로 제안한 개인 작업입니다.",
       "blocks": [
         "myPart",
+        "gallery",
         "stats",
         "details",
         "table",
@@ -447,7 +448,28 @@
           }
         ]
       },
-      "gallery": [],
+      "gallery": [
+        {
+          "src": "assets/zombiehigh/raid_difficulty.jpg",
+          "alt": "단독 소탕전 난이도 선택 화면 와이어프레임",
+          "caption": "제안 ① 단독 소탕전 — 난이도 선택 / 입장 화면"
+        },
+        {
+          "src": "assets/zombiehigh/raid_battle.jpg",
+          "alt": "단독 소탕전 전투 화면 와이어프레임",
+          "caption": "제안 ① 전투 중 화면 — 웨이브 진행과 버프 선택"
+        },
+        {
+          "src": "assets/zombiehigh/fishing_main.jpg",
+          "alt": "광장 낚시터 메인 화면 와이어프레임",
+          "caption": "제안 ② 광장 낚시터 — 메인 화면"
+        },
+        {
+          "src": "assets/zombiehigh/lobby_deco.jpg",
+          "alt": "로비 꾸미기 메인 화면 와이어프레임",
+          "caption": "제안 ② 로비 꾸미기 — 아이템 배치 화면"
+        }
+      ],
       "wideShot": null,
       "stats": [
         {
@@ -538,7 +560,9 @@
           "newTab": true
         }
       ],
-      "cardSummary": "12년차 라이브 게임을 MDA로 분석하고 신규 콘텐츠 2건 제안 — 개인 작업"
+      "cardSummary": "12년차 라이브 게임을 MDA로 분석하고 신규 콘텐츠 2건 제안 — 개인 작업",
+      "thumb": "",
+      "galleryFit": "contain"
     },
     {
       "id": "broken-cradle",

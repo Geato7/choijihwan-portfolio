@@ -39,8 +39,10 @@ function myPart(mp) {
 ${has(mp.intro) ? `        <p>${esc(mp.intro)}</p>\n` : ""}${bullets ? `        <ul>\n${bullets}\n        </ul>\n` : ""}      </div>`;
 }
 
-function gallery(items) {
+function gallery(items, fit) {
   if (!has(items)) return "";
+  // 와이어프레임처럼 잘리면 안 되는 문서형 이미지는 fit="contain" 으로 통째로 보여준다
+  const cls = fit === "contain" ? "gallery gallery-fit" : "gallery";
   const figs = items
     .map(
       (g) => `        <figure>
@@ -48,7 +50,7 @@ function gallery(items) {
 ${has(g.caption) ? `          <figcaption>${esc(g.caption)}</figcaption>\n` : ""}        </figure>`
     )
     .join("\n");
-  return `      <div class="gallery">
+  return `      <div class="${cls}">
 ${figs}
       </div>`;
 }
@@ -124,7 +126,7 @@ const DEFAULT_BLOCKS = ["myPart", "gallery", "wideShot", "stats", "videos", "det
 function project(p) {
   const renderers = {
     myPart: () => myPart(p.myPart),
-    gallery: () => gallery(p.gallery),
+    gallery: () => gallery(p.gallery, p.galleryFit),
     wideShot: () => wideShot(p.wideShot),
     stats: () => stats(p.stats),
     videos: () => videos(p.videos),
@@ -160,7 +162,9 @@ function projectIndex(projects, title) {
   const cards = projects
     .map((p) => {
       // 썸네일은 따로 지정하지 않으면 큰 이미지 → 갤러리 첫 장 순으로 자동 선택
-      const thumb = p.thumb || (p.wideShot && p.wideShot.src) || (p.gallery && p.gallery[0] && p.gallery[0].src) || "";
+      // thumb 를 명시하면 그 값을 그대로 쓴다. 빈 문자열이면 "이미지 없음" 카드가 된다.
+      const thumb = p.thumb !== undefined ? p.thumb
+        : (p.wideShot && p.wideShot.src) || (p.gallery && p.gallery[0] && p.gallery[0].src) || "";
       // "05 — TEAM PROJECT" 에서 분류만 떼어낸다 (이미지 없는 카드에 쓴다)
       const kind = String(p.num || "").split("—").pop().trim();
       const inner = thumb
