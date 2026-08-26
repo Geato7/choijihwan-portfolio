@@ -42,7 +42,10 @@ ${has(mp.intro) ? `        <p>${esc(mp.intro)}</p>\n` : ""}${bullets ? `        
 function gallery(items, fit) {
   if (!has(items)) return "";
   // 와이어프레임처럼 잘리면 안 되는 문서형 이미지는 fit="contain" 으로 통째로 보여준다
-  const cls = fit === "contain" ? "gallery gallery-fit" : "gallery";
+  // contain = 정해진 칸 안에 통째로, natural = 이미지 원본 비율 그대로
+  const cls = fit === "contain" ? "gallery gallery-fit"
+    : fit === "natural" ? "gallery gallery-natural"
+    : "gallery";
   const figs = items
     .map(
       (g) => `        <figure>
