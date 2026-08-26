@@ -196,6 +196,7 @@
       "lead": "“시간이 곧 돈이고, 적을 죽여야만 살아남는 사후세계.” 신규 IP 인디 게임이라는 전제 아래, 경쟁작 가격 분포와 손익분기점을 근거로 가격 전략을, 한정된 예산을 전제로 PR 중심 광고 전략을 설계했습니다.",
       "blocks": [
         "myPart",
+        "wideShot",
         "details",
         "table",
         "buttons"
@@ -231,7 +232,11 @@
         ]
       },
       "gallery": [],
-      "wideShot": null,
+      "wideShot": {
+        "src": "assets/sos/title.jpg",
+        "alt": "SOS: Sands Of Sin 타이틀 화면 — 폐허가 된 사후세계와 거대한 모래시계",
+        "caption": "타이틀 화면 — 모래시계와 폐허로 표현한 사후세계 세계관"
+      },
       "stats": [],
       "videos": [],
       "details": [
