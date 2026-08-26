@@ -96,6 +96,24 @@ python -m http.server 8000
 `<head>` 안 초기화 스크립트에서 저장값이 없을 때 `matchMedia('(prefers-color-scheme: dark)')`
 결과를 쓰도록 바꾸면 된다.
 
+## 브랜드 마크 · 공유 미리보기
+
+파비콘과 링크 공유용 이미지는 `assets/brand/mark.png` 한 장에서 생성된다.
+마크를 바꾸려면 그 파일을 교체하고 두 스크립트를 실행한 뒤 커밋하면 된다.
+
+```bash
+python tools/make-icons.py
+```
+
+```bash
+python tools/make-og.py
+```
+
+- `favicon.ico` — 16px는 'CJ', 32/48px는 'CJH' 전체. 세 글자는 16px에서 뭉개지기 때문이다.
+- `og-image.png` — 1200×630. 카카오톡 썸네일(약 300px)에서도 읽히도록 이름과 직함만 크게 넣는다.
+- 공유 플랫폼은 이미지를 오래 캐시한다. 그림을 바꿨으면 `content.json` 의
+  `site.ogImageVersion` 숫자를 올려야 새 이미지가 반영된다.
+
 ## 이미지 · PDF 교체
 
 - `assets/`, `files/` 에 파일을 올리고 `content.json` 의 경로만 맞추면 된다.

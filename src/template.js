@@ -234,6 +234,10 @@ ${has(c.text) ? `      <p>${esc(c.text)}</p>\n` : ""}${links.length ? `      <di
 
 export function renderPage(content, css) {
   const { site, hero: h, projects = [], contact } = content;
+  // 공유 미리보기(og)용 절대 주소 — 상대 경로를 쓰면 카카오톡/슬랙이 이미지를 못 찾는다
+  const base = String(site.url || "").replace(/\/*$/, "/");
+  const ogImg = base && site.ogImage ? base + site.ogImage + (site.ogImageVersion ? "?v=" + site.ogImageVersion : "") : "";
+
   const navLinks = [
     `      <a href="#home">${esc(site.homeNavLabel || "소개")}</a>`,
     ...projects.map((p) => `      <a href="#${attr(p.id)}">${esc(p.navLabel || p.title)}</a>`),
@@ -251,6 +255,27 @@ export function renderPage(content, css) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(site.title)}</title>
 <meta name="description" content="${attr(site.description)}">
+${base ? `<link rel="canonical" href="${attr(base)}">` : ""}
+<meta name="theme-color" content="${attr(site.themeColor || "#0a0a0a")}">
+
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="${attr(site.title)}">
+<meta property="og:title" content="${attr(site.title)}">
+<meta property="og:description" content="${attr(site.description)}">
+<meta property="og:locale" content="ko_KR">${base ? `
+<meta property="og:url" content="${attr(base)}">` : ""}${ogImg ? `
+<meta property="og:image" content="${attr(ogImg)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${attr(site.title)}">` : ""}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${attr(site.title)}">
+<meta name="twitter:description" content="${attr(site.description)}">${ogImg ? `
+<meta name="twitter:image" content="${attr(ogImg)}">` : ""}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">

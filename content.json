@@ -6,7 +6,11 @@
     "logo": "최지환",
     "homeNavLabel": "소개",
     "contactNavLabel": "연락처",
-    "projectsIndexTitle": "프로젝트 한눈에 보기"
+    "projectsIndexTitle": "프로젝트 한눈에 보기",
+    "url": "https://geato7.github.io/choijihwan-portfolio/",
+    "ogImage": "og-image.png",
+    "ogImageVersion": "1",
+    "themeColor": "#0a0a0a"
   },
   "hero": {
     "eyebrow": "Game Designer Portfolio",
