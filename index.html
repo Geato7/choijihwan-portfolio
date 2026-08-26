@@ -122,7 +122,7 @@
     max-width:var(--maxw); margin:0 auto; padding:16px 28px;
     display:flex; align-items:center; justify-content:space-between;
   }
-  .logo{font-weight:900; font-size:16px; letter-spacing:0.5px;}
+  .logo{font-weight:600; font-size:16px; letter-spacing:-0.01em;}
   .nav-links{display:flex; gap:28px; font-size:14px; color:var(--text-dim);}
   .nav-links a{transition:color .2s;}
   .nav-links a:hover{color:var(--hover-text);}
@@ -153,8 +153,8 @@
     color:var(--text-faint); margin-bottom:20px; font-weight:500;
   }
   .hero h1{
-    font-size:clamp(36px,6vw,64px);
-    font-weight:900; letter-spacing:-1px; line-height:1.15;
+    font-size:clamp(42px,7.6vw,96px);
+    font-weight:500; letter-spacing:-0.05em; line-height:1.02;
     margin-bottom:22px;
   }
   .hero h1 span{color:var(--text-faint);}
@@ -189,7 +189,7 @@
 
   /* PROJECT INDEX — 히어로 아래 카드 목차 */
   .index-sec{padding:80px 0; border-bottom:1px solid var(--border);}
-  .index-title{font-size:clamp(22px,3vw,30px); font-weight:900; letter-spacing:-0.5px; margin-bottom:26px;}
+  .index-title{font-size:clamp(26px,4vw,48px); font-weight:500; letter-spacing:-0.04em; line-height:1.05; margin-bottom:28px;}
   .index-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
   .pcard{
     display:flex; flex-direction:column; overflow:hidden;
@@ -206,20 +206,20 @@
   .pcard-noimg{font-size:12px; letter-spacing:2px; color:var(--text-faint); text-align:center; padding:0 16px;}
   .pcard-body{display:block; padding:18px 18px 20px;}
   .pcard-num{display:block; font-size:11px; letter-spacing:1.5px; color:var(--text-faint); margin-bottom:8px;}
-  .pcard-title{display:block; font-size:18px; font-weight:700; letter-spacing:-0.3px; margin-bottom:8px;}
+  .pcard-title{display:block; font-size:20px; font-weight:500; letter-spacing:-0.02em; margin-bottom:8px;}
   .pcard-sum{display:block; font-size:13.5px; color:var(--text-dim); line-height:1.6;}
 
   /* SECTION GENERIC */
   section.project{padding:100px 0; border-bottom:1px solid var(--border);}
   .section-head{margin-bottom:48px;}
   .section-num{font-size:13px; color:var(--text-faint); letter-spacing:2px; margin-bottom:14px;}
-  .section-head h2{font-size:clamp(28px,4vw,42px); font-weight:900; letter-spacing:-0.5px; margin-bottom:14px;}
+  .section-head h2{font-size:clamp(32px,5.4vw,72px); font-weight:500; letter-spacing:-0.045em; line-height:1.03; margin-bottom:16px;}
   .section-head .role{font-size:14px; color:var(--text-dim);}
   .section-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin-top:18px; font-weight:400;}
 
   .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--border); margin:40px 0; border:1px solid var(--border);}
   .stat{background:var(--bg); padding:22px 18px;}
-  .stat .num{font-size:24px; font-weight:900; margin-bottom:4px;}
+  .stat .num{font-size:28px; font-weight:600; letter-spacing:-0.03em; margin-bottom:5px;}
   .stat .lbl{font-size:12px; color:var(--text-faint);}
 
   /* 칸을 늘리지 않고 내용 높이만큼만 쓴다.
@@ -238,7 +238,7 @@
     border-radius:6px; background:var(--card); padding:28px 30px; margin:40px 0;
   }
   .my-part .mp-label{font-size:12px; letter-spacing:2px; color:var(--text-faint); font-weight:700; margin-bottom:12px;}
-  .my-part h3{font-size:19px; font-weight:700; letter-spacing:-0.3px; margin-bottom:14px;}
+  .my-part h3{font-size:23px; font-weight:600; letter-spacing:-0.035em; line-height:1.25; margin-bottom:14px;}
   .my-part p{font-size:15px; color:var(--text-dim); font-weight:400; margin-bottom:18px;}
   .my-part ul{list-style:none; display:grid; gap:11px;}
   .my-part li{font-size:14px; color:var(--text-dim); font-weight:400; line-height:1.65; padding-left:18px; position:relative;}
@@ -270,7 +270,7 @@
 
   /* CONTACT / FOOTER */
   footer{padding:90px 0 60px;}
-  footer h2{font-size:clamp(30px,5vw,48px); font-weight:900; margin-bottom:20px; letter-spacing:-0.5px;}
+  footer h2{font-size:clamp(32px,5.4vw,72px); font-weight:500; margin-bottom:22px; letter-spacing:-0.045em; line-height:1.03;}
   footer p{color:var(--text-dim); max-width:520px; margin-bottom:36px; font-weight:400;}
   .contact-links{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:60px;}
   .foot-bottom{border-top:1px solid var(--border); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
