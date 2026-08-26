@@ -123,7 +123,7 @@ ${body}
 
 const DEFAULT_BLOCKS = ["myPart", "gallery", "wideShot", "stats", "videos", "details", "table", "buttons"];
 
-function project(p) {
+function project(p, featuredLabel) {
   const renderers = {
     myPart: () => myPart(p.myPart),
     gallery: () => gallery(p.gallery, p.galleryFit),
@@ -144,11 +144,19 @@ function project(p) {
     ? ` <span style="color:var(--text-faint); font-weight:400; font-size:0.55em;">${esc(p.titleSub)}</span>`
     : "";
 
+  const numLine = has(p.num) || has(p.date)
+    ? `        <div class="section-num">${esc(p.num)}${has(p.num) && has(p.date) ? " · " : ""}${has(p.date) ? `<span class="section-date">${esc(p.date)}</span>` : ""}</div>\n`
+    : "";
+  // featured 로 지정한 프로젝트에는 배지와 외곽선이 붙는다
+  const badge = p.featured && has(featuredLabel)
+    ? `        <div class="featured-badge">${esc(featuredLabel)}</div>\n`
+    : "";
+
   return `  <!-- ${esc(p.id).toUpperCase()} -->
-  <section class="project reveal" id="${attr(p.id)}">
+  <section class="project reveal${p.featured ? " project--featured" : ""}" id="${attr(p.id)}">
     <div class="wrap">
       <div class="section-head">
-${has(p.num) ? `        <div class="section-num">${esc(p.num)}</div>\n` : ""}        <h2>${esc(p.title)}${subtitle}</h2>
+${badge}${numLine}        <h2>${esc(p.title)}${subtitle}</h2>
 ${has(p.role) ? `        <div class="role">${esc(p.role)}</div>\n` : ""}${has(p.lead) ? `        <p class="section-lead">${esc(p.lead)}</p>\n` : ""}      </div>
 
 ${body}
@@ -173,7 +181,7 @@ function projectIndex(projects, title) {
       return `        <a class="pcard" href="#${attr(p.id)}">
           <span class="pcard-thumb">${inner}</span>
           <span class="pcard-body">
-${has(p.num) ? `            <span class="pcard-num">${esc(p.num)}</span>\n` : ""}            <span class="pcard-title">${esc(p.title)}</span>
+${has(p.num) || has(p.date) ? `            <span class="pcard-num">${esc(p.num)}${has(p.num) && has(p.date) ? " · " : ""}${esc(p.date)}</span>\n` : ""}            <span class="pcard-title">${esc(p.title)}</span>
             <span class="pcard-sum">${esc(p.cardSummary || p.role)}</span>
           </span>
         </a>`;
@@ -341,7 +349,7 @@ ${hero(h, projects[0]?.id)}
 
 ${projectIndex(projects, site.projectsIndexTitle || "프로젝트")}
 
-${projects.map(project).join("\n\n")}
+${projects.map((pr) => project(pr, site.featuredLabel)).join("\n\n")}
 
 ${footer(contact)}
 

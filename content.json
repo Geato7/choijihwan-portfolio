@@ -10,7 +10,8 @@
     "url": "https://geato7.github.io/choijihwan-portfolio/",
     "ogImage": "og-image.png",
     "ogImageVersion": "2",
-    "themeColor": "#0a0a0a"
+    "themeColor": "#0a0a0a",
+    "featuredLabel": "대표 프로젝트"
   },
   "hero": {
     "eyebrow": "Game Designer Portfolio",
@@ -184,7 +185,9 @@
           "newTab": true
         }
       ],
-      "cardSummary": "정보를 퍼뜨려 NPC의 믿음을 움직이는 전략 시뮬레이션 — 콘텐츠 기획 · PM"
+      "cardSummary": "정보를 퍼뜨려 NPC의 믿음을 움직이는 전략 시뮬레이션 — 콘텐츠 기획 · PM",
+      "date": "2026.07 – 08",
+      "featured": true
     },
     {
       "id": "sos",
@@ -285,7 +288,8 @@
           "newTab": true
         }
       ],
-      "cardSummary": "경쟁작 가격 분포와 손익분기점으로 설계한 마케팅 계획서 — 가격 · 광고 전략 단독 담당"
+      "cardSummary": "경쟁작 가격 분포와 손익분기점으로 설계한 마케팅 계획서 — 가격 · 광고 전략 단독 담당",
+      "date": "2026"
     },
     {
       "id": "elvenea",
@@ -400,7 +404,8 @@
           "newTab": true
         }
       ],
-      "cardSummary": "Unity 3D 액션 어드벤처 졸업작품 — 전투 · AI · UI 시스템 C# 구현"
+      "cardSummary": "Unity 3D 액션 어드벤처 졸업작품 — 전투 · AI · UI 시스템 C# 구현",
+      "date": "2025.10"
     },
     {
       "id": "zombiehigh",
@@ -562,7 +567,8 @@
       ],
       "cardSummary": "12년차 라이브 게임을 MDA로 분석하고 신규 콘텐츠 2건 제안 — 개인 작업",
       "thumb": "",
-      "galleryFit": "contain"
+      "galleryFit": "contain",
+      "date": "2026"
     },
     {
       "id": "broken-cradle",
@@ -762,7 +768,8 @@
           "newTab": true
         }
       ],
-      "cardSummary": "7일간의 생존 딜레마를 그린 심리 노벨 어드벤처 — 시나리오 · 대사 427줄 · 레벨 디자인"
+      "cardSummary": "7일간의 생존 딜레마를 그린 심리 노벨 어드벤처 — 시나리오 · 대사 427줄 · 레벨 디자인",
+      "date": "2026.04"
     }
   ],
   "contact": {
