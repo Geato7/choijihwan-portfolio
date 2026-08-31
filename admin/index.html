@@ -156,6 +156,7 @@
   <h1>포트폴리오 편집기 <span id="repoName"></span></h1>
   <span id="status">불러오는 중…</span>
   <button class="btn btn-sm" id="toggleView">미리보기</button>
+  <button class="btn" id="statsBtn">방문 통계</button>
   <button class="btn" id="reloadBtn" title="저장한 내용을 버리고 다시 불러옵니다">되돌리기</button>
   <button class="btn" id="downloadBtn">파일로 저장</button>
   <button class="btn btn-primary" id="saveBtn" disabled>사이트에 반영</button>
@@ -174,6 +175,8 @@
     <div class="frame-wrap" id="frameWrap"><iframe id="preview" title="미리보기"></iframe></div>
   </div>
 </div>
+
+<div id="statsPane"></div>
 
 <div class="modal-bg" id="tokenModal">
   <div class="modal">
@@ -200,6 +203,7 @@
 
 <script type="module">
 import { renderPage } from "../src/template.js";
+import { mountStats } from "./stats.js";
 
 /* ===================== 설정 ===================== */
 const OWNER = "Geato7";
@@ -748,8 +752,30 @@ $("reloadBtn").onclick = () => {
   load();
 };
 $("toggleView").onclick = () => {
+  closeStats();
   document.body.classList.toggle("show-preview");
   $("toggleView").textContent = document.body.classList.contains("show-preview") ? "편집으로" : "미리보기";
+};
+
+/* ===================== 방문 통계 ===================== */
+let stats = null;
+function closeStats() {
+  document.body.classList.remove("show-stats");
+  $("statsBtn").textContent = "방문 통계";
+}
+$("statsBtn").onclick = () => {
+  if (!content) return;
+  if (document.body.classList.contains("show-stats")) { closeStats(); return; }
+  if (!stats) {
+    // 통계 화면에서 Firebase 설정을 고치면 편집기와 똑같이 '수정됨'으로 잡혀야 한다
+    window.__statsCfgChanged = changed;
+    stats = mountStats({ pane: $("statsPane"), getContent: () => content });
+  }
+  document.body.classList.remove("show-preview");
+  $("toggleView").textContent = "미리보기";
+  document.body.classList.add("show-stats");
+  $("statsBtn").textContent = "편집으로";
+  stats.open();
 };
 $("viewMode").onchange = (e) => {
   $("frameWrap").classList.toggle("mobile", e.target.value === "mobile");

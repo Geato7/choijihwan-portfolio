@@ -2,6 +2,8 @@
 // Node(build.mjs)와 브라우저(admin 에디터 미리보기)에서 똑같이 쓰인다.
 // 이 파일을 고치면 사이트의 "구조"가 바뀐다. 글 내용만 바꿀 거라면 content.json을 고칠 것.
 
+import { analyticsScript } from "./analytics.js";
+
 const esc = (v) =>
   String(v ?? "")
     .replace(/&/g, "&amp;")
@@ -385,7 +387,7 @@ ${footer(contact)}
     window.__revealReady = true;
   }
 </script>
-
+${analyticsScript(site.analytics)}
 </body>
 </html>
 `;
