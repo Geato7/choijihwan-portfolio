@@ -13,8 +13,8 @@
     "themeColor": "#0a0a0a",
     "featuredLabel": "대표 프로젝트",
     "analytics": {
-      "projectId": "",
-      "apiKey": ""
+      "projectId": "github-portfolio-choijihwan",
+      "apiKey": "AIzaSyC6ItB_K9bF19iYiSdGVeXDpfRdIB8BO5I"
     }
   },
   "hero": {
@@ -93,7 +93,10 @@
         "gallery",
         "stats",
         "videos",
-        "buttons"
+        "buttons",
+        "wideShot",
+        "details",
+        "table"
       ],
       "myPart": {
         "heading": "콘텐츠 기획 · 프로젝트 관리(PM)",
@@ -143,7 +146,11 @@
           "caption": "미션 리포트 화면"
         }
       ],
-      "wideShot": null,
+      "wideShot": {
+        "src": "",
+        "alt": "",
+        "caption": ""
+      },
       "stats": [
         {
           "num": "30",
@@ -208,7 +215,9 @@
         "stats",
         "details",
         "table",
-        "buttons"
+        "buttons",
+        "wideShot",
+        "videos"
       ],
       "myPart": {
         "heading": "게임 분석 · 콘텐츠 제안 — 개인 작업 전체",
@@ -262,7 +271,11 @@
           "caption": "제안 ② 로비 꾸미기 — 아이템 배치 화면"
         }
       ],
-      "wideShot": null,
+      "wideShot": {
+        "src": "",
+        "alt": "",
+        "caption": ""
+      },
       "stats": [
         {
           "num": "MDA",
@@ -372,7 +385,9 @@
         "stats",
         "details",
         "table",
-        "buttons"
+        "buttons",
+        "wideShot",
+        "videos"
       ],
       "galleryFit": "natural",
       "myPart": {
@@ -427,7 +442,11 @@
           "caption": "보스 아레나 그레이박스 — 조각상 해제 단계별 조형 변화"
         }
       ],
-      "wideShot": null,
+      "wideShot": {
+        "src": "",
+        "alt": "",
+        "caption": ""
+      },
       "stats": [
         {
           "num": "12인",
@@ -516,7 +535,10 @@
         "wideShot",
         "details",
         "table",
-        "buttons"
+        "buttons",
+        "gallery",
+        "stats",
+        "videos"
       ],
       "myPart": {
         "heading": "가격 전략 · 광고 전략 — 개인 단독 담당",
@@ -620,7 +642,8 @@
         "stats",
         "details",
         "table",
-        "buttons"
+        "buttons",
+        "videos"
       ],
       "myPart": {
         "heading": "시나리오 · 대사 스크립트 작성 · 레벨 디자인",
@@ -820,7 +843,9 @@
         "stats",
         "videos",
         "details",
-        "buttons"
+        "buttons",
+        "gallery",
+        "table"
       ],
       "myPart": {
         "heading": "시스템 구현 — Unity C# 스크립팅",
