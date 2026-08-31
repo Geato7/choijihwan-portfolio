@@ -769,7 +769,12 @@ $("statsBtn").onclick = () => {
   if (!stats) {
     // 통계 화면에서 Firebase 설정을 고치면 편집기와 똑같이 '수정됨'으로 잡혀야 한다
     window.__statsCfgChanged = changed;
-    stats = mountStats({ pane: $("statsPane"), getContent: () => content });
+    stats = mountStats({
+      pane: $("statsPane"),
+      getContent: () => content,
+      isDirty: () => JSON.stringify(content) !== originalJson,
+      save,   // 설정 화면에서 바로 저장할 수 있도록 넘긴다
+    });
   }
   document.body.classList.remove("show-preview");
   $("toggleView").textContent = "미리보기";

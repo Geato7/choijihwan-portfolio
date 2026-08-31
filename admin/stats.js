@@ -147,7 +147,7 @@ service cloud.firestore {
 }`;
 
 /* ===================== 진입점 ===================== */
-export function mountStats({ pane, getContent }) {
+export function mountStats({ pane, getContent, isDirty, save }) {
   document.head.append($$("style", { html: STYLE }));
 
   let state = { range: Number(localStorage.getItem(RANGE_KEY)) || 30, rows: null, day: null, err: "" };
@@ -375,22 +375,55 @@ export function mountStats({ pane, getContent }) {
         "실제 접근 권한은 위의 보안 규칙이 정합니다.")));
   }
 
+  // 설정 입력칸 + 저장 버튼.
+  // 저장을 안 하면 값이 이 브라우저 안에만 있다가 새로고침 때 사라지므로,
+  // 저장 버튼을 입력칸 바로 아래에 둔다 (상단 [사이트에 반영] 과 같은 동작).
   function cfgFields() {
     const a = getContent().site.analytics || (getContent().site.analytics = { projectId: "", apiKey: "" });
     const mk = (label, key, ph) => {
       const inp = $$("input", { type: "text", placeholder: ph });
       inp.value = a[key] || "";
-      inp.addEventListener("input", () => { a[key] = inp.value.trim(); window.__statsCfgChanged?.(); });
+      inp.addEventListener("input", () => {
+        a[key] = inp.value.trim();
+        window.__statsCfgChanged?.();
+        warn.style.display = cfgOf() ? "" : "none";
+      });
       return $$("div", { class: "field" }, $$("label", {}, label), inp);
     };
-    return $$("div", { class: "cfg" },
-      mk("projectId", "projectId", "choijihwan-portfolio"),
-      mk("apiKey", "apiKey", "AIza…"));
+
+    const warn = $$("div", { class: "notice", style: "margin:0 0 12px" },
+      "아직 저장 전입니다 — 아래 버튼을 눌러야 사이트에 반영됩니다. 그냥 새로고침하면 입력한 값이 사라집니다.");
+    warn.style.display = cfgOf() && isDirty?.() ? "" : "none";
+
+    const btn = $$("button", { class: "btn btn-primary", onclick: async () => {
+      if (!cfgOf()) { state.err = "projectId 와 apiKey 를 둘 다 넣어야 저장됩니다."; render(); return; }
+      btn.disabled = true;
+      const label = btn.textContent;
+      btn.textContent = "저장 중…";
+      try { await save?.(); } catch (e) { /* save() 가 상단 상태줄에 이유를 띄운다 */ }
+      btn.disabled = false;
+      btn.textContent = label;
+      state.err = isDirty?.()
+        ? "저장이 안 됐습니다. 상단 상태 글씨를 눌러 GitHub 토큰을 등록한 뒤 다시 눌러주세요."
+        : "";
+      if (!state.err) alert("저장했습니다. 사이트에 수집 스크립트가 붙는 데 20~30초 걸립니다.");
+      render();
+    } }, "설정 저장하고 통계 열기");
+
+    return $$("div", {},
+      $$("div", { class: "cfg" },
+        mk("projectId", "projectId", "choijihwan-portfolio"),
+        mk("apiKey", "apiKey", "AIza…")),
+      warn,
+      $$("div", { style: "display:flex; gap:8px; align-items:center; flex-wrap:wrap" },
+        btn,
+        $$("span", { style: "font-size:12px; color:var(--faint)" },
+          "상단 [사이트에 반영] 을 눌러도 똑같습니다")));
   }
 
   /* ---------- 본 화면 ---------- */
   function draw() {
-    if (!cfgOf()) return setupView("");
+    if (!cfgOf()) return setupView(state.err);
     if (!ctx || !ctx.user) {
       return $$("div", { class: "st-wrap" }, $$("div", { class: "st-setup" },
         $$("h2", {}, "방문 통계"),
