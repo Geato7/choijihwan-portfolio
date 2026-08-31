@@ -216,6 +216,13 @@ export function analyticsScript(analytics) {
     } catch (e) {}
   }
 
+  // 사이트 안의 사건(미니게임을 열었다 같은 것)도 '본 곳' 으로 남길 수 있게 열어 둔다
+  window.__pfTrack = function (tag) {
+    if (!tag || seen.indexOf(tag) > -1 || seen.length >= 40) return;
+    seen.push(String(tag).slice(0, 40));
+    flush(true);
+  };
+
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") flush(true); else mark = Date.now();
   });

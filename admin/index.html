@@ -300,6 +300,17 @@ function field(label, obj, key, { multiline = false, hint = "", placeholder = ""
   );
 }
 
+// 켬/끔 하나짜리 항목. 값이 없으면 켜진 것으로 본다.
+function checkField(label, obj, key) {
+  const cb = el("input", { type: "checkbox" });
+  cb.checked = obj[key] !== false;
+  // 켜면 키를 지운다 — content.json 에 기본값을 굳이 적어 두지 않기 위해
+  cb.addEventListener("change", () => { if (cb.checked) delete obj[key]; else obj[key] = false; changed(); });
+  return el("div", { class: "field" },
+    el("label", { style: "display:flex; align-items:center; gap:8px; color:var(--text); cursor:pointer" },
+      cb, label));
+}
+
 function iconBtn(text, title, onclick) {
   return el("button", { class: "btn btn-sm shrink", title, onclick }, text);
 }
@@ -404,6 +415,7 @@ function renderForm() {
     field("브라우저 탭 제목", content.site, "title"),
     field("검색엔진 설명문", content.site, "description", { multiline: true }),
     field("좌측 상단 로고 텍스트", content.site, "logo"),
+    checkField("맨 아래에 미니게임(너구리) 보여주기", content.site, "miniGame"),
   ));
 
   /* 히어로 */

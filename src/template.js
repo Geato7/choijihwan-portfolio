@@ -3,6 +3,7 @@
 // 이 파일을 고치면 사이트의 "구조"가 바뀐다. 글 내용만 바꿀 거라면 content.json을 고칠 것.
 
 import { analyticsScript } from "./analytics.js";
+import { gameCss, gameMarkup, gameScript } from "./game.js";
 
 const esc = (v) =>
   String(v ?? "")
@@ -232,7 +233,7 @@ ${meta ? `      <div class="meta-grid">\n${meta}\n      </div>\n` : ""}    </div
   </section>`;
 }
 
-function footer(c) {
+function footer(c, gameCta) {
   const links = [];
   if (has(c.phone)) links.push(`        <a class="btn btn-primary" href="tel:${attr(String(c.phone).replace(/[^0-9+]/g, ""))}">${esc(c.phone)}</a>`);
   if (has(c.email)) links.push(`        <a class="btn btn-outline" href="mailto:${attr(c.email)}">${esc(c.email)}</a>`);
@@ -241,7 +242,7 @@ function footer(c) {
   <footer id="contact">
     <div class="wrap">
       <h2>${esc(c.heading)}</h2>
-${has(c.text) ? `      <p>${esc(c.text)}</p>\n` : ""}${links.length ? `      <div class="contact-links">\n${links.join("\n")}\n      </div>\n` : ""}      <div class="foot-bottom">
+${has(c.text) ? `      <p>${esc(c.text)}</p>\n` : ""}${links.length ? `      <div class="contact-links">\n${links.join("\n")}\n      </div>\n` : ""}${gameCta ? gameCta + "\n" : ""}      <div class="foot-bottom">
         <span>${esc(c.copyright)}</span>
         <span><a href="#home">${esc(c.backToTop || "맨 위로 ↑")}</a></span>
       </div>
@@ -253,6 +254,10 @@ export function renderPage(content, css) {
   const { site, hero: h, projects = [], contact } = content;
   // 공유 미리보기(og)용 절대 주소 — 상대 경로를 쓰면 카카오톡/슬랙이 이미지를 못 찾는다
   const base = String(site.url || "").replace(/\/*$/, "/");
+  // 미니게임 — content.json 의 site.miniGame 이 false 면 통째로 빠진다
+  const gameOn = site.miniGame !== false;
+  const game = gameOn ? gameMarkup(site) : null;
+
   const ogImg = base && site.ogImage ? base + site.ogImage + (site.ogImageVersion ? "?v=" + site.ogImageVersion : "") : "";
 
   const navLinks = [
@@ -321,6 +326,7 @@ ${base ? `<link rel="canonical" href="${attr(base)}">` : ""}
 </script>
 <style>
 ${css}
+${gameOn ? gameCss() : ""}
 </style>
 </head>
 <body>
@@ -356,7 +362,7 @@ ${projectIndex(projects, site.projectsIndexTitle || "프로젝트")}
 
 ${projects.map((pr) => project(pr, site.featuredLabel)).join("\n\n")}
 
-${footer(contact)}
+${footer(contact, gameOn ? game.cta : "")}
 
 </main>
 
@@ -387,6 +393,7 @@ ${footer(contact)}
     window.__revealReady = true;
   }
 </script>
+${gameOn ? game.modal + "\n" + gameScript() : ""}
 ${analyticsScript(site.analytics)}
 </body>
 </html>

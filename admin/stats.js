@@ -166,6 +166,7 @@ export function mountStats({ pane, getContent, isDirty, save }) {
     if (id === "home") return "소개";
     if (id === "projects") return "프로젝트 한눈에 보기";
     if (id === "contact") return "연락처";
+    if (id === "minigame") return "미니게임(너구리)";
     const p = (getContent()?.projects || []).find((x) => x.id === id);
     return p ? p.title : id;
   }
