@@ -6,7 +6,7 @@
 //   index.html            소개
 //   projects.html         프로젝트 목차(카드)
 //   projects/<id>.html    프로젝트 하나
-//   devlog.html           데브로그
+//   notes.html            기획 노트
 //   contact.html          연락처
 
 import { analyticsScript } from "./analytics.js";
@@ -206,7 +206,7 @@ ${next ? link(next, "next", "다음") : `        <span class="pager-link pager-e
   </nav>`;
 }
 
-// 데브로그 — 월별로 묶은 타임라인. 위쪽 칩으로 분류를 걸러 볼 수 있다.
+// 기획 노트 — 월별로 묶은 타임라인. 위쪽 칩으로 분류를 걸러 볼 수 있다.
 function devlogEntry(e, prefix) {
   return `        <article class="devlog-entry" data-tag="${attr(e.project || "")}">
           <div class="devlog-meta">
@@ -260,10 +260,10 @@ ${chips.map(([tag, n]) => `        <button type="button" class="dl-chip" data-ta
     items.push(devlogEntry(e, prefix));
   }
 
-  return `  <section class="project reveal" id="devlog">
+  return `  <section class="project reveal" id="notes">
     <div class="wrap">
       <div class="section-head">
-        <h1>${esc(dl.heading || "데브로그")}</h1>
+        <h1>${esc(dl.heading || "기획 노트")}</h1>
 ${has(dl.lead) ? `        <p class="section-lead">${esc(dl.lead)}</p>\n` : ""}      </div>
 
 ${summary}
@@ -347,7 +347,7 @@ ${cards}
 function hero(h, prefix) {
   const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
   // 옛 앵커 주소를 새 페이지로 옮겨준다 (content.json 을 고치지 않아도 동작하도록)
-  const MAP = { "#projects": "projects.html", "#contact": "contact.html", "#belief": "projects.html", "#home": "index.html" };
+  const MAP = { "#projects": "projects.html", "#contact": "contact.html", "#belief": "projects.html", "#home": "index.html", "#devlog": "notes.html", "devlog.html": "notes.html" };
   const buttons = (h.buttons || []).map((b) => (MAP[b.href] ? { ...b, href: MAP[b.href] } : b));
   const meta = (h.meta || [])
     .map(
@@ -407,7 +407,7 @@ function notFoundSection(site, root) {
       <div class="cta-row">
         <a class="btn btn-primary" href="${attr(root)}index.html">소개</a>
         <a class="btn btn-outline" href="${attr(root)}projects.html">프로젝트</a>
-        <a class="btn btn-outline" href="${attr(root)}devlog.html">데브로그</a>
+        <a class="btn btn-outline" href="${attr(root)}notes.html">기획 노트</a>
         <a class="btn btn-outline" href="${attr(root)}contact.html">연락처</a>
       </div>
     </div>
@@ -429,7 +429,8 @@ export function sitePages(content) {
   for (const p of projects) {
     pages.push({ key: `project:${p.id}`, path: `projects/${p.id}.html`, label: `프로젝트 — ${p.title}` });
   }
-  if (devlogCount(content)) pages.push({ key: "devlog", path: "devlog.html", label: "데브로그" });
+  // 코드 안의 이름은 devlog 로 두고, 화면에 보이는 이름과 주소만 기획 노트/notes 로 쓴다
+  if (devlogCount(content)) pages.push({ key: "devlog", path: "notes.html", label: "기획 노트" });
   pages.push({ key: "contact", path: "contact.html", label: "연락처" });
   return pages;
 }
@@ -440,7 +441,7 @@ function navBar(content, prefix, current) {
     ["index", site.homeNavLabel || "소개", "index.html"],
     ["projects", site.projectsNavLabel || "프로젝트", "projects.html"],
   ];
-  if (devlogCount(content)) items.push(["devlog", (devlog && devlog.navLabel) || "데브로그", "devlog.html"]);
+  if (devlogCount(content)) items.push(["devlog", (devlog && devlog.navLabel) || "기획 노트", "notes.html"]);
   items.push(["contact", site.contactNavLabel || "연락처", "contact.html"]);
 
   return items
@@ -574,7 +575,7 @@ ${siteFooter(contact)}
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
       // threshold 를 비율로 주면 화면보다 큰 섹션은 영영 조건을 못 채운다.
-      // (데브로그처럼 6,000px 짜리 섹션이 720px 화면에서 12% 를 넘길 수 없다)
+      // (기획 노트처럼 6,000px 짜리 섹션이 720px 화면에서 12% 를 넘길 수 없다)
       // 그래서 '한 픽셀이라도 들어오면' 으로 두고 아래쪽 여백으로 타이밍만 잡는다.
     }, { threshold: 0, rootMargin: "0px 0px -80px 0px" });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
@@ -622,8 +623,8 @@ export function renderPage(content, css, key = "index") {
   if (key === "devlog") {
     const dl = devlog || {};
     return shell(content, css, {
-      prefix: "", nav: "devlog", canonicalPath: "devlog.html",
-      title: `${dl.heading || "데브로그"} — ${siteName}`,
+      prefix: "", nav: "devlog", canonicalPath: "notes.html",
+      title: `${dl.heading || "기획 노트"} — ${siteName}`,
       description: dl.lead || site.description,
       body: devlogSection(dl, ""),
       script: devlogScript(),
@@ -669,7 +670,26 @@ export function renderSite(content, css) {
     path: pg.path,
     html: renderPage(content, css, pg.key),
   }));
-  // 404 는 목록/사이트맵에 넣지 않는다
+  // 404 와 옛 주소 안내는 목록/사이트맵에 넣지 않는다
   pages.push({ path: "404.html", html: renderPage(content, css, "404"), noIndex: true });
+  if (devlogCount(content)) {
+    // devlog.html -> notes.html. 이름을 바꾸기 전에 색인됐을 수 있어 남겨 둔다.
+    pages.push({ path: "devlog.html", noIndex: true, html:
+`<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="notes.html">
+<meta http-equiv="refresh" content="0; url=notes.html">
+<title>기획 노트로 이동합니다</title>
+</head>
+<body>
+<p><a href="notes.html">기획 노트로 이동합니다.</a></p>
+<script>location.replace("notes.html");</script>
+</body>
+</html>
+` });
+  }
   return pages;
 }

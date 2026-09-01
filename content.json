@@ -46,8 +46,8 @@
         "newTab": false
       },
       {
-        "label": "데브로그",
-        "href": "devlog.html",
+        "label": "기획 노트",
+        "href": "notes.html",
         "style": "outline",
         "newTab": false
       },
@@ -1015,8 +1015,8 @@
     }
   ],
   "devlog": {
-    "navLabel": "데브로그",
-    "heading": "데브로그",
+    "navLabel": "기획 노트",
+    "heading": "기획 노트",
     "lead": "교육 과정과 개인 작업에서 연습하고 만든 것들을 날짜순으로 기록합니다. 완성작이 아니라 과정입니다.",
     "entries": [
       {

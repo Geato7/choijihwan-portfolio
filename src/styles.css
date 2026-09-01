@@ -231,7 +231,7 @@
   .price-table td{color:var(--text-dim); font-weight:400;}
   .price-table tr td:first-child{color:var(--text); font-weight:500;}
 
-  /* DEVLOG — 월별로 묶은 타임라인 */
+  /* 기획 노트 — 월별로 묶은 타임라인 (클래스 이름은 devlog- 를 그대로 쓴다) */
   .devlog-filter{display:flex; flex-wrap:wrap; gap:8px; margin:34px 0 8px;}
   .dl-chip{
     border:1px solid var(--border); background:none; color:var(--text-dim);
@@ -285,7 +285,7 @@
   .foot-bottom{border-top:1px solid var(--border); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
   .foot-bottom span{font-size:13px; color:var(--text-faint);}
 
-  /* 프로젝트 목차 / 데브로그 페이지 — 헤더에 가리지 않도록 위쪽 여백 */
+  /* 프로젝트 목차 / 기획 노트 페이지 — 헤더에 가리지 않도록 위쪽 여백 */
   .index-sec{padding-top:140px;}
   .index-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin:-14px 0 30px; font-weight:400;}
   main > section.project:first-of-type{padding-top:140px;}

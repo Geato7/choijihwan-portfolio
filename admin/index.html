@@ -509,7 +509,7 @@ function renderForm() {
       renderForm(); changed();
     } }, "+ 프로젝트 추가")));
 
-  /* 데브로그 */
+  /* 기획 노트 */
   form.append(devlogGroup());
 
   /* 연락처 */
@@ -724,11 +724,11 @@ function gridEditor(p) {
 }
 
 function devlogGroup() {
-  if (!content.devlog) content.devlog = { navLabel: "데브로그", heading: "데브로그", lead: "", entries: [] };
+  if (!content.devlog) content.devlog = { navLabel: "기획 노트", heading: "기획 노트", lead: "", entries: [] };
   const dl = content.devlog;
   if (!Array.isArray(dl.entries)) dl.entries = [];
 
-  return group("데브로그", `글 ${dl.entries.length}개`,
+  return group("기획 노트", `글 ${dl.entries.length}개`,
     field("메뉴에 표시할 이름", dl, "navLabel"),
     field("섹션 제목", dl, "heading"),
     field("섹션 설명", dl, "lead", { multiline: true }),
