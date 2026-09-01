@@ -34,14 +34,20 @@
     ],
     "buttons": [
       {
-        "label": "세부 연락처 ↓",
+        "label": "연락처",
         "href": "contact.html",
         "style": "primary",
         "newTab": false
       },
       {
-        "label": "프로젝트 보기 ↓",
+        "label": "프로젝트 보기",
         "href": "projects.html",
+        "style": "outline",
+        "newTab": false
+      },
+      {
+        "label": "데브로그",
+        "href": "devlog.html",
         "style": "outline",
         "newTab": false
       }

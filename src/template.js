@@ -206,33 +206,109 @@ ${next ? link(next, "next", "다음") : `        <span class="pager-link pager-e
   </nav>`;
 }
 
-// 데브로그 — 날짜순 기록 한 줄. 한 섹션 안에 리스트로 쌓인다.
+// 데브로그 — 월별로 묶은 타임라인. 위쪽 칩으로 분류를 걸러 볼 수 있다.
 function devlogEntry(e, prefix) {
-  return `        <div class="devlog-entry">
+  return `        <article class="devlog-entry" data-tag="${attr(e.project || "")}">
           <div class="devlog-meta">
 ${has(e.date) ? `            <span class="devlog-date">${esc(e.date)}</span>\n` : ""}${has(e.project) ? `            <span class="devlog-tag">${esc(e.project)}</span>\n` : ""}          </div>
           <h3 class="devlog-title">${esc(e.title)}</h3>
-${has(e.retro) ? `          <p class="devlog-retro">${esc(e.retro)}</p>\n` : ""}${has(e.fileHref) ? `          <a class="devlog-file" href="${attr(resolve(e.fileHref, prefix))}" target="_blank" rel="noopener">${esc(e.fileLabel || "파일 보기")} ↗</a>\n` : ""}        </div>`;
+${has(e.retro) ? `          <p class="devlog-retro">${esc(e.retro)}</p>\n` : ""}${has(e.fileHref) ? `          <a class="devlog-file" href="${attr(resolve(e.fileHref, prefix))}" target="_blank" rel="noopener">${esc(e.fileLabel || "파일 보기")} ↗</a>\n` : ""}        </article>`;
 }
+
+// "2026-06-22" -> "2026.06". 날짜가 없으면 빈 문자열.
+const devlogMonth = (v) => (/^\d{4}-\d{2}/.test(String(v || "")) ? String(v).slice(0, 7).replace("-", ".") : "");
 
 function devlogSection(dl, prefix) {
   const entries = ((dl && dl.entries) || []).filter((e) => has(e.title));
   if (!entries.length) return "";
   // 최신 글이 위로 오도록 날짜 내림차순 정렬 (에디터에서 순서를 따로 관리할 필요 없게)
-  const sorted = entries
-    .slice()
-    .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
-  const items = sorted.map((e) => devlogEntry(e, prefix)).join("\n");
+  const sorted = entries.slice().sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+
+  // 요약 — 몇 편을, 언제부터 언제까지, 몇 갈래로
+  const dated = sorted.map((e) => e.date).filter((v) => devlogMonth(v));
+  const span = dated.length
+    ? (devlogMonth(dated[dated.length - 1]) === devlogMonth(dated[0])
+        ? devlogMonth(dated[0])
+        : `${devlogMonth(dated[dated.length - 1])} – ${devlogMonth(dated[0]).slice(5)}`)
+    : "—";
+  const counts = new Map();
+  for (const e of sorted) if (has(e.project)) counts.set(e.project, (counts.get(e.project) || 0) + 1);
+  const summary = stats([
+    { num: String(sorted.length), label: "기록" },
+    { num: span, label: "기간" },
+    { num: String(counts.size), label: "분류" },
+  ]);
+
+  // 분류 칩 — 많이 쓴 분류가 앞에 온다
+  const chips = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const filter = chips.length > 1
+    ? `      <div class="devlog-filter" id="devlogFilter">
+        <button type="button" class="dl-chip is-on" data-tag="">전체 <b>${sorted.length}</b></button>
+${chips.map(([tag, n]) => `        <button type="button" class="dl-chip" data-tag="${attr(tag)}">${esc(tag)} <b>${n}</b></button>`).join("\n")}
+      </div>`
+    : "";
+
+  // 월이 바뀌는 자리에 표시를 하나 끼워 넣는다
+  let last = null;
+  const items = [];
+  for (const e of sorted) {
+    const m = devlogMonth(e.date) || "날짜 미상";
+    if (m !== last) {
+      items.push(`        <div class="devlog-month" data-month="${attr(m)}"><span>${esc(m)}</span></div>`);
+      last = m;
+    }
+    items.push(devlogEntry(e, prefix));
+  }
+
   return `  <section class="project reveal" id="devlog">
     <div class="wrap">
       <div class="section-head">
-        <h2>${esc(dl.heading || "데브로그")}</h2>
+        <h1>${esc(dl.heading || "데브로그")}</h1>
 ${has(dl.lead) ? `        <p class="section-lead">${esc(dl.lead)}</p>\n` : ""}      </div>
-      <div class="devlog-list">
-${items}
+
+${summary}
+
+${filter}
+      <div class="devlog-list" id="devlogList">
+${items.join("\n")}
       </div>
+      <p class="devlog-empty" id="devlogEmpty" hidden>이 분류에는 아직 글이 없습니다.</p>
     </div>
   </section>`;
+}
+
+// 분류 칩 동작 — 고른 분류만 남기고, 남는 글이 없는 월 표시는 함께 감춘다
+function devlogScript() {
+  return `<script>
+(function(){
+  var bar = document.getElementById('devlogFilter');
+  if (!bar) return;
+  var list = document.getElementById('devlogList');
+  var empty = document.getElementById('devlogEmpty');
+  bar.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.dl-chip');
+    if (!btn) return;
+    var tag = btn.getAttribute('data-tag');
+    bar.querySelectorAll('.dl-chip').forEach(function (b) { b.classList.toggle('is-on', b === btn); });
+    var shown = 0;
+    list.querySelectorAll('.devlog-entry').forEach(function (el) {
+      var on = !tag || el.getAttribute('data-tag') === tag;
+      el.hidden = !on;
+      if (on) shown++;
+    });
+    // 뒤따르는 글이 하나도 없는 월 표시는 숨긴다
+    list.querySelectorAll('.devlog-month').forEach(function (h) {
+      var n = h.nextElementSibling, any = false;
+      while (n && !n.classList.contains('devlog-month')) {
+        if (n.classList.contains('devlog-entry') && !n.hidden) { any = true; break; }
+        n = n.nextElementSibling;
+      }
+      h.hidden = !any;
+    });
+    if (empty) empty.hidden = shown > 0;
+  });
+})();
+</script>`;
 }
 
 // 프로젝트 카드 목차 — projects.html 의 본문. 카드를 누르면 그 프로젝트 페이지로 간다.
@@ -477,7 +553,10 @@ ${siteFooter(contact)}
   try {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+      // threshold 를 비율로 주면 화면보다 큰 섹션은 영영 조건을 못 채운다.
+      // (데브로그처럼 6,000px 짜리 섹션이 720px 화면에서 12% 를 넘길 수 없다)
+      // 그래서 '한 픽셀이라도 들어오면' 으로 두고 아래쪽 여백으로 타이밍만 잡는다.
+    }, { threshold: 0, rootMargin: "0px 0px -80px 0px" });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     window.__revealReady = true;
   } catch (err) {
@@ -485,6 +564,7 @@ ${siteFooter(contact)}
     window.__revealReady = true;
   }
 </script>
+${o.script || ""}
 ${o.withGame ? game.modal + "\n" + gameScript() : ""}
 ${analyticsScript(site.analytics)}
 </body>
@@ -515,6 +595,7 @@ export function renderPage(content, css, key = "index") {
       title: `${dl.heading || "데브로그"} — ${siteName}`,
       description: dl.lead || site.description,
       body: devlogSection(dl, ""),
+      script: devlogScript(),
     });
   }
 

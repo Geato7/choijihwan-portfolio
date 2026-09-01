@@ -286,9 +286,40 @@
   .price-table td{color:var(--text-dim); font-weight:400;}
   .price-table tr td:first-child{color:var(--text); font-weight:500;}
 
-  /* DEVLOG — 날짜순 기록 리스트 */
-  .devlog-list{margin:36px 0; display:grid; gap:0; border-top:1px solid var(--border);}
-  .devlog-entry{padding:26px 0; border-bottom:1px solid var(--border); display:grid; gap:10px;}
+  /* DEVLOG — 월별로 묶은 타임라인 */
+  .devlog-filter{display:flex; flex-wrap:wrap; gap:8px; margin:34px 0 8px;}
+  .dl-chip{
+    border:1px solid var(--border); background:none; color:var(--text-dim);
+    border-radius:999px; padding:7px 14px; font-size:12.5px; line-height:1;
+    transition:border-color .2s, color .2s, background-color .2s;
+  }
+  .dl-chip b{color:var(--text-faint); font-weight:500; margin-left:3px; font-size:11px;}
+  .dl-chip:hover{border-color:var(--text-faint); color:var(--text);}
+  .dl-chip.is-on{background:var(--solid); border-color:var(--solid); color:var(--solid-text);}
+  .dl-chip.is-on b{color:var(--solid-text); opacity:.6;}
+
+  /* 왼쪽 세로선이 타임라인, 글마다 점이 하나씩 붙는다 */
+  .devlog-list{margin:28px 0 0; position:relative; padding-left:26px;}
+  .devlog-list::before{
+    content:""; position:absolute; left:4px; top:10px; bottom:10px;
+    width:1px; background:var(--border);
+  }
+  .devlog-month{position:relative; padding:26px 0 10px;}
+  .devlog-month:first-child{padding-top:4px;}
+  .devlog-month span{
+    font-size:12px; font-weight:700; letter-spacing:1.5px; color:var(--text-faint);
+  }
+  .devlog-month::before{
+    content:""; position:absolute; left:-26px; top:50%; margin-top:-3px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--bg); border:1px solid var(--text-faint);
+  }
+  .devlog-entry{position:relative; padding:20px 0 22px; border-bottom:1px solid var(--border); display:grid; gap:9px;}
+  .devlog-entry::before{
+    content:""; position:absolute; left:-26px; top:28px;
+    width:7px; height:7px; border-radius:50%; background:var(--border);
+  }
+  .devlog-entry:hover::before{background:var(--text-faint);}
   .devlog-meta{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
   .devlog-date{font-size:12px; color:var(--text-faint); letter-spacing:0.5px; font-weight:700;}
   .devlog-tag{font-size:11px; color:var(--text-dim); border:1px solid var(--border); border-radius:999px; padding:3px 10px;}
@@ -296,6 +327,7 @@
   .devlog-retro{font-size:14.5px; color:var(--text-dim); font-weight:400; max-width:680px;}
   .devlog-file{display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--text); border-bottom:1px solid var(--text-faint); width:fit-content; transition:border-color .2s;}
   .devlog-file:hover{border-color:var(--text);}
+  .devlog-empty{margin:28px 0 10px; font-size:14px; color:var(--text-faint);}
 
   /* CONTACT — contact.html 본문 */
   .contact-sec{padding:140px 0 90px;}
@@ -365,6 +397,10 @@
     main > section.project:first-of-type{padding-top:110px;}
     .pager-row{grid-template-columns:1fr;}
     .pager-next{text-align:left;}
+    .devlog-list{padding-left:20px;}
+    .devlog-list::before{left:3px;}
+    .devlog-month::before,.devlog-entry::before{left:-20px;}
+    .dl-chip{padding:6px 12px; font-size:12px;}
   }
 
   @media (max-width: 980px) and (min-width: 761px){
@@ -417,8 +453,9 @@
         <span class="tag">Notion 기획 문서화</span>
       </div>
       <div class="cta-row">
-        <a class="btn btn-primary" href="contact.html">세부 연락처 ↓</a>
-        <a class="btn btn-outline" href="projects.html">프로젝트 보기 ↓</a>
+        <a class="btn btn-primary" href="contact.html">연락처</a>
+        <a class="btn btn-outline" href="projects.html">프로젝트 보기</a>
+        <a class="btn btn-outline" href="devlog.html">데브로그</a>
       </div>
 
       <div class="meta-grid">
@@ -472,7 +509,10 @@
   try {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+      // threshold 를 비율로 주면 화면보다 큰 섹션은 영영 조건을 못 채운다.
+      // (데브로그처럼 6,000px 짜리 섹션이 720px 화면에서 12% 를 넘길 수 없다)
+      // 그래서 '한 픽셀이라도 들어오면' 으로 두고 아래쪽 여백으로 타이밍만 잡는다.
+    }, { threshold: 0, rootMargin: "0px 0px -80px 0px" });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     window.__revealReady = true;
   } catch (err) {
@@ -480,6 +520,7 @@
     window.__revealReady = true;
   }
 </script>
+
 
 <script>
 /* 방문 통계 — 개인정보(IP·이름·이메일)는 저장하지 않습니다.

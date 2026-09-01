@@ -286,9 +286,40 @@
   .price-table td{color:var(--text-dim); font-weight:400;}
   .price-table tr td:first-child{color:var(--text); font-weight:500;}
 
-  /* DEVLOG — 날짜순 기록 리스트 */
-  .devlog-list{margin:36px 0; display:grid; gap:0; border-top:1px solid var(--border);}
-  .devlog-entry{padding:26px 0; border-bottom:1px solid var(--border); display:grid; gap:10px;}
+  /* DEVLOG — 월별로 묶은 타임라인 */
+  .devlog-filter{display:flex; flex-wrap:wrap; gap:8px; margin:34px 0 8px;}
+  .dl-chip{
+    border:1px solid var(--border); background:none; color:var(--text-dim);
+    border-radius:999px; padding:7px 14px; font-size:12.5px; line-height:1;
+    transition:border-color .2s, color .2s, background-color .2s;
+  }
+  .dl-chip b{color:var(--text-faint); font-weight:500; margin-left:3px; font-size:11px;}
+  .dl-chip:hover{border-color:var(--text-faint); color:var(--text);}
+  .dl-chip.is-on{background:var(--solid); border-color:var(--solid); color:var(--solid-text);}
+  .dl-chip.is-on b{color:var(--solid-text); opacity:.6;}
+
+  /* 왼쪽 세로선이 타임라인, 글마다 점이 하나씩 붙는다 */
+  .devlog-list{margin:28px 0 0; position:relative; padding-left:26px;}
+  .devlog-list::before{
+    content:""; position:absolute; left:4px; top:10px; bottom:10px;
+    width:1px; background:var(--border);
+  }
+  .devlog-month{position:relative; padding:26px 0 10px;}
+  .devlog-month:first-child{padding-top:4px;}
+  .devlog-month span{
+    font-size:12px; font-weight:700; letter-spacing:1.5px; color:var(--text-faint);
+  }
+  .devlog-month::before{
+    content:""; position:absolute; left:-26px; top:50%; margin-top:-3px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--bg); border:1px solid var(--text-faint);
+  }
+  .devlog-entry{position:relative; padding:20px 0 22px; border-bottom:1px solid var(--border); display:grid; gap:9px;}
+  .devlog-entry::before{
+    content:""; position:absolute; left:-26px; top:28px;
+    width:7px; height:7px; border-radius:50%; background:var(--border);
+  }
+  .devlog-entry:hover::before{background:var(--text-faint);}
   .devlog-meta{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
   .devlog-date{font-size:12px; color:var(--text-faint); letter-spacing:0.5px; font-weight:700;}
   .devlog-tag{font-size:11px; color:var(--text-dim); border:1px solid var(--border); border-radius:999px; padding:3px 10px;}
@@ -296,6 +327,7 @@
   .devlog-retro{font-size:14.5px; color:var(--text-dim); font-weight:400; max-width:680px;}
   .devlog-file{display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--text); border-bottom:1px solid var(--text-faint); width:fit-content; transition:border-color .2s;}
   .devlog-file:hover{border-color:var(--text);}
+  .devlog-empty{margin:28px 0 10px; font-size:14px; color:var(--text-faint);}
 
   /* CONTACT — contact.html 본문 */
   .contact-sec{padding:140px 0 90px;}
@@ -365,6 +397,10 @@
     main > section.project:first-of-type{padding-top:110px;}
     .pager-row{grid-template-columns:1fr;}
     .pager-next{text-align:left;}
+    .devlog-list{padding-left:20px;}
+    .devlog-list::before{left:3px;}
+    .devlog-month::before,.devlog-entry::before{left:-20px;}
+    .dl-chip{padding:6px 12px; font-size:12px;}
   }
 
   @media (max-width: 980px) and (min-width: 761px){
@@ -406,27 +442,51 @@
   <section class="project reveal" id="devlog">
     <div class="wrap">
       <div class="section-head">
-        <h2>데브로그</h2>
+        <h1>데브로그</h1>
         <p class="section-lead">교육 과정과 개인 작업에서 연습하고 만든 것들을 날짜순으로 기록합니다. 완성작이 아니라 과정입니다.</p>
       </div>
-      <div class="devlog-list">
-        <div class="devlog-entry">
+
+      <div class="stat-row">
+        <div class="stat"><div class="num">25</div><div class="lbl">기록</div></div>
+        <div class="stat"><div class="num">2026.03 – 09</div><div class="lbl">기간</div></div>
+        <div class="stat"><div class="num">12</div><div class="lbl">분류</div></div>
+      </div>
+
+      <div class="devlog-filter" id="devlogFilter">
+        <button type="button" class="dl-chip is-on" data-tag="">전체 <b>25</b></button>
+        <button type="button" class="dl-chip" data-tag="게임 분석">게임 분석 <b>5</b></button>
+        <button type="button" class="dl-chip" data-tag="기획 제안">기획 제안 <b>4</b></button>
+        <button type="button" class="dl-chip" data-tag="시스템 기획">시스템 기획 <b>4</b></button>
+        <button type="button" class="dl-chip" data-tag="캐릭터 기획">캐릭터 기획 <b>3</b></button>
+        <button type="button" class="dl-chip" data-tag="데이터 설계">데이터 설계 <b>2</b></button>
+        <button type="button" class="dl-chip" data-tag="레벨 디자인">레벨 디자인 <b>1</b></button>
+        <button type="button" class="dl-chip" data-tag="엘브네아">엘브네아 <b>1</b></button>
+        <button type="button" class="dl-chip" data-tag="역기획">역기획 <b>1</b></button>
+        <button type="button" class="dl-chip" data-tag="좀비고">좀비고 <b>1</b></button>
+        <button type="button" class="dl-chip" data-tag="퀘스트 기획">퀘스트 기획 <b>1</b></button>
+        <button type="button" class="dl-chip" data-tag="회고">회고 <b>1</b></button>
+        <button type="button" class="dl-chip" data-tag="UI · UX">UI · UX <b>1</b></button>
+      </div>
+      <div class="devlog-list" id="devlogList">
+        <div class="devlog-month" data-month="2026.09"><span>2026.09</span></div>
+        <article class="devlog-entry" data-tag="엘브네아">
           <div class="devlog-meta">
             <span class="devlog-date">2026-09-01</span>
             <span class="devlog-tag">엘브네아</span>
           </div>
           <h3 class="devlog-title">엘브네아 — 개인 기여 문서 정리</h3>
           <p class="devlog-retro">팀 소개 자료는 28쪽 중 24쪽이 그래픽 산출물이라, 제가 맡은 시스템 구현이 드러나지 않았습니다. 그래서 전투·AI·UI·대화만 다루는 문서를 따로 썼습니다. 쓰면서 알게 된 것은 NavMesh·Animator·Pixel Crushers 세 번의 선택이 전부 같은 기준에서 나왔다는 점입니다 — 이미 잘 만들어진 것은 가져오고, 이 게임에만 해당하는 것을 직접 만든다.</p>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="좀비고">
           <div class="devlog-meta">
             <span class="devlog-date">2026-09-01</span>
             <span class="devlog-tag">좀비고</span>
           </div>
           <h3 class="devlog-title">좀비고 — 제안의 유효성을 스스로 검증</h3>
           <p class="devlog-retro">‘제안이 실제로 유효한지 짚는 과정이 없다’는 지적을 받고 따로 따져봤습니다. 결론은 주장을 좁히는 것이었습니다. 단독 소탕전은 매칭 풀을 늘리지 못합니다. 대신 파티 레이드의 실질 참여 인원인 ‘동접 × 파티 결성 성공률’에서 곱셈 항이 없다는 점이 이 콘텐츠의 값어치입니다. 도입 후 파티 레이드 참여자가 오히려 줄면 실패로 본다는 반증 조건을 먼저 정해뒀습니다.</p>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <div class="devlog-month" data-month="2026.06"><span>2026.06</span></div>
+        <article class="devlog-entry" data-tag="레벨 디자인">
           <div class="devlog-meta">
             <span class="devlog-date">2026-06-22</span>
             <span class="devlog-tag">레벨 디자인</span>
@@ -434,8 +494,8 @@
           <h3 class="devlog-title">탑다운 레벨 디자인 — 지하 본부 침투</h3>
           <p class="devlog-retro">지하 4층을 ‘위기 — 완화’ 리듬으로 배치했습니다. EMP 수류탄을 5개로 제한해 3층에서 쓰면 4층이 어려워지는 트레이드오프를 만들었고, 마지막 층은 앞선 세 층과 달리 전투가 아닌 잠입으로 뒤집었습니다. 데이터를 확보하는 순간 제한 시간이 배속으로 줄어들게 해 클라이맥스를 만들었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260622_탑다운레벨디자인_26_최지환.pdf" target="_blank" rel="noopener">레벨 디자인 기획서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="데이터 설계">
           <div class="devlog-meta">
             <span class="devlog-date">2026-06-15</span>
             <span class="devlog-tag">데이터 설계</span>
@@ -443,8 +503,8 @@
           <h3 class="devlog-title">퀘스트 클래스 설계</h3>
           <p class="devlog-retro">퀘스트·트리거·보상 세 테이블로 나누고 컬럼 정의부터 실제 데이터 13개까지 채웠습니다. 시작 트리거와 완료 트리거를 따로 만들지 않고 한 테이블에서 trigger_type으로 구분했고, 갈라지는 퀘스트(Q011-1 / Q011-2)를 어떻게 표현할지가 실제 고민이었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260615_퀘스트클래스설계_26_최지환.xlsx" target="_blank" rel="noopener">설계 시트 (XLSX) ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="퀘스트 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-06-12</span>
             <span class="devlog-tag">퀘스트 기획</span>
@@ -452,8 +512,8 @@
           <h3 class="devlog-title">퀘스트 기획서 — 영화 「모범시민」</h3>
           <p class="devlog-retro">영화 한 편을 퀘스트 20개로 옮겼습니다. ‘사전 준비 → 습격 → 도주’를 핵심 루프로 잡되, 주인공이 수감되는 3장부터는 직접 조작에서 원격 조작으로 플레이 패턴 자체를 바꿔 같은 루프가 지루해지지 않게 했습니다. 준비 단계의 정보 수집량이 이후 습격 난이도를 바꾸도록 묶은 것이 핵심입니다.</p>
           <a class="devlog-file" href="files/devlog/20260612_퀘스트작성연습_26_최지환.pdf" target="_blank" rel="noopener">퀘스트 기획서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="기획 제안">
           <div class="devlog-meta">
             <span class="devlog-date">2026-06-11</span>
             <span class="devlog-tag">기획 제안</span>
@@ -461,8 +521,9 @@
           <h3 class="devlog-title">상용 게임 지표 개선 제안서 — TFT</h3>
           <p class="devlog-retro">인기 순위 4위인데 매출 81위라는 격차를 문제로 잡았습니다. AI 전적 분석 피드백으로 고착률·이용 시간·BU Rate·ARPPU·신규 잔존율을 각각 어떤 경로로 개선하는지 나눠 적었고, 이벤트성 매출과 달리 왜 효과가 지속되는지를 월별 시나리오로 정리했습니다.</p>
           <a class="devlog-file" href="files/devlog/20260611_상용게임지표제안서_26_최지환.pdf" target="_blank" rel="noopener">제안서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <div class="devlog-month" data-month="2026.05"><span>2026.05</span></div>
+        <article class="devlog-entry" data-tag="게임 분석">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-22</span>
             <span class="devlog-tag">게임 분석</span>
@@ -470,8 +531,8 @@
           <h3 class="devlog-title">보스 몬스터 디자인 분석 — 「용과 같이 0」 쿠제</h3>
           <p class="devlog-retro">첫 보스가 전투 방식을 가르치는 교육 장치라는 관점에서 봤습니다. 느린 패턴과 긴 딜레이로 진입 장벽을 낮추면서도, 체력이 깎이면 주황색 오오라를 띄워 강화 패턴으로 넘어가게 한 구조가 ‘쉬운데 지루하지 않게’ 만드는 답이었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260522_보스몬스터디자인분석_26_최지환.pdf" target="_blank" rel="noopener">분석 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="캐릭터 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-21</span>
             <span class="devlog-tag">캐릭터 기획</span>
@@ -479,8 +540,8 @@
           <h3 class="devlog-title">챔피언 역기획서 — Dr.P</h3>
           <p class="devlog-retro">4월에 설정만 잡았던 캐릭터를 구현 단위까지 내렸습니다. 스킬 레벨별 수치, 상태 12종 정의, 상태 전이 조건, 애니메이션 리소스 20종까지 적고 나서야 설정 문서와 개발이 받을 수 있는 문서가 어디서 갈리는지 알았습니다.</p>
           <a class="devlog-file" href="files/devlog/20260521_캐릭터디자인역기획서_26_최지환.pdf" target="_blank" rel="noopener">역기획서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="캐릭터 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-20</span>
             <span class="devlog-tag">캐릭터 기획</span>
@@ -488,8 +549,8 @@
           <h3 class="devlog-title">캐릭터 디자인 분석 — LoL 5종</h3>
           <p class="devlog-retro">우디르·카서스·트린다미어·브라이어·케일을 기획 의도 / 고유 플레이 컨셉 / 선택 이유 / 재미 요소 네 항목으로 갈라 봤습니다. 다섯 모두 ‘설정과 스킬 구조가 같은 말을 하고 있는가’를 기준으로 읽었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260520_캐릭터디자인분석_26_최지환.pdf" target="_blank" rel="noopener">분석 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="데이터 설계">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-14</span>
             <span class="devlog-tag">데이터 설계</span>
@@ -497,8 +558,8 @@
           <h3 class="devlog-title">데이터 테이블 설계</h3>
           <p class="devlog-retro">스탯 35종을 정의하고 캐릭터·스킬·스킬레벨·효과·아이템·장비·세트·제작 레시피 테이블을 외래키로 연결했습니다. 수치를 스킬 테이블에 직접 넣지 않고 skill_level로 분리한 것이 요점입니다 — 밸런싱할 때 한 곳만 고치면 되도록 하기 위해서입니다.</p>
           <a class="devlog-file" href="files/devlog/20260514_데이터테이블_최지환.xlsx" target="_blank" rel="noopener">설계 시트 (XLSX) ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="시스템 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-14</span>
             <span class="devlog-tag">시스템 기획</span>
@@ -506,8 +567,8 @@
           <h3 class="devlog-title">클래스 다이어그램 2차</h3>
           <p class="devlog-retro">1차에서 시민과 경찰이 둘 다 ‘Civilion’으로 적혀 있던 것을 바로잡고, 감염(infects)·사살(shoot)·스폰(spawn) 관계선을 정리했습니다. 도시 클래스가 사람 목록을 들고 클리어 조건을 검사하는 구조로 책임을 나눴습니다.</p>
           <a class="devlog-file" href="files/devlog/20260514_클래스다이어그램2_26(최지환).pdf" target="_blank" rel="noopener">다이어그램 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="시스템 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-13</span>
             <span class="devlog-tag">시스템 기획</span>
@@ -515,8 +576,8 @@
           <h3 class="devlog-title">클래스 다이어그램 1차</h3>
           <p class="devlog-retro">좀비 게임을 대상으로 사람·좀비·도시 클래스의 속성과 메서드를 처음 정리했습니다. 상속받는 두 클래스의 이름을 똑같이 적어둔 것을 다음 날 발견해 2차에서 고쳤습니다.</p>
           <a class="devlog-file" href="files/devlog/20260513_클래스다이어그램_26(최지환).pdf" target="_blank" rel="noopener">다이어그램 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="역기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-12</span>
             <span class="devlog-tag">역기획</span>
@@ -524,8 +585,8 @@
           <h3 class="devlog-title">고전 게임 역기획 — 갤러그</h3>
           <p class="devlog-retro">갤러그를 17쪽 분량으로 역기획했습니다. 규칙이 단순한 게임일수록 왜 그 규칙이어야 했는지를 되짚기가 더 어렵다는 걸 느낀 작업입니다.</p>
           <a class="devlog-file" href="files/devlog/20260512_고전게임역기획(갤러그)2_최지환.pdf" target="_blank" rel="noopener">역기획서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="시스템 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-07</span>
             <span class="devlog-tag">시스템 기획</span>
@@ -533,8 +594,8 @@
           <h3 class="devlog-title">2D 리소스 구조 — 쿠키런: 킹덤</h3>
           <p class="devlog-retro">레이어 9단을 정리하고 동적 레이어의 순서 결정 규칙을 뽑았습니다. Y축 정렬을 기본으로 두되 이펙트·데미지 숫자·UI는 예외로 고정하고, 사망한 캐릭터는 즉시 최하단으로 보냅니다. 규칙보다 예외를 어디에 둘지가 핵심이었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260507_2D리소스구조_최지환.pdf" target="_blank" rel="noopener">구조 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="UI · UX">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-06</span>
             <span class="devlog-tag">UI · UX</span>
@@ -542,8 +603,8 @@
           <h3 class="devlog-title">게임 UI 역기획서 — 몬길: STAR DIVE</h3>
           <p class="devlog-retro">로비·성장·가챠·전투 네 화면의 UI 플로우와 요소별 기획 의도를 정리하고, 각 요소의 상태(기본 / 활성 / 쿨타임 / 비활성)를 정의했습니다. 장점만 적지 않고 ‘보스 게이지 색상 직관성 부족’, ‘파티 슬롯이 작아 전투 중 식별이 어려움’ 같은 단점도 함께 남겼습니다.</p>
           <a class="devlog-file" href="files/devlog/20260506_게임UI역기획서_최지환.pdf" target="_blank" rel="noopener">역기획서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="게임 분석">
           <div class="devlog-meta">
             <span class="devlog-date">2026-05-04</span>
             <span class="devlog-tag">게임 분석</span>
@@ -551,8 +612,9 @@
           <h3 class="devlog-title">게임 분석 — 이환</h3>
           <p class="devlog-retro">전투(에스퍼 사이클)·육성(테트리스형 드라이브 모듈)·가챠(주사위 보드)·도시 생활 네 축을 분해했습니다. 픽뚫이 없고 천장 티켓이 100% 이월되는 설계가 일반적인 수집형과 무엇이 다른지를 표로 비교했습니다.</p>
           <a class="devlog-file" href="files/devlog/20260504_게임분석_이환_최지환.pdf" target="_blank" rel="noopener">분석 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <div class="devlog-month" data-month="2026.04"><span>2026.04</span></div>
+        <article class="devlog-entry" data-tag="캐릭터 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-04-15</span>
             <span class="devlog-tag">캐릭터 기획</span>
@@ -560,8 +622,8 @@
           <h3 class="devlog-title">신규 캐릭터 설정 — TFT 「Dr.P」</h3>
           <p class="devlog-retro">자운 세계관에 없던 ‘외과 의사’ 직업과, 후반 메타로 갈수록 채택률이 떨어지는 암살자 역할군의 문제를 하나의 캐릭터로 묶었습니다. 출혈 피해의 일부가 아군 회복으로 돌아가는 패시브로 ‘치료와 살상이 같은 행위’라는 테마를 수치로 옮긴 것이 설계의 중심입니다.</p>
           <a class="devlog-file" href="files/devlog/20260415_신규캐릭터설정_최지환.pdf" target="_blank" rel="noopener">설정 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="기획 제안">
           <div class="devlog-meta">
             <span class="devlog-date">2026-04-13</span>
             <span class="devlog-tag">기획 제안</span>
@@ -569,8 +631,8 @@
           <h3 class="devlog-title">제안서 작성 — Good Night 확장판</h3>
           <p class="devlog-retro">열흘 전 제안서에 시장 분석·타겟 페르소나·경쟁작 비교·수익 모델·SWOT을 붙여 확장했습니다. Devotion·Inside·Edith Finch와 비교하면서 ‘퍼즐이 플래시백 발동 조건으로 작동하는 구조’를 우리만의 차별점으로 세울 수 있었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260413_제안서작성_단위평가_최지환.pdf" target="_blank" rel="noopener">제안서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="기획 제안">
           <div class="devlog-meta">
             <span class="devlog-date">2026-04-09</span>
             <span class="devlog-tag">기획 제안</span>
@@ -578,8 +640,8 @@
           <h3 class="devlog-title">Good Night 노이즈 리스트</h3>
           <p class="devlog-retro">제 제안서를 스스로 검증한 문서입니다. 선택지 시스템의 의도, 플래시백 발동 조건, 엔딩 전환 조건 세 가지가 명시되어 있지 않다는 것을 찾아 각각 완화 방안을 붙였습니다. 만든 사람이 자기 문서의 구멍을 찾는 연습이었고, 이후 기획서를 쓸 때 기준이 됐습니다.</p>
           <a class="devlog-file" href="files/devlog/20260409_Good Night_노이즈리스트_최지환.pdf" target="_blank" rel="noopener">노이즈 리스트 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="시스템 기획">
           <div class="devlog-meta">
             <span class="devlog-date">2026-04-09</span>
             <span class="devlog-tag">시스템 기획</span>
@@ -587,8 +649,8 @@
           <h3 class="devlog-title">호혜성 설계 연습</h3>
           <p class="devlog-retro">유저와의 관계를 초·중·후반으로 나눠 요구와 보상의 균형을 설계했습니다. WoW 초창기의 ‘선 넘는 요구’와 배틀그라운드 초기 시즌패스의 ‘얕은 보상’을 반례로 놓고 각각 완화 방안을 붙였습니다.</p>
           <a class="devlog-file" href="files/devlog/20260409_호혜성_최지환.pdf" target="_blank" rel="noopener">연습 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="게임 분석">
           <div class="devlog-meta">
             <span class="devlog-date">2026-04-09</span>
             <span class="devlog-tag">게임 분석</span>
@@ -596,8 +658,8 @@
           <h3 class="devlog-title">USP 도출 — 전략 장르 3종</h3>
           <p class="devlog-retro">Hearts of Iron IV · Civilization VI · RimWorld의 셀링 포인트를 각각 둘씩 뽑아 비교했습니다. 같은 전략 장르인데도 ‘실시간 규모’, ‘다수의 승리 조건’, ‘정해진 목표가 없음’으로 차별점이 완전히 갈린다는 것이 결론이었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260409_USP도출_최지환.pdf" target="_blank" rel="noopener">분석 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="기획 제안">
           <div class="devlog-meta">
             <span class="devlog-date">2026-04-03</span>
             <span class="devlog-tag">기획 제안</span>
@@ -605,8 +667,9 @@
           <h3 class="devlog-title">게임 제안서 — Good Night</h3>
           <p class="devlog-retro">한나 아렌트의 ‘악의 평범성’을 테마로 잡은 인터랙티브 무비 퍼즐 공포 게임입니다. ‘어떤 선택을 해도 결말은 같다’는 구조 자체를 무력감이라는 미학의 장치로 쓰기로 하고, 코어 루프와 챕터별 사회적 메시지를 함께 설계했습니다.</p>
           <a class="devlog-file" href="files/devlog/20260403_제안서_최지환.pdf" target="_blank" rel="noopener">제안서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <div class="devlog-month" data-month="2026.03"><span>2026.03</span></div>
+        <article class="devlog-entry" data-tag="게임 분석">
           <div class="devlog-meta">
             <span class="devlog-date">2026-03-31</span>
             <span class="devlog-tag">게임 분석</span>
@@ -614,8 +677,8 @@
           <h3 class="devlog-title">테마와 메카닉스 분석 — 림월드</h3>
           <p class="devlog-retro">메카닉스 12종을 나열한 뒤 계획·자원 순환·방어·캐릭터 관리 네 개를 핵심으로 추렸습니다. 스토리를 전면에 두지 않고 ‘이야기꾼’으로 난이도를 고르게 한 구조가, 플레이어를 제3자 관찰자 자리에 앉히는 장치라는 점이 인상적이었습니다.</p>
           <a class="devlog-file" href="files/devlog/20260331_테마와메카닉스분석_최지환.pdf" target="_blank" rel="noopener">분석 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <article class="devlog-entry" data-tag="게임 분석">
           <div class="devlog-meta">
             <span class="devlog-date">2026-03-29</span>
             <span class="devlog-tag">게임 분석</span>
@@ -623,16 +686,18 @@
           <h3 class="devlog-title">게임 분석 — 두근두근타운(Hertopia)</h3>
           <p class="devlog-retro">생활 시뮬레이션의 핵심 루프(NPC 의뢰 → 재료 수급 → 가구 제작 → 보상)를 정리하고, 반복 퀘스트와 느린 이동이 초반 템포를 떨어뜨린다고 봤습니다. 다만 BM에 차량이 있는 것을 보고, 이동 수단을 일부러 수익화 지점으로 남겨둔 설계일 수 있다고 판단했습니다.</p>
           <a class="devlog-file" href="files/devlog/20260329_두근두근타운(Hertopia)분석_최지환.pdf" target="_blank" rel="noopener">분석 문서 PDF ↗</a>
-        </div>
-        <div class="devlog-entry">
+        </article>
+        <div class="devlog-month" data-month="날짜 미상"><span>날짜 미상</span></div>
+        <article class="devlog-entry" data-tag="회고">
           <div class="devlog-meta">
             <span class="devlog-tag">회고</span>
           </div>
           <h3 class="devlog-title">베스트 게임 5 선정</h3>
           <p class="devlog-retro">마인크래프트 · Hearts of Iron IV · 림월드 · Barony · 리그 오브 레전드를 고르고 왜 좋았는지 적었습니다. 지금 다시 보면 자유도와 ‘플레이어가 스스로 이야기를 만드는 구조’에 반복해서 끌린다는 게 보입니다. 이후 기획 취향의 출발점입니다.</p>
           <a class="devlog-file" href="files/devlog/최지환_베스트 게임 5 선정.pdf" target="_blank" rel="noopener">정리 문서 PDF ↗</a>
-        </div>
+        </article>
       </div>
+      <p class="devlog-empty" id="devlogEmpty" hidden>이 분류에는 아직 글이 없습니다.</p>
     </div>
   </section>
 
@@ -666,13 +731,46 @@
   try {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+      // threshold 를 비율로 주면 화면보다 큰 섹션은 영영 조건을 못 채운다.
+      // (데브로그처럼 6,000px 짜리 섹션이 720px 화면에서 12% 를 넘길 수 없다)
+      // 그래서 '한 픽셀이라도 들어오면' 으로 두고 아래쪽 여백으로 타이밍만 잡는다.
+    }, { threshold: 0, rootMargin: "0px 0px -80px 0px" });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     window.__revealReady = true;
   } catch (err) {
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
     window.__revealReady = true;
   }
+</script>
+<script>
+(function(){
+  var bar = document.getElementById('devlogFilter');
+  if (!bar) return;
+  var list = document.getElementById('devlogList');
+  var empty = document.getElementById('devlogEmpty');
+  bar.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.dl-chip');
+    if (!btn) return;
+    var tag = btn.getAttribute('data-tag');
+    bar.querySelectorAll('.dl-chip').forEach(function (b) { b.classList.toggle('is-on', b === btn); });
+    var shown = 0;
+    list.querySelectorAll('.devlog-entry').forEach(function (el) {
+      var on = !tag || el.getAttribute('data-tag') === tag;
+      el.hidden = !on;
+      if (on) shown++;
+    });
+    // 뒤따르는 글이 하나도 없는 월 표시는 숨긴다
+    list.querySelectorAll('.devlog-month').forEach(function (h) {
+      var n = h.nextElementSibling, any = false;
+      while (n && !n.classList.contains('devlog-month')) {
+        if (n.classList.contains('devlog-entry') && !n.hidden) { any = true; break; }
+        n = n.nextElementSibling;
+      }
+      h.hidden = !any;
+    });
+    if (empty) empty.hidden = shown > 0;
+  });
+})();
 </script>
 
 <script>
