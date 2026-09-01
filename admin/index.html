@@ -166,7 +166,8 @@
   <div class="pane form-pane" id="form"></div>
   <div class="pane preview-pane">
     <div class="preview-head">
-      <span>미리보기 — 실제 사이트와 동일하게 그려집니다</span>
+      <span>미리보기</span>
+      <select id="pageSel"></select>
       <select id="viewMode" style="margin-left:auto">
         <option value="desktop">데스크톱</option>
         <option value="mobile">모바일</option>
@@ -202,7 +203,7 @@
 </div>
 
 <script type="module">
-import { renderPage } from "../src/template.js";
+import { renderPage, sitePages } from "../src/template.js";
 import { mountStats } from "./stats.js";
 
 /* ===================== 설정 ===================== */
@@ -245,6 +246,7 @@ async function load() {
   // renderForm 이 빈 블록/기본값을 채워 넣으므로, 그 뒤에 기준값을 잡아야
   // 아무것도 안 고쳤는데 '수정됨'으로 뜨지 않는다.
   renderForm();
+  refreshPageSel();
   originalJson = JSON.stringify(content);
   renderPreview();
   setStatus(localStorage.getItem(TOKEN_KEY) ? "준비됨" : "토큰 미등록 — 파일로 저장만 가능", localStorage.getItem(TOKEN_KEY) ? "ok" : "warn");
@@ -253,11 +255,23 @@ async function load() {
 
 /* ===================== 미리보기 ===================== */
 let previewTimer;
+let previewKey = "index";
+// 페이지가 여러 장이므로 어느 장을 미리 볼지 고른다. 프로젝트를 추가·삭제하면 목록도 따라 바뀐다.
+function refreshPageSel() {
+  const sel = $("pageSel");
+  const prev = sel.value || previewKey;
+  sel.textContent = "";
+  for (const pg of sitePages(content)) {
+    sel.append(el("option", { value: pg.key }, pg.label));
+  }
+  sel.value = [...sel.options].some((o) => o.value === prev) ? prev : "index";
+  previewKey = sel.value;
+}
 function renderPreview() {
   clearTimeout(previewTimer);
   previewTimer = setTimeout(() => {
     try {
-      $("preview").srcdoc = renderPage(content, css);
+      $("preview").srcdoc = renderPage(content, css, previewKey);
     } catch (e) {
       setStatus("미리보기 오류: " + e.message, "err");
     }
@@ -265,6 +279,7 @@ function renderPreview() {
 }
 
 function changed() {
+  refreshPageSel();
   renderPreview();
   const dirty = JSON.stringify(content) !== originalJson;
   setStatus(dirty ? "수정됨 — 아직 반영 전" : "변경 없음", dirty ? "warn" : "");
@@ -863,6 +878,7 @@ $("statsBtn").onclick = () => {
   $("statsBtn").textContent = "편집으로";
   stats.open();
 };
+$("pageSel").onchange = (e) => { previewKey = e.target.value; renderPreview(); };
 $("viewMode").onchange = (e) => {
   $("frameWrap").classList.toggle("mobile", e.target.value === "mobile");
 };

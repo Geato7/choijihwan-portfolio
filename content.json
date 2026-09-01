@@ -15,7 +15,9 @@
     "analytics": {
       "projectId": "github-portfolio-choijihwan",
       "apiKey": "AIzaSyC6ItB_K9bF19iYiSdGVeXDpfRdIB8BO5I"
-    }
+    },
+    "projectsNavLabel": "프로젝트",
+    "projectsIndexLead": "여섯 개의 프로젝트를 분류와 시기로 정리했습니다. 카드를 누르면 해당 프로젝트 페이지로 이동합니다."
   },
   "hero": {
     "eyebrow": "Game Designer Portfolio",
@@ -33,13 +35,13 @@
     "buttons": [
       {
         "label": "세부 연락처 ↓",
-        "href": "#contact",
+        "href": "contact.html",
         "style": "primary",
         "newTab": false
       },
       {
         "label": "프로젝트 보기 ↓",
-        "href": "#projects",
+        "href": "projects.html",
         "style": "outline",
         "newTab": false
       }
@@ -399,7 +401,6 @@
         }
       ],
       "cardSummary": "12년차 라이브 게임을 MDA로 분석하고 신규 콘텐츠 2건 제안 — 개인 작업",
-      "thumb": "",
       "galleryFit": "contain",
       "date": "2026.08"
     },

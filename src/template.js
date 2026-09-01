@@ -1,6 +1,13 @@
-// content.json -> index.html 로 바꾸는 템플릿.
+// content.json -> 사이트 HTML 로 바꾸는 템플릿.
 // Node(build.mjs)와 브라우저(admin 에디터 미리보기)에서 똑같이 쓰인다.
 // 이 파일을 고치면 사이트의 "구조"가 바뀐다. 글 내용만 바꿀 거라면 content.json을 고칠 것.
+//
+// 사이트는 여러 장으로 나뉜다. 헤더 메뉴는 이 네 갈래만 보여준다.
+//   index.html            소개
+//   projects.html         프로젝트 목차(카드)
+//   projects/<id>.html    프로젝트 하나
+//   devlog.html           데브로그
+//   contact.html          연락처
 
 import { analyticsScript } from "./analytics.js";
 import { gameCss, gameMarkup, gameScript } from "./game.js";
@@ -17,16 +24,25 @@ const attr = (v) => esc(v);
 // 비어 있는 항목은 렌더하지 않는다 (에디터에서 지우면 사이트에서도 사라지도록)
 const has = (v) => Array.isArray(v) ? v.length > 0 : !!v;
 
-function btn(b) {
-  const cls = b.style === "primary" ? "btn btn-primary" : "btn btn-outline";
-  const target = b.newTab ? ' target="_blank" rel="noopener"' : "";
-  return `<a class="${cls}" href="${attr(b.href)}"${target}>${esc(b.label)}</a>`;
+// projects/ 안의 페이지는 한 단계 깊으므로 상대 경로 앞에 ../ 가 붙는다.
+// 절대 주소·앵커·mailto·tel 은 그대로 둔다.
+function resolve(href, prefix) {
+  const v = String(href ?? "");
+  if (!prefix || !v) return v;
+  if (/^(https?:)?\/\//i.test(v) || /^(#|mailto:|tel:|\/)/.test(v)) return v;
+  return prefix + v;
 }
 
-function buttonRow(buttons) {
+function btn(b, prefix) {
+  const cls = b.style === "primary" ? "btn btn-primary" : "btn btn-outline";
+  const target = b.newTab ? ' target="_blank" rel="noopener"' : "";
+  return `<a class="${cls}" href="${attr(resolve(b.href, prefix))}"${target}>${esc(b.label)}</a>`;
+}
+
+function buttonRow(buttons, prefix) {
   if (!has(buttons)) return "";
   return `      <div class="cta-row">
-${buttons.map((b) => "        " + btn(b)).join("\n")}
+${buttons.map((b) => "        " + btn(b, prefix)).join("\n")}
       </div>`;
 }
 
@@ -42,7 +58,7 @@ function myPart(mp) {
 ${has(mp.intro) ? `        <p>${esc(mp.intro)}</p>\n` : ""}${bullets ? `        <ul>\n${bullets}\n        </ul>\n` : ""}      </div>`;
 }
 
-function gallery(items, fit) {
+function gallery(items, fit, prefix) {
   if (!has(items)) return "";
   // 와이어프레임처럼 잘리면 안 되는 문서형 이미지는 fit="contain" 으로 통째로 보여준다
   // contain = 정해진 칸 안에 통째로, natural = 이미지 원본 비율 그대로
@@ -52,7 +68,7 @@ function gallery(items, fit) {
   const figs = items
     .map(
       (g) => `        <figure>
-          <img src="${attr(g.src)}" alt="${attr(g.alt)}" loading="lazy">
+          <img src="${attr(resolve(g.src, prefix))}" alt="${attr(g.alt)}" loading="lazy">
 ${has(g.caption) ? `          <figcaption>${esc(g.caption)}</figcaption>\n` : ""}        </figure>`
     )
     .join("\n");
@@ -61,10 +77,10 @@ ${figs}
       </div>`;
 }
 
-function wideShot(w) {
+function wideShot(w, prefix) {
   if (!w || !has(w.src)) return "";
   return `      <figure class="wide-shot">
-        <img src="${attr(w.src)}" alt="${attr(w.alt)}" loading="lazy">
+        <img src="${attr(resolve(w.src, prefix))}" alt="${attr(w.alt)}" loading="lazy">
 ${has(w.caption) ? `        <figcaption>${esc(w.caption)}</figcaption>\n` : ""}      </figure>`;
 }
 
@@ -129,16 +145,16 @@ ${body}
 
 const DEFAULT_BLOCKS = ["myPart", "gallery", "wideShot", "stats", "videos", "details", "table", "buttons"];
 
-function project(p, featuredLabel) {
+function project(p, featuredLabel, prefix) {
   const renderers = {
     myPart: () => myPart(p.myPart),
-    gallery: () => gallery(p.gallery, p.galleryFit),
-    wideShot: () => wideShot(p.wideShot),
+    gallery: () => gallery(p.gallery, p.galleryFit, prefix),
+    wideShot: () => wideShot(p.wideShot, prefix),
     stats: () => stats(p.stats),
     videos: () => videos(p.videos),
     details: () => details(p.details),
     table: () => table(p.table),
-    buttons: () => buttonRow(p.buttons),
+    buttons: () => buttonRow(p.buttons, prefix),
   };
   const order = has(p.blocks) ? p.blocks : DEFAULT_BLOCKS;
   const body = order
@@ -170,88 +186,44 @@ ${body}
   </section>`;
 }
 
-// 프로젝트 카드 인덱스 — 히어로 바로 아래. 긴 페이지의 목차 역할을 한다.
-function projectIndex(projects, title) {
-  if (projects.length < 2) return "";
-  const cards = projects
-    .map((p) => {
-      // 썸네일은 따로 지정하지 않으면 큰 이미지 → 갤러리 첫 장 순으로 자동 선택
-      // thumb 를 명시하면 그 값을 그대로 쓴다. 빈 문자열이면 "이미지 없음" 카드가 된다.
-      const thumb = p.thumb !== undefined ? p.thumb
-        : (p.wideShot && p.wideShot.src) || (p.gallery && p.gallery[0] && p.gallery[0].src) || "";
-      // "05 — TEAM PROJECT" 에서 분류만 떼어낸다 (이미지 없는 카드에 쓴다)
-      const kind = String(p.num || "").split("—").pop().trim();
-      const inner = thumb
-        ? `<img src="${attr(thumb)}" alt="" loading="lazy">`
-        : `<span class="pcard-noimg">${esc(kind || p.title)}</span>`;
-      return `        <a class="pcard" href="#${attr(p.id)}">
-          <span class="pcard-thumb">${inner}</span>
-          <span class="pcard-body">
-${has(p.num) || has(p.date) ? `            <span class="pcard-num">${esc(p.num)}${has(p.num) && has(p.date) ? " · " : ""}${esc(p.date)}</span>\n` : ""}            <span class="pcard-title">${esc(p.title)}</span>
-            <span class="pcard-sum">${esc(p.cardSummary || p.role)}</span>
-          </span>
+// 프로젝트 상세 페이지 맨 아래 — 목록으로 돌아가거나 앞뒤 프로젝트로 넘어간다
+function pager(projects, idx, indexLabel) {
+  const prev = projects[idx - 1];
+  const next = projects[idx + 1];
+  const link = (p, dir, label) =>
+    `        <a class="pager-link pager-${dir}" href="${attr(p.id)}.html">
+          <span class="pager-dir">${esc(label)}</span>
+          <span class="pager-title">${esc(p.title)}</span>
         </a>`;
-    })
-    .join("\n");
-
-  return `  <!-- PROJECT INDEX -->
-  <section class="index-sec reveal" id="projects">
+  return `  <nav class="pager-sec reveal" aria-label="프로젝트 이동">
     <div class="wrap">
-      <h2 class="index-title">${esc(title)}</h2>
-      <div class="index-grid">
-${cards}
+      <a class="pager-index" href="../projects.html">← ${esc(indexLabel)} 전체 보기</a>
+      <div class="pager-row">
+${prev ? link(prev, "prev", "이전") : `        <span class="pager-link pager-empty"></span>`}
+${next ? link(next, "next", "다음") : `        <span class="pager-link pager-empty"></span>`}
       </div>
     </div>
-  </section>`;
+  </nav>`;
 }
 
-function hero(h, firstProjectId) {
-  const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
-  const buttons = (h.buttons || []).map((b) => {
-    // "프로젝트 보기" 버튼이 사라진 프로젝트를 가리키지 않도록 보정
-    if (b.href === "#belief" && firstProjectId) return { ...b, href: `#${firstProjectId}` };
-    return b;
-  });
-  const meta = (h.meta || [])
-    .map(
-      (m) => `        <div>
-          <div class="meta-label">${esc(m.label)}</div>
-          <div class="meta-value">${(m.lines || []).map(esc).join("<br>")}</div>
-        </div>`
-    )
-    .join("\n");
-
-  return `  <!-- HERO / PROFILE -->
-  <section class="hero" id="home">
-    <div class="wrap">
-      <div class="eyebrow">${esc(h.eyebrow)}</div>
-      <h1>${esc(h.name)}${has(h.subtitle) ? ` <span>${esc(h.subtitle)}</span>` : ""}</h1>
-${has(h.lead) ? `      <p class="lead">${esc(h.lead)}</p>\n` : ""}${tags ? `      <div class="tags">\n${tags}\n      </div>\n` : ""}${
-    has(buttons) ? `      <div class="cta-row">\n${buttons.map((b) => "        " + btn(b)).join("\n")}\n      </div>\n` : ""
-  }
-${meta ? `      <div class="meta-grid">\n${meta}\n      </div>\n` : ""}    </div>
-  </section>`;
-}
-
-// 데브로그 — 날짜순 기록 한 줄. 별도 페이지 없이 한 섹션 안에 리스트로 쌓인다.
-function devlogEntry(e) {
+// 데브로그 — 날짜순 기록 한 줄. 한 섹션 안에 리스트로 쌓인다.
+function devlogEntry(e, prefix) {
   return `        <div class="devlog-entry">
           <div class="devlog-meta">
 ${has(e.date) ? `            <span class="devlog-date">${esc(e.date)}</span>\n` : ""}${has(e.project) ? `            <span class="devlog-tag">${esc(e.project)}</span>\n` : ""}          </div>
           <h3 class="devlog-title">${esc(e.title)}</h3>
-${has(e.retro) ? `          <p class="devlog-retro">${esc(e.retro)}</p>\n` : ""}${has(e.fileHref) ? `          <a class="devlog-file" href="${attr(e.fileHref)}" target="_blank" rel="noopener">${esc(e.fileLabel || "파일 보기")} ↗</a>\n` : ""}        </div>`;
+${has(e.retro) ? `          <p class="devlog-retro">${esc(e.retro)}</p>\n` : ""}${has(e.fileHref) ? `          <a class="devlog-file" href="${attr(resolve(e.fileHref, prefix))}" target="_blank" rel="noopener">${esc(e.fileLabel || "파일 보기")} ↗</a>\n` : ""}        </div>`;
 }
 
-function devlogSection(dl) {
+function devlogSection(dl, prefix) {
   const entries = ((dl && dl.entries) || []).filter((e) => has(e.title));
   if (!entries.length) return "";
   // 최신 글이 위로 오도록 날짜 내림차순 정렬 (에디터에서 순서를 따로 관리할 필요 없게)
   const sorted = entries
     .slice()
     .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
-  const items = sorted.map(devlogEntry).join("\n");
-  return `  <!-- DEVLOG -->
-  <section class="project reveal" id="devlog">
+  const items = sorted.map((e) => devlogEntry(e, prefix)).join("\n");
+  return `  <section class="project reveal" id="devlog">
     <div class="wrap">
       <div class="section-head">
         <h2>${esc(dl.heading || "데브로그")}</h2>
@@ -263,40 +235,133 @@ ${items}
   </section>`;
 }
 
-function footer(c, gameCta) {
+// 프로젝트 카드 목차 — projects.html 의 본문. 카드를 누르면 그 프로젝트 페이지로 간다.
+function projectIndex(projects, title, lead, prefix) {
+  const cards = projects
+    .map((p) => {
+      // 썸네일은 따로 지정하지 않으면 큰 이미지 → 갤러리 첫 장 순으로 자동 선택
+      // thumb 를 명시하면 그 값을 그대로 쓴다. 빈 문자열이면 "이미지 없음" 카드가 된다.
+      const thumb = p.thumb !== undefined ? p.thumb
+        : (p.wideShot && p.wideShot.src) || (p.gallery && p.gallery[0] && p.gallery[0].src) || "";
+      // "05 — TEAM PROJECT" 에서 분류만 떼어낸다 (이미지 없는 카드에 쓴다)
+      const kind = String(p.num || "").split("—").pop().trim();
+      const inner = thumb
+        ? `<img src="${attr(resolve(thumb, prefix))}" alt="" loading="lazy">`
+        : `<span class="pcard-noimg">${esc(kind || p.title)}</span>`;
+      return `        <a class="pcard" href="${attr(prefix)}projects/${attr(p.id)}.html">
+          <span class="pcard-thumb">${inner}</span>
+          <span class="pcard-body">
+${has(p.num) || has(p.date) ? `            <span class="pcard-num">${esc(p.num)}${has(p.num) && has(p.date) ? " · " : ""}${esc(p.date)}</span>\n` : ""}            <span class="pcard-title">${esc(p.title)}</span>
+            <span class="pcard-sum">${esc(p.cardSummary || p.role)}</span>
+          </span>
+        </a>`;
+    })
+    .join("\n");
+
+  return `  <section class="index-sec reveal" id="projects">
+    <div class="wrap">
+      <h1 class="index-title">${esc(title)}</h1>
+${has(lead) ? `      <p class="index-lead">${esc(lead)}</p>\n` : ""}      <div class="index-grid">
+${cards}
+      </div>
+    </div>
+  </section>`;
+}
+
+function hero(h, prefix) {
+  const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
+  // 옛 앵커 주소를 새 페이지로 옮겨준다 (content.json 을 고치지 않아도 동작하도록)
+  const MAP = { "#projects": "projects.html", "#contact": "contact.html", "#belief": "projects.html", "#home": "index.html" };
+  const buttons = (h.buttons || []).map((b) => (MAP[b.href] ? { ...b, href: MAP[b.href] } : b));
+  const meta = (h.meta || [])
+    .map(
+      (m) => `        <div>
+          <div class="meta-label">${esc(m.label)}</div>
+          <div class="meta-value">${(m.lines || []).map(esc).join("<br>")}</div>
+        </div>`
+    )
+    .join("\n");
+
+  return `  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="eyebrow">${esc(h.eyebrow)}</div>
+      <h1>${esc(h.name)}${has(h.subtitle) ? ` <span>${esc(h.subtitle)}</span>` : ""}</h1>
+${has(h.lead) ? `      <p class="lead">${esc(h.lead)}</p>\n` : ""}${tags ? `      <div class="tags">\n${tags}\n      </div>\n` : ""}${
+    has(buttons) ? `      <div class="cta-row">\n${buttons.map((b) => "        " + btn(b, prefix)).join("\n")}\n      </div>\n` : ""
+  }
+${meta ? `      <div class="meta-grid">\n${meta}\n      </div>\n` : ""}    </div>
+  </section>`;
+}
+
+// 연락처 — contact.html 의 본문
+function contactSection(c, gameCta) {
   const links = [];
   if (has(c.phone)) links.push(`        <a class="btn btn-primary" href="tel:${attr(String(c.phone).replace(/[^0-9+]/g, ""))}">${esc(c.phone)}</a>`);
   if (has(c.email)) links.push(`        <a class="btn btn-outline" href="mailto:${attr(c.email)}">${esc(c.email)}</a>`);
 
-  return `  <!-- CONTACT -->
-  <footer id="contact">
+  return `  <section class="contact-sec reveal" id="contact">
     <div class="wrap">
-      <h2>${esc(c.heading)}</h2>
-${has(c.text) ? `      <p>${esc(c.text)}</p>\n` : ""}${links.length ? `      <div class="contact-links">\n${links.join("\n")}\n      </div>\n` : ""}${gameCta ? gameCta + "\n" : ""}      <div class="foot-bottom">
+      <h1>${esc(c.heading)}</h1>
+${has(c.text) ? `      <p>${esc(c.text)}</p>\n` : ""}${links.length ? `      <div class="contact-links">\n${links.join("\n")}\n      </div>\n` : ""}${gameCta ? gameCta + "\n" : ""}    </div>
+  </section>`;
+}
+
+// 모든 페이지 맨 아래에 붙는 한 줄
+function siteFooter(c) {
+  return `  <footer class="site-foot">
+    <div class="wrap">
+      <div class="foot-bottom">
         <span>${esc(c.copyright)}</span>
-        <span><a href="#home">${esc(c.backToTop || "맨 위로 ↑")}</a></span>
+        <span><a href="#top">${esc(c.backToTop || "맨 위로 ↑")}</a></span>
       </div>
     </div>
   </footer>`;
 }
 
-export function renderPage(content, css) {
-  const { site, hero: h, projects = [], contact, devlog } = content;
-  const devlogEntries = ((devlog && devlog.entries) || []).filter((e) => has(e.title));
-  // 공유 미리보기(og)용 절대 주소 — 상대 경로를 쓰면 카카오톡/슬랙이 이미지를 못 찾는다
+/* ── 페이지 목록 ─────────────────────────────────────────────── */
+
+function devlogCount(content) {
+  return (((content.devlog || {}).entries) || []).filter((e) => has(e.title)).length;
+}
+
+export function sitePages(content) {
+  const { projects = [] } = content;
+  const pages = [
+    { key: "index", path: "index.html", label: "소개" },
+    { key: "projects", path: "projects.html", label: "프로젝트 목차" },
+  ];
+  for (const p of projects) {
+    pages.push({ key: `project:${p.id}`, path: `projects/${p.id}.html`, label: `프로젝트 — ${p.title}` });
+  }
+  if (devlogCount(content)) pages.push({ key: "devlog", path: "devlog.html", label: "데브로그" });
+  pages.push({ key: "contact", path: "contact.html", label: "연락처" });
+  return pages;
+}
+
+function navBar(content, prefix, current) {
+  const { site, devlog } = content;
+  const items = [
+    ["index", site.homeNavLabel || "소개", "index.html"],
+    ["projects", site.projectsNavLabel || "프로젝트", "projects.html"],
+  ];
+  if (devlogCount(content)) items.push(["devlog", (devlog && devlog.navLabel) || "데브로그", "devlog.html"]);
+  items.push(["contact", site.contactNavLabel || "연락처", "contact.html"]);
+
+  return items
+    .map(([key, label, href]) =>
+      `      <a href="${attr(prefix + href)}"${key === current ? ' class="current" aria-current="page"' : ""}>${esc(label)}</a>`)
+    .join("\n");
+}
+
+/* ── 페이지 한 장 ────────────────────────────────────────────── */
+
+function shell(content, css, o) {
+  const { site, contact } = content;
+  const prefix = o.prefix;
   const base = String(site.url || "").replace(/\/*$/, "/");
-  // 미니게임 — content.json 의 site.miniGame 이 false 면 통째로 빠진다
-  const gameOn = site.miniGame !== false;
-  const game = gameOn ? gameMarkup(site) : null;
-
+  const game = o.withGame ? gameMarkup(site) : null;
   const ogImg = base && site.ogImage ? base + site.ogImage + (site.ogImageVersion ? "?v=" + site.ogImageVersion : "") : "";
-
-  const navLinks = [
-    `      <a href="#home">${esc(site.homeNavLabel || "소개")}</a>`,
-    ...projects.map((p) => `      <a href="#${attr(p.id)}">${esc(p.navLabel || p.title)}</a>`),
-    ...(devlogEntries.length ? [`      <a href="#devlog">${esc((devlog && devlog.navLabel) || "데브로그")}</a>`] : []),
-    `      <a href="#contact">${esc(site.contactNavLabel || "연락처")}</a>`,
-  ].join("\n");
+  const pageUrl = base ? base + (o.canonicalPath === "index.html" ? "" : o.canonicalPath) : "";
 
   return `<!DOCTYPE html>
 <!--
@@ -307,28 +372,28 @@ export function renderPage(content, css) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(site.title)}</title>
-<meta name="description" content="${attr(site.description)}">
-${base ? `<link rel="canonical" href="${attr(base)}">` : ""}
+<title>${esc(o.title)}</title>
+<meta name="description" content="${attr(o.description)}">
+${pageUrl ? `<link rel="canonical" href="${attr(pageUrl)}">` : ""}
 <meta name="theme-color" content="${attr(site.themeColor || "#0a0a0a")}">
 
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="${attr(prefix)}favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="${attr(prefix)}apple-touch-icon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${attr(site.title)}">
-<meta property="og:title" content="${attr(site.title)}">
-<meta property="og:description" content="${attr(site.description)}">
-<meta property="og:locale" content="ko_KR">${base ? `
-<meta property="og:url" content="${attr(base)}">` : ""}${ogImg ? `
+<meta property="og:title" content="${attr(o.title)}">
+<meta property="og:description" content="${attr(o.description)}">
+<meta property="og:locale" content="ko_KR">${pageUrl ? `
+<meta property="og:url" content="${attr(pageUrl)}">` : ""}${ogImg ? `
 <meta property="og:image" content="${attr(ogImg)}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${attr(site.title)}">` : ""}
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${attr(site.title)}">
-<meta name="twitter:description" content="${attr(site.description)}">${ogImg ? `
+<meta name="twitter:title" content="${attr(o.title)}">
+<meta name="twitter:description" content="${attr(o.description)}">${ogImg ? `
 <meta name="twitter:image" content="${attr(ogImg)}">` : ""}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -348,7 +413,6 @@ ${base ? `<link rel="canonical" href="${attr(base)}">` : ""}
     el.className += (el.className ? ' ' : '') + 'js';
 
     // 아래쪽 스크립트가 오류로 죽어 관찰자가 안 붙는 경우를 대비한 안전장치.
-    // 정상 동작하면 __revealReady 가 true 라서 아무 일도 하지 않는다.
     setTimeout(function(){
       if (window.__revealReady) return;
       var items = document.querySelectorAll('.reveal');
@@ -358,16 +422,16 @@ ${base ? `<link rel="canonical" href="${attr(base)}">` : ""}
 </script>
 <style>
 ${css}
-${gameOn ? gameCss() : ""}
+${o.withGame ? gameCss() : ""}
 </style>
 </head>
 <body>
 
-<header class="nav">
+<header class="nav" id="top">
   <div class="nav-inner">
-    <a class="logo" href="#home">${esc(site.logo)}</a>
+    <a class="logo" href="${attr(prefix)}index.html">${esc(site.logo)}</a>
     <nav class="nav-links" id="navLinks">
-${navLinks}
+${navBar(content, prefix, o.nav)}
     </nav>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="밝은 화면 / 어두운 화면 전환" title="밝게 / 어둡게">
@@ -388,15 +452,9 @@ ${navLinks}
 
 <main>
 
-${hero(h, projects[0]?.id)}
+${o.body}
 
-${projectIndex(projects, site.projectsIndexTitle || "프로젝트")}
-
-${projects.map((pr) => project(pr, site.featuredLabel)).join("\n\n")}
-
-${devlogSection(devlog)}
-
-${footer(contact, gameOn ? game.cta : "")}
+${siteFooter(contact)}
 
 </main>
 
@@ -427,9 +485,76 @@ ${footer(contact, gameOn ? game.cta : "")}
     window.__revealReady = true;
   }
 </script>
-${gameOn ? game.modal + "\n" + gameScript() : ""}
+${o.withGame ? game.modal + "\n" + gameScript() : ""}
 ${analyticsScript(site.analytics)}
 </body>
 </html>
 `;
+}
+
+/* ── 페이지별 본문 ───────────────────────────────────────────── */
+
+export function renderPage(content, css, key = "index") {
+  const { site, hero: h, projects = [], contact, devlog } = content;
+  const siteName = site.logo || site.title || "";
+  const gameOn = site.miniGame !== false;
+
+  if (key === "projects") {
+    const t = site.projectsIndexTitle || "프로젝트";
+    return shell(content, css, {
+      prefix: "", nav: "projects", canonicalPath: "projects.html",
+      title: `${t} — ${siteName}`, description: site.description,
+      body: projectIndex(projects, t, site.projectsIndexLead, ""),
+    });
+  }
+
+  if (key === "devlog") {
+    const dl = devlog || {};
+    return shell(content, css, {
+      prefix: "", nav: "devlog", canonicalPath: "devlog.html",
+      title: `${dl.heading || "데브로그"} — ${siteName}`,
+      description: dl.lead || site.description,
+      body: devlogSection(dl, ""),
+    });
+  }
+
+  if (key === "contact") {
+    const game = gameOn ? gameMarkup(site) : null;
+    return shell(content, css, {
+      prefix: "", nav: "contact", canonicalPath: "contact.html",
+      title: `${site.contactNavLabel || "연락처"} — ${siteName}`,
+      description: contact.text || site.description,
+      body: contactSection(contact, gameOn ? game.cta : ""),
+      withGame: gameOn,
+    });
+  }
+
+  if (key.startsWith("project:")) {
+    const id = key.slice("project:".length);
+    const idx = projects.findIndex((p) => p.id === id);
+    if (idx < 0) return "";
+    const p = projects[idx];
+    return shell(content, css, {
+      prefix: "../", nav: "projects", canonicalPath: `projects/${id}.html`,
+      title: `${p.title} — ${siteName}`,
+      description: p.cardSummary || p.role || site.description,
+      body: [project(p, site.featuredLabel, "../"),
+             pager(projects, idx, site.projectsIndexTitle || "프로젝트")].join("\n\n"),
+    });
+  }
+
+  // 기본값: 소개
+  return shell(content, css, {
+    prefix: "", nav: "index", canonicalPath: "index.html",
+    title: site.title, description: site.description,
+    body: hero(h, ""),
+  });
+}
+
+// build.mjs 가 쓰는 진입점 — [{ path, html }, ...]
+export function renderSite(content, css) {
+  return sitePages(content).map((pg) => ({
+    path: pg.path,
+    html: renderPage(content, css, pg.key),
+  }));
 }
