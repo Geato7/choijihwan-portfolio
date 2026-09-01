@@ -311,6 +311,21 @@ function devlogScript() {
 </script>`;
 }
 
+// 게임 경험 — 플레이 이력 한 장. 숫자 줄 + 표만 쓴다.
+function playSection(ph) {
+  if (!ph || !has((ph.table || {}).rows)) return "";
+  const blocks = [stats(ph.stats), table(ph.table)].filter(Boolean).join("\n\n");
+  return `  <section class="project reveal" id="play">
+    <div class="wrap">
+      <div class="section-head">
+        <h1>${esc(ph.heading || "게임 경험")}</h1>
+${has(ph.role) ? `        <div class="role">${esc(ph.role)}</div>\n` : ""}${has(ph.lead) ? `        <p class="section-lead">${esc(ph.lead)}</p>\n` : ""}      </div>
+
+${blocks}
+    </div>
+  </section>`;
+}
+
 // 프로젝트 카드 목차 — projects.html 의 본문. 카드를 누르면 그 프로젝트 페이지로 간다.
 function projectIndex(projects, title, lead, prefix) {
   const cards = projects
@@ -420,6 +435,10 @@ function devlogCount(content) {
   return (((content.devlog || {}).entries) || []).filter((e) => has(e.title)).length;
 }
 
+function playCount(content) {
+  return ((((content.playHistory || {}).table) || {}).rows || []).length;
+}
+
 export function sitePages(content) {
   const { projects = [] } = content;
   const pages = [
@@ -431,6 +450,7 @@ export function sitePages(content) {
   }
   // 코드 안의 이름은 devlog 로 두고, 화면에 보이는 이름과 주소만 기획 노트/notes 로 쓴다
   if (devlogCount(content)) pages.push({ key: "devlog", path: "notes.html", label: "기획 노트" });
+  if (playCount(content)) pages.push({ key: "play", path: "play.html", label: "게임 경험" });
   pages.push({ key: "contact", path: "contact.html", label: "연락처" });
   return pages;
 }
@@ -442,6 +462,7 @@ function navBar(content, prefix, current) {
     ["projects", site.projectsNavLabel || "프로젝트", "projects.html"],
   ];
   if (devlogCount(content)) items.push(["devlog", (devlog && devlog.navLabel) || "기획 노트", "notes.html"]);
+  if (playCount(content)) items.push(["play", (content.playHistory && content.playHistory.navLabel) || "게임 경험", "play.html"]);
   items.push(["contact", site.contactNavLabel || "연락처", "contact.html"]);
 
   return items
@@ -628,6 +649,16 @@ export function renderPage(content, css, key = "index") {
       description: dl.lead || site.description,
       body: devlogSection(dl, ""),
       script: devlogScript(),
+    });
+  }
+
+  if (key === "play") {
+    const ph = content.playHistory || {};
+    return shell(content, css, {
+      prefix: "", nav: "play", canonicalPath: "play.html",
+      title: `${ph.heading || "게임 경험"} — ${siteName}`,
+      description: ph.lead || site.description,
+      body: playSection(ph),
     });
   }
 
