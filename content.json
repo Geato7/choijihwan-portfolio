@@ -50,6 +50,12 @@
         "href": "devlog.html",
         "style": "outline",
         "newTab": false
+      },
+      {
+        "label": "이력서 (PDF) ↗",
+        "href": "files/이력서_최지환.pdf",
+        "style": "outline",
+        "newTab": true
       }
     ],
     "meta": [
