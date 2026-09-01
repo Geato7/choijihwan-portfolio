@@ -961,7 +961,7 @@
         },
         {
           "term": "담당 업무",
-          "desc": "전투 · AI · UI 관리 시스템 C# 스크립팅 — AI는 Unity AI Navigation(NavMesh)에 커스텀 스크립트 조합"
+          "desc": "전투 · AI · UI 관리 시스템 C# 스크립팅 — 명중 판정은 공격 모션 중에만 무기 콜라이더를 여는 방식, AI는 Unity AI Navigation(NavMesh) 이동에 Animator 상태 머신과 커스텀 판단 스크립트를 조합"
         },
         {
           "term": "대화 시스템",
@@ -973,7 +973,7 @@
         },
         {
           "term": "로컬라이제이션",
-          "desc": "유니티짱(Unity-chan) 보이스 로컬라이제이션"
+          "desc": "유니티짱(Unity-chan) 보이스 적용 — 라이선스 필수 조건인 크레딧 표기를 확인해 빌드에 반영"
         },
         {
           "term": "기타",
@@ -989,7 +989,14 @@
         }
       ],
       "table": null,
-      "buttons": [],
+      "buttons": [
+        {
+          "label": "개인 기여 문서 (PDF) ↗",
+          "href": "files/엘브네아_개인기여_최지환.pdf",
+          "style": "primary",
+          "newTab": true
+        }
+      ],
       "cardSummary": "Unity 3D 액션 어드벤처 졸업작품 — 전투 · AI · UI 시스템 C# 구현",
       "date": "2025.10"
     }
