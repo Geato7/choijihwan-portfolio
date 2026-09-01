@@ -388,13 +388,56 @@ ${meta ? `      <div class="meta-grid">\n${meta}\n      </div>\n` : ""}    </div
 function contactSection(c, gameCta) {
   const links = [];
   if (has(c.phone)) links.push(`        <a class="btn btn-primary" href="tel:${attr(String(c.phone).replace(/[^0-9+]/g, ""))}">${esc(c.phone)}</a>`);
-  if (has(c.email)) links.push(`        <a class="btn btn-outline" href="mailto:${attr(c.email)}">${esc(c.email)}</a>`);
+  if (has(c.email)) {
+    links.push(`        <a class="btn btn-outline" href="mailto:${attr(c.email)}">${esc(c.email)}</a>`);
+    // mailto 가 열리지 않는 환경(웹메일만 쓰는 PC 등)에서 막다른 길이 되지 않도록 복사 버튼을 함께 둔다
+    links.push(`        <button type="button" class="btn btn-outline btn-copy" id="copyMail" aria-live="polite" data-email="${attr(c.email)}">${esc(c.copyLabel || "주소 복사")}</button>`);
+  }
 
   return `  <section class="contact-sec reveal" id="contact">
     <div class="wrap">
       <h1>${esc(c.heading)}</h1>
 ${has(c.text) ? `      <p>${esc(c.text)}</p>\n` : ""}${links.length ? `      <div class="contact-links">\n${links.join("\n")}\n      </div>\n` : ""}${gameCta ? gameCta + "\n" : ""}    </div>
   </section>`;
+}
+
+// 이메일 주소 복사 — 성공하면 버튼 글자가 잠깐 바뀐다
+function copyMailScript() {
+  return `<script>
+(function(){
+  var b = document.getElementById('copyMail');
+  if (!b) return;
+  var label = b.textContent, timer;
+  function done(ok){
+    clearTimeout(timer);
+    b.textContent = ok ? '복사됨' : '복사 실패';
+    b.classList.toggle('is-done', ok);
+    timer = setTimeout(function(){ b.textContent = label; b.classList.remove('is-done'); }, 1600);
+  }
+  function fallback(v){
+    try {
+      var t = document.createElement('textarea');
+      t.value = v;
+      t.setAttribute('readonly', '');
+      t.style.position = 'fixed';
+      t.style.top = '-1000px';
+      document.body.appendChild(t);
+      t.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(t);
+      done(ok);
+    } catch (e) { done(false); }
+  }
+  b.addEventListener('click', function(){
+    var v = b.getAttribute('data-email') || '';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(v).then(function(){ done(true); }, function(){ fallback(v); });
+    } else {
+      fallback(v);
+    }
+  });
+})();
+</script>`;
 }
 
 // 모든 페이지 맨 아래에 붙는 한 줄
@@ -669,6 +712,7 @@ export function renderPage(content, css, key = "index") {
       title: `${site.contactNavLabel || "연락처"} — ${siteName}`,
       description: contact.text || site.description,
       body: contactSection(contact, gameOn ? game.cta : ""),
+      script: copyMailScript(),
       withGame: gameOn,
     });
   }

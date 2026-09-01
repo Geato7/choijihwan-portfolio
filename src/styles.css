@@ -123,6 +123,9 @@
   .btn-primary:hover{background:var(--solid-hover);}
   .btn-outline{border-color:var(--border); color:var(--text);}
   .btn-outline:hover{border-color:var(--text-dim);}
+  /* 복사 버튼 — button 요소라 배경·글꼴을 직접 되돌려 준다 */
+  .btn-copy{background:none; font-family:inherit; line-height:inherit; cursor:pointer;}
+  .btn-copy.is-done{border-color:var(--text); color:var(--text);}
 
   .meta-grid{
     margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:0;
