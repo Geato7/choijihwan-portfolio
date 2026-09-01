@@ -405,6 +405,44 @@ function imageField(label, obj, key) {
   return f;
 }
 
+// 이미지 전용인 uploadImage 와 달리 PDF 등 어떤 파일이든 files/ 폴더로 올린다
+async function uploadFile(file, targetObj, key, refreshLabel) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) { openTokenModal(); return; }
+  if (file.size > 15 * 1024 * 1024) {
+    if (!confirm(`${(file.size / 1048576).toFixed(1)}MB 입니다. 그래도 올릴까요?`)) return;
+  }
+  const safe = file.name.normalize("NFC").replace(/\s+/g, "_");
+  const path = `files/${safe}`;
+  setStatus(`파일 업로드 중… (${safe})`);
+  try {
+    const buf = new Uint8Array(await file.arrayBuffer());
+    let bin = "";
+    for (let i = 0; i < buf.length; i += 8192) bin += String.fromCharCode(...buf.subarray(i, i + 8192));
+    const sha = await getSha(path);
+    await ghPut(path, btoa(bin), `파일 추가: ${safe}`, sha);
+    targetObj[key] = path;
+    refreshLabel();
+    changed();
+    setStatus("파일 업로드 완료 — 사이트 반영은 [사이트에 반영] 버튼", "ok");
+  } catch (e) {
+    setStatus("업로드 실패: " + e.message, "err");
+  }
+}
+
+function fileField(label, obj, key) {
+  const f = field(label, obj, key, { hint: "예: files/좀비고_단독소탕전_기획서.pdf" });
+  const input = f.querySelector("input");
+  const picker = el("input", { type: "file", style: "display:none" });
+  picker.addEventListener("change", () => {
+    if (picker.files[0]) uploadFile(picker.files[0], obj, key, () => { input.value = obj[key]; });
+    picker.value = "";
+  });
+  f.append(el("div", { style: "margin-top:6px" },
+    el("button", { class: "btn btn-sm", onclick: () => picker.click() }, "파일 올리기"), picker));
+  return f;
+}
+
 /* ===================== 폼 조립 ===================== */
 function renderForm() {
   const form = $("form");
@@ -455,6 +493,9 @@ function renderForm() {
       content.projects.push(newProject());
       renderForm(); changed();
     } }, "+ 프로젝트 추가")));
+
+  /* 데브로그 */
+  form.append(devlogGroup());
 
   /* 연락처 */
   const c = content.contact;
@@ -665,6 +706,34 @@ function gridEditor(p) {
   };
   redraw();
   return wrap;
+}
+
+function devlogGroup() {
+  if (!content.devlog) content.devlog = { navLabel: "데브로그", heading: "데브로그", lead: "", entries: [] };
+  const dl = content.devlog;
+  if (!Array.isArray(dl.entries)) dl.entries = [];
+
+  return group("데브로그", `글 ${dl.entries.length}개`,
+    field("메뉴에 표시할 이름", dl, "navLabel"),
+    field("섹션 제목", dl, "heading"),
+    field("섹션 설명", dl, "lead", { multiline: true }),
+    el("div", { class: "sub-title" }, "글 목록 (날짜순으로 알아서 정렬됩니다)"),
+    listEditor(dl.entries,
+      (e, box) => {
+        box.append(field("날짜", e, "date", { placeholder: "2026-08-31", hint: "YYYY-MM-DD 형식 — 최신 날짜가 위로 올라갑니다" }));
+        box.append(field("제목", e, "title", { hint: "비워두면 이 글이 사이트에서 사라집니다" }));
+        box.append(field("연결 프로젝트 (태그)", e, "project", { placeholder: "BELIEF" }));
+        box.append(field("회고", e, "retro", { multiline: true }));
+        box.append(fileField("첨부 파일", e, "fileHref"));
+        box.append(field("파일 버튼 이름", e, "fileLabel", { placeholder: "예: 기획서 PDF 보기" }));
+      },
+      newDevlogEntry,
+      { addLabel: "글 추가", titleOf: (e) => e.title || "(제목 없음)" }),
+  );
+}
+
+function newDevlogEntry() {
+  return { date: new Date().toISOString().slice(0, 10), title: "", project: "", retro: "", fileHref: "", fileLabel: "" };
 }
 
 function newProject() {

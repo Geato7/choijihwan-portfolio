@@ -233,6 +233,36 @@ ${meta ? `      <div class="meta-grid">\n${meta}\n      </div>\n` : ""}    </div
   </section>`;
 }
 
+// 데브로그 — 날짜순 기록 한 줄. 별도 페이지 없이 한 섹션 안에 리스트로 쌓인다.
+function devlogEntry(e) {
+  return `        <div class="devlog-entry">
+          <div class="devlog-meta">
+${has(e.date) ? `            <span class="devlog-date">${esc(e.date)}</span>\n` : ""}${has(e.project) ? `            <span class="devlog-tag">${esc(e.project)}</span>\n` : ""}          </div>
+          <h3 class="devlog-title">${esc(e.title)}</h3>
+${has(e.retro) ? `          <p class="devlog-retro">${esc(e.retro)}</p>\n` : ""}${has(e.fileHref) ? `          <a class="devlog-file" href="${attr(e.fileHref)}" target="_blank" rel="noopener">${esc(e.fileLabel || "파일 보기")} ↗</a>\n` : ""}        </div>`;
+}
+
+function devlogSection(dl) {
+  const entries = ((dl && dl.entries) || []).filter((e) => has(e.title));
+  if (!entries.length) return "";
+  // 최신 글이 위로 오도록 날짜 내림차순 정렬 (에디터에서 순서를 따로 관리할 필요 없게)
+  const sorted = entries
+    .slice()
+    .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+  const items = sorted.map(devlogEntry).join("\n");
+  return `  <!-- DEVLOG -->
+  <section class="project reveal" id="devlog">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>${esc(dl.heading || "데브로그")}</h2>
+${has(dl.lead) ? `        <p class="section-lead">${esc(dl.lead)}</p>\n` : ""}      </div>
+      <div class="devlog-list">
+${items}
+      </div>
+    </div>
+  </section>`;
+}
+
 function footer(c, gameCta) {
   const links = [];
   if (has(c.phone)) links.push(`        <a class="btn btn-primary" href="tel:${attr(String(c.phone).replace(/[^0-9+]/g, ""))}">${esc(c.phone)}</a>`);
@@ -251,7 +281,8 @@ ${has(c.text) ? `      <p>${esc(c.text)}</p>\n` : ""}${links.length ? `      <di
 }
 
 export function renderPage(content, css) {
-  const { site, hero: h, projects = [], contact } = content;
+  const { site, hero: h, projects = [], contact, devlog } = content;
+  const devlogEntries = ((devlog && devlog.entries) || []).filter((e) => has(e.title));
   // 공유 미리보기(og)용 절대 주소 — 상대 경로를 쓰면 카카오톡/슬랙이 이미지를 못 찾는다
   const base = String(site.url || "").replace(/\/*$/, "/");
   // 미니게임 — content.json 의 site.miniGame 이 false 면 통째로 빠진다
@@ -263,6 +294,7 @@ export function renderPage(content, css) {
   const navLinks = [
     `      <a href="#home">${esc(site.homeNavLabel || "소개")}</a>`,
     ...projects.map((p) => `      <a href="#${attr(p.id)}">${esc(p.navLabel || p.title)}</a>`),
+    ...(devlogEntries.length ? [`      <a href="#devlog">${esc((devlog && devlog.navLabel) || "데브로그")}</a>`] : []),
     `      <a href="#contact">${esc(site.contactNavLabel || "연락처")}</a>`,
   ].join("\n");
 
@@ -361,6 +393,8 @@ ${hero(h, projects[0]?.id)}
 ${projectIndex(projects, site.projectsIndexTitle || "프로젝트")}
 
 ${projects.map((pr) => project(pr, site.featuredLabel)).join("\n\n")}
+
+${devlogSection(devlog)}
 
 ${footer(contact, gameOn ? game.cta : "")}
 
