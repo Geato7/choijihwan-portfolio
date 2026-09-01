@@ -19,4 +19,20 @@ for (const { path, html } of pages) {
   total += html.length;
   console.log(`  ${path.padEnd(30)} ${html.length.toLocaleString().padStart(9)}자`);
 }
+// 검색엔진용 — 사이트맵에는 404 를 빼고 넣는다
+const base = String(content.site.url || "").replace(/[/]*$/, "/");
+if (base) {
+  const today = new Date().toISOString().slice(0, 10);
+  const urls = pages
+    .filter((p) => !p.noIndex)
+    .map((p) => base + (p.path === "index.html" ? "" : p.path))
+    .map((u) => `  <url><loc>${encodeURI(u)}</loc><lastmod>${today}</lastmod></url>`)
+    .join("\n");
+  writeFileSync(join(root, "sitemap.xml"),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, "utf8");
+  writeFileSync(join(root, "robots.txt"),
+    `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${base}sitemap.xml\n`, "utf8");
+  console.log("  sitemap.xml / robots.txt");
+}
+
 console.log(`페이지 ${pages.length}장 생성 완료 — 합계 ${total.toLocaleString()}자`);

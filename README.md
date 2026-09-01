@@ -22,6 +22,8 @@
 ├── projects/<id>.html          ← "  프로젝트 한 장씩
 ├── devlog.html                 ← "
 ├── contact.html                ← "
+├── 404.html                    ← "  없는 주소용
+├── sitemap.xml / robots.txt    ← "  검색엔진용
 ├── assets/                     ← 이미지
 ├── files/                      ← 포트폴리오 PDF (devlog/ 안은 데브로그 첨부)
 └── .github/workflows/deploy.yml ← main 푸시 시 빌드 + 배포

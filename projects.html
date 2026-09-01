@@ -372,6 +372,49 @@
   html.js .reveal{opacity:0; transform:translateY(16px);}
   html.js .reveal.in{opacity:1; transform:translateY(0);}
 
+  /* 404 */
+  .notfound{padding:180px 0 120px;}
+  .nf-code{font-size:clamp(64px,12vw,140px); font-weight:500; letter-spacing:-0.05em; line-height:1; color:var(--text-faint); margin-bottom:18px;}
+  .notfound h1{font-size:clamp(26px,4.4vw,48px); font-weight:500; letter-spacing:-0.04em; line-height:1.1; margin-bottom:16px;}
+  .notfound p{color:var(--text-dim); margin-bottom:32px; max-width:520px;}
+
+  /* 키보드로 이동할 때만 보이는 초점 표시 (마우스 클릭에는 안 뜬다) */
+  :focus-visible{outline:2px solid var(--text); outline-offset:3px; border-radius:4px;}
+
+  /* 어지럼증 등으로 '동작 줄이기' 를 켠 사용자에게는 애니메이션을 걷어낸다.
+     등장 효과의 '숨김' 상태까지 풀어야 내용이 안 보이는 사고가 없다. */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    html.js .reveal, html.js .reveal.in{opacity:1; transform:none;}
+    *, *::before, *::after{
+      animation-duration:.01ms !important; animation-iteration-count:1 !important;
+      transition-duration:.01ms !important; transition-delay:0s !important;
+    }
+  }
+
+  /* 인쇄 — 브라우저는 배경색을 안 찍으므로 흰 종이에 검은 글씨로 다시 맞춘다.
+     등장 효과가 아직 안 켜진 구간이 통째로 비어 나오는 것도 여기서 막는다. */
+  @media print{
+    :root, :root[data-theme="dark"], :root[data-theme="light"]{
+      --bg:#fff; --bg-alt:#fff; --card:#fff; --border:#c9c9c9;
+      --text:#000; --text-dim:#1c1c1c; --text-faint:#555;
+      --solid:#000; --solid-text:#fff; --accent-line:#000;
+    }
+    body{background:#fff; color:#000;}
+    html.js .reveal, html.js .reveal.in{opacity:1 !important; transform:none !important;}
+    header.nav, .nav-toggle, .theme-toggle, .devlog-filter,
+    .pager-sec, .video-row, .game-cta, .cta-row{display:none !important;}
+    main{padding-top:0;}
+    .hero{padding:0 0 24px;}
+    .index-sec, section.project, .contact-sec, main > section.project:first-of-type{padding:0 0 24px !important;}
+    .wrap{max-width:none; padding:0;}
+    .project--featured .wrap{border:none; padding:0; margin:0;}
+    a{color:#000; text-decoration:underline;}
+    .pcard, .my-part, .stat, .devlog-entry, .detail-row, figure{break-inside:avoid;}
+    .section-head h2, .index-title, .devlog-title{break-after:avoid;}
+    .site-foot{padding-top:16px;}
+  }
+
   @media (max-width: 760px){
     .nav-links{position:absolute; top:100%; left:0; right:0; background:var(--bg); flex-direction:column; gap:0; border-bottom:1px solid var(--border); max-height:0; overflow:hidden; transition:max-height .25s ease;}
     .nav-links.open{max-height:460px;}   /* 메뉴 항목이 늘어나도 잘리지 않도록 여유 있게 */
@@ -502,7 +545,7 @@
   <footer class="site-foot">
     <div class="wrap">
       <div class="foot-bottom">
-        <span>© 2026 최지환. All projects and documents on this site are original work.</span>
+        <span>© 2026 최지환. 문서는 최지환이 작성했으며, 언급된 게임과 상표의 권리는 각 권리자에게 있습니다.</span>
         <span><a href="#top">맨 위로 ↑</a></span>
       </div>
     </div>

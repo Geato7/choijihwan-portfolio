@@ -394,6 +394,26 @@ function siteFooter(c) {
   </footer>`;
 }
 
+
+// 404 — GitHub Pages 가 없는 주소에 이 파일을 그대로 내준다.
+// 이때 주소는 /projects/오타.html 같은 깊은 경로일 수 있으므로,
+// 링크를 상대 경로로 두면 깨진다. 사이트 루트부터의 절대 경로를 쓴다.
+function notFoundSection(site, root) {
+  return `  <section class="notfound reveal">
+    <div class="wrap">
+      <div class="nf-code">404</div>
+      <h1>이 주소에는 아무것도 없습니다</h1>
+      <p>주소가 바뀌었거나 잘못 입력됐을 수 있습니다. 아래에서 찾아가 주세요.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="${attr(root)}index.html">소개</a>
+        <a class="btn btn-outline" href="${attr(root)}projects.html">프로젝트</a>
+        <a class="btn btn-outline" href="${attr(root)}devlog.html">데브로그</a>
+        <a class="btn btn-outline" href="${attr(root)}contact.html">연락처</a>
+      </div>
+    </div>
+  </section>`;
+}
+
 /* ── 페이지 목록 ─────────────────────────────────────────────── */
 
 function devlogCount(content) {
@@ -579,6 +599,17 @@ export function renderPage(content, css, key = "index") {
   const siteName = site.logo || site.title || "";
   const gameOn = site.miniGame !== false;
 
+  if (key === "404") {
+    let root = "/";
+    try { root = new URL(site.url).pathname.replace(/\/*$/, "/"); } catch (e) { root = "/"; }
+    return shell(content, css, {
+      prefix: root, nav: "", canonicalPath: "404.html",
+      title: `페이지를 찾을 수 없습니다 — ${siteName}`,
+      description: "요청한 주소를 찾을 수 없습니다.",
+      body: notFoundSection(site, root),
+    });
+  }
+
   if (key === "projects") {
     const t = site.projectsIndexTitle || "프로젝트";
     return shell(content, css, {
@@ -634,8 +665,11 @@ export function renderPage(content, css, key = "index") {
 
 // build.mjs 가 쓰는 진입점 — [{ path, html }, ...]
 export function renderSite(content, css) {
-  return sitePages(content).map((pg) => ({
+  const pages = sitePages(content).map((pg) => ({
     path: pg.path,
     html: renderPage(content, css, pg.key),
   }));
+  // 404 는 목록/사이트맵에 넣지 않는다
+  pages.push({ path: "404.html", html: renderPage(content, css, "404"), noIndex: true });
+  return pages;
 }

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Sitemap: https://geato7.github.io/choijihwan-portfolio/sitemap.xml
