@@ -38,6 +38,9 @@
     --maxw:1080px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  /* display 를 지정한 요소는 브라우저 기본 [hidden]{display:none} 을 덮어쓴다.
+     (.devlog-entry 가 display:grid 라서 hidden 을 붙여도 그대로 보였다) */
+  [hidden]{display:none !important;}
   html{scroll-behavior:smooth;}
   body{
     background:var(--bg);
