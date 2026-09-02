@@ -411,6 +411,10 @@ ${cards}
   </section>`;
 }
 
+// 첫 화면 본문 순서 — 머리말/이름/소개 문장은 늘 위에 고정, 그 아래 세 칸만
+// 에디터에서 순서를 바꿀 수 있다 (프로젝트 페이지의 blocks 와 같은 방식).
+const DEFAULT_HERO_BLOCKS = ["tags", "buttons", "meta"];
+
 function hero(h, prefix) {
   const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
   // 옛 앵커 주소를 새 페이지로 옮겨준다 (content.json 을 고치지 않아도 동작하도록)
@@ -425,14 +429,20 @@ function hero(h, prefix) {
     )
     .join("\n");
 
+  const renderers = {
+    tags: () => (tags ? `      <div class="tags">\n${tags}\n      </div>` : ""),
+    buttons: () => (has(buttons) ? `      <div class="cta-row">\n${buttons.map((b) => "        " + btn(b, prefix)).join("\n")}\n      </div>` : ""),
+    meta: () => (meta ? `      <div class="meta-grid">\n${meta}\n      </div>` : ""),
+  };
+  const order = has(h.blocks) ? h.blocks : DEFAULT_HERO_BLOCKS;
+  const body = order.map((key) => (renderers[key] ? renderers[key]() : "")).filter(Boolean).join("\n");
+
   return `  <section class="hero" id="home">
     <div class="wrap">
       <div class="eyebrow">${esc(h.eyebrow)}</div>
       <h1>${esc(h.name)}${has(h.subtitle) ? ` <span>${esc(h.subtitle)}</span>` : ""}</h1>
-${has(h.lead) ? `      <p class="lead">${esc(h.lead)}</p>\n` : ""}${tags ? `      <div class="tags">\n${tags}\n      </div>\n` : ""}${
-    has(buttons) ? `      <div class="cta-row">\n${buttons.map((b) => "        " + btn(b, prefix)).join("\n")}\n      </div>\n` : ""
-  }
-${meta ? `      <div class="meta-grid">\n${meta}\n      </div>\n` : ""}    </div>
+${has(h.lead) ? `      <p class="lead">${esc(h.lead)}</p>\n` : ""}${body}
+    </div>
   </section>`;
 }
 

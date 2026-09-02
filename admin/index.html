@@ -477,6 +477,8 @@ function renderForm() {
     field("작은 머리말", h, "eyebrow"),
     el("div", { class: "row" }, field("이름", h, "name"), field("직함", h, "subtitle")),
     field("소개 문장", h, "lead", { multiline: true }),
+    el("div", { class: "sub-title" }, "태그 · 버튼 · 요약 정보 순서 (◀ ▶ 로 이동)"),
+    blockOrderUI(h, HERO_BLOCKS, HERO_BLOCK_LABELS, heroBlockHasContent),
     el("div", { class: "sub-title" }, "태그"),
     stringList(h.tags, "예: 콘텐츠 기획", "태그 추가"),
     el("div", { class: "sub-title" }, "버튼"),
@@ -542,9 +544,9 @@ function styleToggle(b) {
   return wrap;
 }
 
-function ensureBlocks(p) {
-  if (!Array.isArray(p.blocks)) p.blocks = [...ALL_BLOCKS];
-  for (const b of ALL_BLOCKS) if (!p.blocks.includes(b)) p.blocks.push(b);
+function ensureBlockOrder(obj, allKeys) {
+  if (!Array.isArray(obj.blocks)) obj.blocks = [...allKeys];
+  for (const k of allKeys) if (!obj.blocks.includes(k)) obj.blocks.push(k);
 }
 
 function blockHasContent(p, key) {
@@ -555,17 +557,19 @@ function blockHasContent(p, key) {
   return Array.isArray(v) && v.length > 0;
 }
 
-function blockOrderUI(p) {
-  ensureBlocks(p);
+// 텍스트 박스(태그/버튼/요약 정보) 순서 — ◀ ▶ 로 옮긴다. 프로젝트 페이지의
+// 블록 순서 편집기와 같은 부품을 얹었다 (obj.blocks 에 순서를 저장).
+function blockOrderUI(obj, allKeys, labels, hasContentFn) {
+  ensureBlockOrder(obj, allKeys);
   const wrap = el("div", { class: "blocks-order" });
   const redraw = () => {
     wrap.textContent = "";
-    p.blocks.forEach((key, i) => {
-      const empty = !blockHasContent(p, key);
+    obj.blocks.forEach((key, i) => {
+      const empty = !hasContentFn(obj, key);
       wrap.append(el("span", { class: "chip" + (empty ? " empty" : ""), title: empty ? "내용이 없어 표시되지 않습니다" : "" },
-        BLOCK_LABELS[key] || key,
-        el("button", { title: "앞으로", onclick: () => { if (i > 0) { [p.blocks[i - 1], p.blocks[i]] = [p.blocks[i], p.blocks[i - 1]]; redraw(); changed(); } } }, "◀"),
-        el("button", { title: "뒤로", onclick: () => { if (i < p.blocks.length - 1) { [p.blocks[i + 1], p.blocks[i]] = [p.blocks[i], p.blocks[i + 1]]; redraw(); changed(); } } }, "▶")
+        labels[key] || key,
+        el("button", { title: "앞으로", onclick: () => { if (i > 0) { [obj.blocks[i - 1], obj.blocks[i]] = [obj.blocks[i], obj.blocks[i - 1]]; redraw(); changed(); } } }, "◀"),
+        el("button", { title: "뒤로", onclick: () => { if (i < obj.blocks.length - 1) { [obj.blocks[i + 1], obj.blocks[i]] = [obj.blocks[i], obj.blocks[i + 1]]; redraw(); changed(); } } }, "▶")
       ));
     });
   };
@@ -573,8 +577,17 @@ function blockOrderUI(p) {
   return wrap;
 }
 
+const HERO_BLOCK_LABELS = { tags: "태그", buttons: "버튼", meta: "요약 정보(4칸)" };
+const HERO_BLOCKS = Object.keys(HERO_BLOCK_LABELS);
+function heroBlockHasContent(h, key) {
+  if (key === "tags") return (h.tags || []).some((t) => String(t || "").trim());
+  if (key === "buttons") return (h.buttons || []).length > 0;
+  if (key === "meta") return (h.meta || []).length > 0;
+  return false;
+}
+
 function projectGroup(p, pi) {
-  ensureBlocks(p);
+  ensureBlockOrder(p, ALL_BLOCKS);
   const mp = p.myPart || (p.myPart = { heading: "", intro: "", bullets: [] });
   if (!Array.isArray(mp.bullets)) mp.bullets = [];
   for (const k of ["gallery", "stats", "videos", "details", "buttons"]) if (!Array.isArray(p[k])) p[k] = [];
@@ -591,7 +604,7 @@ function projectGroup(p, pi) {
     field("주소용 id", p, "id", { hint: "영문 소문자. 바꾸면 메뉴 링크도 함께 바뀝니다" }),
 
     el("div", { class: "sub-title" }, "블록 순서 (◀ ▶ 로 이동)"),
-    blockOrderUI(p),
+    blockOrderUI(p, ALL_BLOCKS, BLOCK_LABELS, blockHasContent),
 
     el("div", { class: "sub-title" }, "중점 작업 (MY PART)"),
     field("소제목", mp, "heading", { hint: "비워두면 이 블록 전체가 사라집니다" }),
