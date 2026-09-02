@@ -1107,8 +1107,8 @@
         "title": "퀘스트 클래스 설계",
         "project": "데이터 설계",
         "retro": "퀘스트·트리거·보상 세 테이블로 나누고 컬럼 정의부터 실제 데이터 13개까지 채웠습니다. 시작 트리거와 완료 트리거를 따로 만들지 않고 한 테이블에서 trigger_type으로 구분했고, 갈라지는 퀘스트(Q011-1 / Q011-2)를 어떻게 표현할지가 실제 고민이었습니다.",
-        "fileHref": "files/devlog/20260615_퀘스트클래스설계_26_최지환.xlsx",
-        "fileLabel": "설계 시트 (XLSX)"
+        "fileHref": "https://docs.google.com/spreadsheets/d/1BndtPtz3rSF6aW2HHnBNPblA05KA7zIE/edit?usp=sharing",
+        "fileLabel": "설계 시트 보기 (구글 시트)"
       },
       {
         "date": "2026-06-12",
@@ -1155,8 +1155,8 @@
         "title": "데이터 테이블 설계",
         "project": "데이터 설계",
         "retro": "스탯 35종을 정의하고 캐릭터·스킬·스킬레벨·효과·아이템·장비·세트·제작 레시피 테이블을 외래키로 연결했습니다. 수치를 스킬 테이블에 직접 넣지 않고 skill_level로 분리한 것이 요점입니다 — 밸런싱할 때 한 곳만 고치면 되도록 하기 위해서입니다.",
-        "fileHref": "files/devlog/20260514_데이터테이블_최지환.xlsx",
-        "fileLabel": "설계 시트 (XLSX)"
+        "fileHref": "https://docs.google.com/spreadsheets/d/1DIcNmGSAdhU7mU51LDJd7oi6ae2Kn0tH/edit?usp=sharing",
+        "fileLabel": "설계 시트 보기 (구글 시트)"
       },
       {
         "date": "2026-05-14",
