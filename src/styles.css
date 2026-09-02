@@ -130,7 +130,7 @@
 
   .meta-grid{
     margin-top:56px; display:grid; grid-template-columns:0.9fr 1.3fr 1fr 1fr; gap:0;
-    border-top:1px solid var(--border);
+    border-top:1px solid var(--border); align-items:start;
   }
   .meta-grid div{padding:20px 28px 24px; border-right:1px solid var(--border);}
   .meta-grid div:first-child{padding-left:0;}
