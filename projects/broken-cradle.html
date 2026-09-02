@@ -239,6 +239,13 @@
   .section-head .role{font-size:14px; color:var(--text-dim);}
   .section-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin-top:18px; font-weight:400;}
 
+  /* 케이스 스터디 3줄 요약 — 문제 → 결정 → 결과 */
+  .case-summary{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-bottom:48px; border:1px solid var(--border); border-radius:12px; overflow:hidden;}
+  .case-row{padding:18px 22px; border-left:1px solid var(--border);}
+  .case-row:first-child{border-left:none;}
+  .case-label{display:block; font-size:11px; font-weight:700; letter-spacing:1px; color:var(--text-faint); margin-bottom:8px;}
+  .case-row p{font-size:14px; color:var(--text-dim); font-weight:400; line-height:1.5;}
+
   .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--border); margin:40px 0; border:1px solid var(--border);}
   .stat{background:var(--bg); padding:22px 18px;}
   .stat .num{font-size:28px; font-weight:600; letter-spacing:-0.03em; margin-bottom:5px;}
@@ -440,6 +447,9 @@
     .gallery{grid-template-columns:1fr;}
     .video-row{grid-template-columns:1fr;}
     .detail-row{grid-template-columns:1fr; gap:6px;}
+    .case-summary{grid-template-columns:1fr;}
+    .case-row{border-left:none; border-top:1px solid var(--border);}
+    .case-row:first-child{border-top:none;}
     .hero{padding:140px 0 70px;}
     section.project{padding:70px 0;}
     /* 좁은 화면에서 외곽선이 화면 끝에 붙지 않도록 좌우 여백을 준다 */
@@ -501,6 +511,12 @@
         <h2>부서진 요람 <span style="color:var(--text-faint); font-weight:400; font-size:0.55em;">BROKEN CRADLE</span></h2>
         <div class="role">하드코어 심리 생존 노벨 어드벤처 · PC / Ren'Py · 시나리오 · 스크립트 작성 / 레벨 디자인 담당 · 6인 팀</div>
         <p class="section-lead">“자원을 얻으면 인간성을 잃고, 사람을 도우면 자원을 잃는다.” 도시국가를 무너뜨린 장본인 ‘고스트’가 자기가 만든 폐허에서 7일을 버티는 이야기다. 플레이어는 매일 식량을 찾아 나서고, 그때마다 도움을 청하는 생존자와 마주친다. 도우면 식량이 줄고, 약탈하면 정신력이 깎이며, 죽이면 되돌릴 수 없는 업보가 쌓인다. 나는 이 딜레마가 대사 한 줄 단위로 체감되도록 프롤로그부터 세 갈래 엔딩까지 전체 시나리오와 대사 스크립트를 썼고, 그 선택이 실제로 벌어지는 무대인 스테이지 동선을 설계했다.</p>
+      </div>
+
+      <div class="case-summary">
+        <div class="case-row"><span class="case-label">문제</span><p>‘자원과 인간성의 상충’이라는 메카닉을 숫자가 아니라 대사 한 줄 단위로 체감시켜야 했다.</p></div>
+        <div class="case-row"><span class="case-label">결정</span><p>선택의 결과를 선택지 문구에 직접 명시해, 몰랐다는 변명이 불가능하도록 죄책감을 설계에 심었다.</p></div>
+        <div class="case-row"><span class="case-label">결과</span><p>프롤로그부터 세 엔딩까지 13개 파트 427개 대사·연출 큐를 개발이 바로 옮길 수 있는 형태로 완성했다.</p></div>
       </div>
 
       <div class="my-part">

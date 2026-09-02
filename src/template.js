@@ -145,6 +145,17 @@ ${body}
 
 const DEFAULT_BLOCKS = ["myPart", "gallery", "wideShot", "stats", "videos", "details", "table", "buttons"];
 
+// 케이스 스터디 맨 위 3줄 요약 — 문제 → 결정 → 결과. 훑어보는 사람용.
+function caseSummary(cs) {
+  if (!cs || !(has(cs.problem) || has(cs.decision) || has(cs.result))) return "";
+  const row = (label, text) => (has(text)
+    ? `        <div class="case-row"><span class="case-label">${esc(label)}</span><p>${esc(text)}</p></div>`
+    : "");
+  return `      <div class="case-summary">
+${[row("문제", cs.problem), row("결정", cs.decision), row("결과", cs.result)].filter(Boolean).join("\n")}
+      </div>`;
+}
+
 function project(p, featuredLabel, prefix) {
   const renderers = {
     myPart: () => myPart(p.myPart),
@@ -180,6 +191,8 @@ function project(p, featuredLabel, prefix) {
       <div class="section-head">
 ${badge}${numLine}        <h2>${esc(p.title)}${subtitle}</h2>
 ${has(p.role) ? `        <div class="role">${esc(p.role)}</div>\n` : ""}${has(p.lead) ? `        <p class="section-lead">${esc(p.lead)}</p>\n` : ""}      </div>
+
+${caseSummary(p.caseSummary)}
 
 ${body}
     </div>

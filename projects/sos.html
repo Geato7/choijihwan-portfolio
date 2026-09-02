@@ -239,6 +239,13 @@
   .section-head .role{font-size:14px; color:var(--text-dim);}
   .section-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin-top:18px; font-weight:400;}
 
+  /* 케이스 스터디 3줄 요약 — 문제 → 결정 → 결과 */
+  .case-summary{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-bottom:48px; border:1px solid var(--border); border-radius:12px; overflow:hidden;}
+  .case-row{padding:18px 22px; border-left:1px solid var(--border);}
+  .case-row:first-child{border-left:none;}
+  .case-label{display:block; font-size:11px; font-weight:700; letter-spacing:1px; color:var(--text-faint); margin-bottom:8px;}
+  .case-row p{font-size:14px; color:var(--text-dim); font-weight:400; line-height:1.5;}
+
   .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--border); margin:40px 0; border:1px solid var(--border);}
   .stat{background:var(--bg); padding:22px 18px;}
   .stat .num{font-size:28px; font-weight:600; letter-spacing:-0.03em; margin-bottom:5px;}
@@ -440,6 +447,9 @@
     .gallery{grid-template-columns:1fr;}
     .video-row{grid-template-columns:1fr;}
     .detail-row{grid-template-columns:1fr; gap:6px;}
+    .case-summary{grid-template-columns:1fr;}
+    .case-row{border-left:none; border-top:1px solid var(--border);}
+    .case-row:first-child{border-top:none;}
     .hero{padding:140px 0 70px;}
     section.project{padding:70px 0;}
     /* 좁은 화면에서 외곽선이 화면 끝에 붙지 않도록 좌우 여백을 준다 */
@@ -501,6 +511,12 @@
         <h2>SOS: Sands Of Sin</h2>
         <div class="role">로그라이트 RPG 마케팅 계획서 · 가격 전략 / 광고 전략 개인 담당 · 6인 팀</div>
         <p class="section-lead">“시간이 곧 돈이고, 적을 죽여야만 살아남는 사후세계.” 신규 IP 인디 게임이라는 전제 아래, 경쟁작 가격 분포와 손익분기점을 근거로 가격 전략을, 한정된 예산을 전제로 PR 중심 광고 전략을 설계했습니다.</p>
+      </div>
+
+      <div class="case-summary">
+        <div class="case-row"><span class="case-label">문제</span><p>신규 IP 인디 게임, 인지도도 예산도 없는 상태에서 가격과 광고를 정해야 했다.</p></div>
+        <div class="case-row"><span class="case-label">결정</span><p>포지셔닝 문장을 먼저 확정하고, 이후 모든 가격·광고 판단을 그 문장에서 역산했다.</p></div>
+        <div class="case-row"><span class="case-label">결과</span><p>경쟁작 가격 분포·손익분기점 근거 가격 전략과 PR 중심 광고 전략을 완성했다.</p></div>
       </div>
 
       <div class="my-part">

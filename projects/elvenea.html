@@ -239,6 +239,13 @@
   .section-head .role{font-size:14px; color:var(--text-dim);}
   .section-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin-top:18px; font-weight:400;}
 
+  /* 케이스 스터디 3줄 요약 — 문제 → 결정 → 결과 */
+  .case-summary{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-bottom:48px; border:1px solid var(--border); border-radius:12px; overflow:hidden;}
+  .case-row{padding:18px 22px; border-left:1px solid var(--border);}
+  .case-row:first-child{border-left:none;}
+  .case-label{display:block; font-size:11px; font-weight:700; letter-spacing:1px; color:var(--text-faint); margin-bottom:8px;}
+  .case-row p{font-size:14px; color:var(--text-dim); font-weight:400; line-height:1.5;}
+
   .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--border); margin:40px 0; border:1px solid var(--border);}
   .stat{background:var(--bg); padding:22px 18px;}
   .stat .num{font-size:28px; font-weight:600; letter-spacing:-0.03em; margin-bottom:5px;}
@@ -440,6 +447,9 @@
     .gallery{grid-template-columns:1fr;}
     .video-row{grid-template-columns:1fr;}
     .detail-row{grid-template-columns:1fr; gap:6px;}
+    .case-summary{grid-template-columns:1fr;}
+    .case-row{border-left:none; border-top:1px solid var(--border);}
+    .case-row:first-child{border-top:none;}
     .hero{padding:140px 0 70px;}
     section.project{padding:70px 0;}
     /* 좁은 화면에서 외곽선이 화면 끝에 붙지 않도록 좌우 여백을 준다 */
@@ -501,6 +511,12 @@
         <h2>엘브네아 <span style="color:var(--text-faint); font-weight:400; font-size:0.55em;">Elvenea</span></h2>
         <div class="role">잊힌 낙원을 찾아서 · Unity 3D 액션 어드벤처 · 시스템 구현 담당 · 팀 ‘화석 피라미드’ 3인 · 졸업전시 작품</div>
         <p class="section-lead">빛의 신 ‘엘리에르’가 봉인되고 어둠의 화신 ‘카르엘’에 의해 세계가 감정과 기억을 잃은 침묵에 빠진 뒤, 감응 능력을 지닌 유일한 존재가 탑을 정화하며 정령들과 감정을 공명해 나가는 판타지 액션 어드벤처입니다. 저는 전투 · AI · UI 관리 시스템을 C#으로 직접 스크립팅하고, 대화 시스템부터 사운드 연출까지 플레이 경험 전반의 구현을 담당했습니다.</p>
+      </div>
+
+      <div class="case-summary">
+        <div class="case-row"><span class="case-label">문제</span><p>기획·아트가 나뉜 3인 팀에서, 만든 것을 실제로 ‘돌아가게’ 만들 사람이 따로 필요했다.</p></div>
+        <div class="case-row"><span class="case-label">결정</span><p>전투·AI·UI 관리 시스템을 C#으로 직접 스크립팅하고, 대화·사운드·이펙트 연출까지 구현을 전담했다.</p></div>
+        <div class="case-row"><span class="case-label">결과</span><p>졸업전시 빌드를 안정화까지 완료해 정상 시연했다.</p></div>
       </div>
 
       <div class="my-part">
