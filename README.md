@@ -166,6 +166,42 @@ python -m http.server 8000
 기록은 무한정 쌓이므로 가끔 **[오래된 기록 정리]** 로 180일 지난 것을 지운다.
 **[CSV]** 로 내려받으면 엑셀에서 볼 수 있다.
 
+### 다른 사이트도 같이 보기
+
+기록마다 `site` 값이 붙는다. 한 Firebase 프로젝트에 여러 사이트를 몰아넣고,
+통계 화면 위쪽 선택 상자로 갈라 본다. 사이트가 하나뿐이면 상자가 안 나온다.
+
+이 사이트의 이름은 `content.json` 의 `site.analytics.siteId` 다.
+**다른 사이트**는 빌드 과정이 없어도 되고, 아래 한 줄만 넣으면 된다.
+
+```html
+<script src="https://geato7.github.io/choijihwan-portfolio/analytics/tracker.js"
+        data-project="github-portfolio-choijihwan"
+        data-key="AIza…"
+        data-site="내-블로그"></script>
+```
+
+| 속성 | 뜻 |
+| --- | --- |
+| `data-project` | Firebase 프로젝트 ID (필수) |
+| `data-key` | 웹 API 키 (필수) |
+| `data-site` | 통계에서 이 사이트를 부를 이름. 없으면 도메인 |
+| `data-collection` | 저장할 컬렉션. 기본 `visits`, 이름이 `visits` 로 시작하면 규칙이 그대로 통한다 |
+| `data-extra` | 기록마다 덧붙일 값 (JSON, 최대 6개). 이미 있는 항목 이름은 무시된다 |
+
+`analytics/tracker.js` 는 `node build.mjs` 가 [`src/analytics.js`](src/analytics.js)
+하나에서 만들어 낸다. 이 사이트에 심는 코드와 같은 소스다.
+
+수집기는 `main` 안의 `section[id]` 를 훑어 **어느 구역을 봤는지** 남긴다.
+`main` 이 없는 사이트면 문서 전체의 `section[id]`·`article[id]` 로 물러선다.
+사이트 쪽에서 직접 사건을 남기고 싶으면 `window.__pfTrack("이름")` 을 부르면 된다
+(미니게임이 이 방식으로 기록된다).
+
+구역 id 를 한글 이름으로 바꿔 보여주려면 `site.analytics.labels` 에
+`{"pricing": "가격 안내"}` 처럼 넣는다.
+
+관리자를 늘리려면 보안 규칙 마지막 줄의 이메일 목록에 쉼표로 추가한다.
+
 ## 테마 (다크 / 라이트)
 
 우측 상단 버튼으로 전환한다. **기본은 다크**이고, 방문자가 고른 값은 그 브라우저에

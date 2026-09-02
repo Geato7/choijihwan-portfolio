@@ -14,7 +14,8 @@
     "featuredLabel": "대표 프로젝트",
     "analytics": {
       "projectId": "github-portfolio-choijihwan",
-      "apiKey": "AIzaSyC6ItB_K9bF19iYiSdGVeXDpfRdIB8BO5I"
+      "apiKey": "AIzaSyC6ItB_K9bF19iYiSdGVeXDpfRdIB8BO5I",
+      "siteId": "choijihwan-portfolio"
     },
     "projectsNavLabel": "프로젝트",
     "projectsIndexLead": "여섯 개의 프로젝트를 분류와 시기로 정리했습니다. 카드를 누르면 해당 프로젝트 페이지로 이동합니다."

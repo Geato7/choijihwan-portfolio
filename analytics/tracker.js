@@ -1,90 +1,15 @@
-// 방문 통계 수집기.
-//
-// 한 Firebase 프로젝트로 여러 사이트를 함께 볼 수 있게 만들었다. 기록마다 site 값이
-// 붙고, 통계 화면에서 사이트별로 갈라 본다.
-//
-// 쓰는 방법은 두 가지다.
-//   1) 이 저장소처럼 빌드하는 사이트 — analyticsScript(cfg) 가 페이지 안에 직접 심는다.
-//   2) 그 밖의 아무 사이트 — build.mjs 가 만들어 두는 analytics/tracker.js 를
-//      script 태그로 불러 쓴다. 설정은 태그의 data-* 속성으로 준다.
-//
-// 무엇을 남기나: 날짜, 브라우저마다 무작위로 만든 익명 ID, 기기/브라우저/OS,
-// 유입 경로, 표준시간대로 짐작한 지역, 머문 시간, 들른 페이지와 구역.
-// 무엇을 안 남기나: IP 주소, 이름, 이메일 등 사람을 특정할 수 있는 값.
-
-export const TRACKER_VERSION = 2;
-
-// 표준시간대 -> 사람이 읽는 지역 이름. 목록에 없으면 표준시간대 앞부분을 쓴다.
-const TZ_REGIONS = {
-  "Asia/Seoul": "대한민국",
-  "Asia/Tokyo": "일본",
-  "Asia/Shanghai": "중국",
-  "Asia/Chongqing": "중국",
-  "Asia/Hong_Kong": "홍콩",
-  "Asia/Taipei": "대만",
-  "Asia/Singapore": "싱가포르",
-  "Asia/Bangkok": "태국",
-  "Asia/Jakarta": "인도네시아",
-  "Asia/Manila": "필리핀",
-  "Asia/Ho_Chi_Minh": "베트남",
-  "Asia/Kolkata": "인도",
-  "Asia/Calcutta": "인도",
-  "Asia/Dubai": "UAE",
-  "Australia/Sydney": "호주",
-  "Australia/Melbourne": "호주",
-  "Pacific/Auckland": "뉴질랜드",
-  "America/New_York": "미국(동부)",
-  "America/Chicago": "미국(중부)",
-  "America/Denver": "미국(산악)",
-  "America/Phoenix": "미국(애리조나)",
-  "America/Los_Angeles": "미국(서부)",
-  "America/Anchorage": "미국(알래스카)",
-  "Pacific/Honolulu": "미국(하와이)",
-  "America/Toronto": "캐나다",
-  "America/Vancouver": "캐나다",
-  "America/Sao_Paulo": "브라질",
-  "America/Mexico_City": "멕시코",
-  "Europe/London": "영국",
-  "Europe/Dublin": "아일랜드",
-  "Europe/Paris": "프랑스",
-  "Europe/Berlin": "독일",
-  "Europe/Madrid": "스페인",
-  "Europe/Rome": "이탈리아",
-  "Europe/Amsterdam": "네덜란드",
-  "Europe/Stockholm": "스웨덴",
-  "Europe/Warsaw": "폴란드",
-  "Europe/Moscow": "러시아",
-  "Europe/Istanbul": "튀르키예",
-  "Africa/Cairo": "이집트",
-  "Africa/Johannesburg": "남아공",
-};
-
-// 문자열 안에 </script> 가 있으면 브라우저가 스크립트를 거기서 끊는다
-const lit = (v) => JSON.stringify(v).replace(/</g, "\\u003c");
-
-/** 설정을 정리한다. projectId·apiKey 가 없으면 null (= 수집 안 함). */
-export function normalizeConfig(a) {
-  const projectId = String(a?.projectId || "").trim();
-  const apiKey = String(a?.apiKey || "").trim();
-  if (!projectId || !apiKey) return null;
-  const cfg = { projectId, apiKey };
-  const siteId = String(a?.siteId || "").trim();
-  if (siteId) cfg.siteId = siteId;
-  const collection = String(a?.collection || "").trim();
-  if (collection && collection !== "visits") cfg.collection = collection;
-  if (a?.extra && typeof a.extra === "object") cfg.extra = a.extra;
-  return cfg;
-}
-
-/* ------------------------------------------------------------------ *
- * 수집기 본문. window.__pfStart(cfg) 하나만 바깥에 내놓는다.
- * 인라인으로 심든 tracker.js 로 불러오든 이 코드가 그대로 쓰인다.
- * ------------------------------------------------------------------ */
-function trackerBody() {
-  return `(function () {
+/* 방문 통계 수집기 v2 — 개인정보(IP·이름·이메일)를 저장하지 않습니다.
+   붙이는 법:
+   <script src="…/analytics/tracker.js"
+           data-project="파이어베이스_프로젝트ID"
+           data-key="웹_API_키"
+           data-site="이-사이트를-부를-이름"></script>
+   data-site 를 안 주면 도메인 이름을 씁니다.
+   data-collection 으로 저장할 컬렉션을, data-extra 로 덧붙일 값(JSON)을 줄 수 있습니다. */
+(function () {
   if (window.__pfStart) return;                    // 두 번 실려도 한 번만
-  var TZ = ${lit(TZ_REGIONS)};
-  var VERSION = ${TRACKER_VERSION};
+  var TZ = {"Asia/Seoul":"대한민국","Asia/Tokyo":"일본","Asia/Shanghai":"중국","Asia/Chongqing":"중국","Asia/Hong_Kong":"홍콩","Asia/Taipei":"대만","Asia/Singapore":"싱가포르","Asia/Bangkok":"태국","Asia/Jakarta":"인도네시아","Asia/Manila":"필리핀","Asia/Ho_Chi_Minh":"베트남","Asia/Kolkata":"인도","Asia/Calcutta":"인도","Asia/Dubai":"UAE","Australia/Sydney":"호주","Australia/Melbourne":"호주","Pacific/Auckland":"뉴질랜드","America/New_York":"미국(동부)","America/Chicago":"미국(중부)","America/Denver":"미국(산악)","America/Phoenix":"미국(애리조나)","America/Los_Angeles":"미국(서부)","America/Anchorage":"미국(알래스카)","Pacific/Honolulu":"미국(하와이)","America/Toronto":"캐나다","America/Vancouver":"캐나다","America/Sao_Paulo":"브라질","America/Mexico_City":"멕시코","Europe/London":"영국","Europe/Dublin":"아일랜드","Europe/Paris":"프랑스","Europe/Berlin":"독일","Europe/Madrid":"스페인","Europe/Rome":"이탈리아","Europe/Amsterdam":"네덜란드","Europe/Stockholm":"스웨덴","Europe/Warsaw":"폴란드","Europe/Moscow":"러시아","Europe/Istanbul":"튀르키예","Africa/Cairo":"이집트","Africa/Johannesburg":"남아공"};
+  var VERSION = 2;
 
   window.__pfStart = function (cfg) {
     cfg = cfg || {};
@@ -143,32 +68,32 @@ function trackerBody() {
 
     // 인앱 브라우저를 먼저 걸러야 한다 — 대개 UA 에 Chrome/Safari 를 같이 달고 온다
     var browser = /KAKAOTALK/i.test(ua) ? "카카오톡 인앱"
-      : /NAVER\\(inapp/i.test(ua) ? "네이버 인앱"
+      : /NAVER\(inapp/i.test(ua) ? "네이버 인앱"
       : /Whale/i.test(ua) ? "웨일"
-      : /FBAN|FBAV|Instagram|Line\\//i.test(ua) ? "SNS 인앱"
-      : /Edg\\//.test(ua) ? "Edge"
-      : /OPR\\/|Opera/.test(ua) ? "Opera"
+      : /FBAN|FBAV|Instagram|Line\//i.test(ua) ? "SNS 인앱"
+      : /Edg\//.test(ua) ? "Edge"
+      : /OPR\/|Opera/.test(ua) ? "Opera"
       : /SamsungBrowser/.test(ua) ? "삼성 인터넷"
-      : /Firefox\\//.test(ua) ? "Firefox"
-      : /Chrome\\//.test(ua) ? "Chrome"
-      : /Safari\\//.test(ua) ? "Safari" : "기타";
+      : /Firefox\//.test(ua) ? "Firefox"
+      : /Chrome\//.test(ua) ? "Chrome"
+      : /Safari\//.test(ua) ? "Safari" : "기타";
 
     var refHost = "";
     try {
-      if (document.referrer) refHost = new URL(document.referrer).hostname.replace(/^www\\./, "");
+      if (document.referrer) refHost = new URL(document.referrer).hostname.replace(/^www\./, "");
     } catch (e) {}
     if (refHost === location.hostname) refHost = "";          // 사이트 안에서의 이동
 
     var refType = !refHost ? (browser.indexOf("인앱") > -1 ? "메신저·SNS 링크" : "직접 방문")
-      : /(^|\\.)google\\./.test(refHost) ? "구글 검색"
-      : /naver\\./.test(refHost) ? "네이버"
-      : /daum\\.|kakao|kko\\./.test(refHost) ? "다음·카카오"
-      : /bing\\.|duckduckgo|yandex|yahoo/.test(refHost) ? "기타 검색엔진"
+      : /(^|\.)google\./.test(refHost) ? "구글 검색"
+      : /naver\./.test(refHost) ? "네이버"
+      : /daum\.|kakao|kko\./.test(refHost) ? "다음·카카오"
+      : /bing\.|duckduckgo|yandex|yahoo/.test(refHost) ? "기타 검색엔진"
       : /linkedin/.test(refHost) ? "링크드인"
-      : /facebook|instagram|threads|t\\.co$|twitter|x\\.com|discord|reddit/.test(refHost) ? "SNS"
-      : /jobkorea|saramin|wanted|jumpit|programmers|rocketpunch|catch\\.|incruit|albamon/.test(refHost) ? "채용 사이트"
+      : /facebook|instagram|threads|t\.co$|twitter|x\.com|discord|reddit/.test(refHost) ? "SNS"
+      : /jobkorea|saramin|wanted|jumpit|programmers|rocketpunch|catch\.|incruit|albamon/.test(refHost) ? "채용 사이트"
       : /github/.test(refHost) ? "GitHub"
-      : /mail\\.|outlook|gmail|notion/.test(refHost) ? "메일·문서 링크"
+      : /mail\.|outlook|gmail|notion/.test(refHost) ? "메일·문서 링크"
       : "기타 사이트";
 
     var tz = "";
@@ -275,40 +200,7 @@ function trackerBody() {
     window.addEventListener("pagehide", function () { flush(true); });
     setInterval(function () { if (document.visibilityState === "visible") flush(false); }, 30000);
   };
-})();`;
-}
-
-/** 빌드하는 사이트용 — 페이지 안에 직접 심는 script 태그. */
-export function analyticsScript(analytics) {
-  const cfg = normalizeConfig(analytics);
-  if (!cfg) return "";
-  return `<script>
-/* 방문 통계 — 개인정보(IP·이름·이메일)는 저장하지 않습니다.
-   끄려면 content.json 의 site.analytics 를 비우면 됩니다. */
-${trackerBody()}
-__pfStart(${lit(cfg)});
-</script>`;
-}
-
-/**
- * 아무 사이트에나 붙일 수 있는 독립 파일(analytics/tracker.js)의 내용.
- * 설정은 script 태그의 data-* 속성에서 읽는다.
- *
- *   <script src="…/analytics/tracker.js"
- *           data-project="my-firebase-project"
- *           data-key="AIza…"
- *           data-site="my-blog"></script>
- */
-export function trackerFile() {
-  return `/* 방문 통계 수집기 v${TRACKER_VERSION} — 개인정보(IP·이름·이메일)를 저장하지 않습니다.
-   붙이는 법:
-   <script src="…/analytics/tracker.js"
-           data-project="파이어베이스_프로젝트ID"
-           data-key="웹_API_키"
-           data-site="이-사이트를-부를-이름"></script>
-   data-site 를 안 주면 도메인 이름을 씁니다.
-   data-collection 으로 저장할 컬렉션을, data-extra 로 덧붙일 값(JSON)을 줄 수 있습니다. */
-${trackerBody()}
+})();
 (function () {
   var s = document.currentScript;
   if (!s) {
@@ -326,5 +218,3 @@ ${trackerBody()}
     extra: extra
   });
 })();
-`;
-}

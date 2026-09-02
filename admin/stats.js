@@ -7,6 +7,7 @@
 const FB = "https://www.gstatic.com/firebasejs/10.12.2";
 const OWNER_KEY = "pf_owner";          // 내 방문을 집계에서 뺄지 (사이트와 같은 도메인이라 통한다)
 const RANGE_KEY = "pf_stats_range";
+const SITE_KEY = "pf_stats_site";      // 마지막으로 고른 사이트
 
 /* ===================== 잡다한 도구 ===================== */
 const $$ = (tag, attrs = {}, ...kids) => {
@@ -62,6 +63,10 @@ body.show-stats #statsPane{display:block; flex:1; min-height:0; overflow-y:auto;
 .st-seg button+button{border-left:1px solid var(--border);}
 .st-seg button.on{background:#fff; color:#0a0a0a; font-weight:700;}
 .st-check{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--dim);}
+.st-select{
+  background:var(--card); color:var(--text); border:1px solid var(--border);
+  border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit; max-width:14rem;
+}
 
 .st-kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:26px;}
 .kpi{background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 15px;}
@@ -127,21 +132,29 @@ table.st tbody tr.sel{background:#1d2430;}
 const RULES = `rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /visits/{doc} {
+
+    // 이름이 visits 로 시작하는 컬렉션이면 무엇이든 같은 규칙을 쓴다.
+    // 사이트를 더 붙일 때 규칙을 고칠 일이 없다 — 기록마다 site 값으로 구분한다.
+    match /{coll}/{doc} {
+
       // 사이트 방문자: 기록을 새로 남기는 것만 가능
-      allow create: if request.resource.data.day is string
+      allow create: if coll.matches('visits.*')
+                    && request.resource.data.day is string
+                    && request.resource.data.site is string
                     && request.resource.data.vid is string
-                    && request.resource.data.size() <= 24;
+                    && request.resource.data.size() <= 30;
 
       // 머문 시간 / 본 구역만 나중에 갱신 가능
-      allow update: if request.resource.data.diff(resource.data)
+      allow update: if coll.matches('visits.*')
+                    && request.resource.data.diff(resource.data)
                        .affectedKeys().hasOnly(['secs', 'views'])
                     && request.resource.data.secs is int
                     && request.resource.data.secs <= 3600;
 
-      // 읽기·삭제는 나만
-      allow read, delete: if request.auth != null
-                          && request.auth.token.email == '__EMAIL__';
+      // 읽기·삭제는 아래 적힌 사람만. 쉼표로 계정을 더 넣을 수 있다.
+      allow read, delete: if coll.matches('visits.*')
+                          && request.auth != null
+                          && request.auth.token.email in ['__EMAIL__'];
     }
   }
 }`;
@@ -150,7 +163,11 @@ service cloud.firestore {
 export function mountStats({ pane, getContent, isDirty, save }) {
   document.head.append($$("style", { html: STYLE }));
 
-  let state = { range: Number(localStorage.getItem(RANGE_KEY)) || 30, rows: null, day: null, err: "" };
+  let state = {
+    range: Number(localStorage.getItem(RANGE_KEY)) || 30,
+    site: localStorage.getItem(SITE_KEY) || "",   // "" = 전체 사이트
+    rows: null, day: null, err: "",
+  };
   let ctx = null;   // { db, auth, user, sdk }
 
   const render = () => { pane.textContent = ""; pane.append(draw()); };
@@ -159,14 +176,29 @@ export function mountStats({ pane, getContent, isDirty, save }) {
     const a = getContent()?.site?.analytics || {};
     const projectId = String(a.projectId || "").trim();
     const apiKey = String(a.apiKey || "").trim();
-    return projectId && apiKey ? { projectId, apiKey } : null;
+    if (!projectId || !apiKey) return null;
+    return {
+      projectId, apiKey,
+      siteId: String(a.siteId || "").trim(),
+      collection: String(a.collection || "").trim() || "visits",
+    };
   }
 
+  // 구역 id -> 사람이 읽는 이름.
+  // content.json 의 site.analytics.labels 로 덮어쓰거나 새로 추가할 수 있다.
+  // 다른 사이트의 기록이면 아는 이름이 없으므로 id 를 그대로 보여준다.
+  const BUILTIN_LABELS = {
+    home: "소개",
+    projects: "프로젝트 한눈에 보기",
+    notes: "기획 노트",
+    play: "게임 경험",
+    contact: "연락처",
+    minigame: "미니게임(너구리)",
+  };
   function labelOf(id) {
-    if (id === "home") return "소개";
-    if (id === "projects") return "프로젝트 한눈에 보기";
-    if (id === "contact") return "연락처";
-    if (id === "minigame") return "미니게임(너구리)";
+    const a = getContent()?.site?.analytics || {};
+    if (a.labels && a.labels[id]) return a.labels[id];
+    if (BUILTIN_LABELS[id]) return BUILTIN_LABELS[id];
     const p = (getContent()?.projects || []).find((x) => x.id === id);
     return p ? p.title : id;
   }
@@ -213,8 +245,10 @@ export function mountStats({ pane, getContent, isDirty, save }) {
     const c = await connect();
     const { collection, query, where, orderBy, limit, getDocs } = c.D;
     const start = state.range === 0 ? "0000-00-00" : shiftDay(-(state.range - 1));
+    // 사이트 구분은 여기서 하지 않고 받아온 뒤 걸러낸다. 날짜 하나만 조건에 걸면
+    // Firestore 가 색인을 알아서 만들어 주므로, 새 사이트를 붙일 때 할 일이 없다.
     const snap = await getDocs(query(
-      collection(c.db, "visits"),
+      collection(c.db, cfgOf().collection),
       where("day", ">=", start),
       orderBy("day", "desc"),
       limit(6000)
@@ -225,25 +259,43 @@ export function mountStats({ pane, getContent, isDirty, save }) {
       try { ts = v.ts?.toDate ? v.ts.toDate() : v.ts ? new Date(v.ts) : null; } catch (e) {}
       return {
         id: d.id, day: v.day || "", ts,
+        site: v.site || "(사이트 미지정)",
         vid: v.vid || "", sid: v.sid || v.vid || d.id,
         newVisitor: !!v.newVisitor,
         device: v.device || "기타", os: v.os || "기타", browser: v.browser || "기타",
         refType: v.refType || "직접 방문", refHost: v.refHost || "",
         region: v.region || "알 수 없음",
+        path: v.path || "", title: v.title || "",
         secs: Number(v.secs || 0),
         views: Array.isArray(v.views) ? v.views : [],
       };
     });
   }
 
+  // 지금 고른 사이트의 기록만. state.site 가 비어 있으면 전부.
+  function visible() {
+    const all = state.rows || [];
+    return state.site ? all.filter((r) => r.site === state.site) : all;
+  }
+  function siteList() {
+    return [...new Set((state.rows || []).map((r) => r.site))].sort();
+  }
+
+  // 접속자 목록에 보여 줄 날짜를 고른다 — 오늘, 없으면 기록이 있는 가장 최근 날.
+  function pickDay() {
+    const rows = visible();
+    const today = dayKST(new Date());
+    if (state.day && rows.some((r) => r.day === state.day)) return;
+    state.day = rows.some((r) => r.day === today) ? today : (rows[0]?.day || today);
+  }
+
   async function refresh() {
     state.err = "";
     try {
       await loadRows();
-      const today = dayKST(new Date());
-      if (!state.day || !state.rows.some((r) => r.day === state.day)) {
-        state.day = state.rows.some((r) => r.day === today) ? today : (state.rows[0]?.day || today);
-      }
+      // 고른 사이트에 기록이 하나도 없으면 전체로 되돌린다
+      if (state.site && !state.rows.some((r) => r.site === state.site)) state.site = "";
+      pickDay();
     } catch (e) {
       state.err = String(e?.message || e);
     }
@@ -259,7 +311,7 @@ export function mountStats({ pane, getContent, isDirty, save }) {
     let total = 0;
     for (let round = 0; round < 12; round++) {
       const snap = await getDocs(query(
-        collection(c.db, "visits"), where("day", "<", cutoff), orderBy("day"), limit(200)
+        collection(c.db, cfgOf().collection), where("day", "<", cutoff), orderBy("day"), limit(200)
       ));
       if (snap.empty) break;
       await Promise.all(snap.docs.map((d) => deleteDoc(doc(c.db, "visits", d.id))));
@@ -305,7 +357,9 @@ export function mountStats({ pane, getContent, isDirty, save }) {
       }
       const s = map.get(r.sid);
       s.pages++;
-      s.secs = Math.max(s.secs, r.secs);
+      // 여러 페이지를 옮겨 다닌 시간을 합친다 (페이지마다 기록이 따로 남는다).
+      // 탭을 켜 둔 채 잊은 경우를 대비해 6시간에서 자른다.
+      s.secs = Math.min(6 * 3600, s.secs + r.secs);
       r.views.forEach((v) => s.views.add(v));
       if (r.ts && (!s.first || r.ts < s.first)) s.first = r.ts;
       if (r.ts && (!s.last || r.ts > s.last)) s.last = r.ts;
@@ -415,6 +469,17 @@ export function mountStats({ pane, getContent, isDirty, save }) {
       $$("div", { class: "cfg" },
         mk("projectId", "projectId", "choijihwan-portfolio"),
         mk("apiKey", "apiKey", "AIza…")),
+      $$("div", { class: "field" },
+        (() => {
+          const inp = $$("input", { type: "text", placeholder: "portfolio" });
+          inp.value = a.siteId || "";
+          inp.addEventListener("input", () => { a.siteId = inp.value.trim(); window.__statsCfgChanged?.(); });
+          return $$("div", {},
+            $$("label", {}, "siteId — 이 사이트를 부를 이름 (선택)"),
+            inp,
+            $$("div", { style: "font-size:11.5px; color:var(--faint); margin-top:5px" },
+              "한 Firebase 프로젝트로 여러 사이트를 볼 때 구분하는 값입니다. 비워 두면 도메인 이름을 씁니다."));
+        })()),
       warn,
       $$("div", { style: "display:flex; gap:8px; align-items:center; flex-wrap:wrap" },
         btn,
@@ -444,7 +509,8 @@ export function mountStats({ pane, getContent, isDirty, save }) {
             $$("div", { style: "margin-top:12px" }, cfgFields())))));
     }
 
-    const rows = state.rows || [];
+    const rows = visible();
+    const sites = siteList();
     const agg = summarize(rows);
     const days = [...agg.byDay.values()].sort((a, b) => (a.day < b.day ? -1 : 1));
     const today = dayKST(new Date());
@@ -477,9 +543,27 @@ export function mountStats({ pane, getContent, isDirty, save }) {
       else localStorage.removeItem(OWNER_KEY);
     });
 
+    // 사이트가 둘 이상 쌓였을 때만 고르는 상자를 낸다
+    const sitePick = $$("select", { class: "st-select", title: "볼 사이트" },
+      $$("option", { value: "" }, `전체 사이트 (${sites.length})`),
+      sites.map((v) => {
+        const o = $$("option", { value: v }, v);
+        if (v === state.site) o.selected = true;
+        return o;
+      }));
+    sitePick.addEventListener("change", () => {
+      state.site = sitePick.value;
+      if (state.site) localStorage.setItem(SITE_KEY, state.site);
+      else localStorage.removeItem(SITE_KEY);
+      state.day = null;
+      pickDay();
+      render();
+    });
+
     const bar = $$("div", { class: "st-bar" },
       $$("div", { class: "grow", style: "font-size:13px; color:var(--dim)" },
         `${rangeLabel} · ${rows.length.toLocaleString()}건 · ${ctx.user.email}`),
+      sites.length > 1 ? sitePick : null,
       seg,
       $$("label", { class: "st-check", title: "이 브라우저에서 내가 사이트를 열어도 통계에 안 잡힙니다" }, ownerCb, "내 방문 제외"),
       $$("button", { class: "btn btn-sm", onclick: refresh }, "새로고침"),
@@ -593,15 +677,17 @@ export function mountStats({ pane, getContent, isDirty, save }) {
   }
 
   function downloadCsv(rows) {
-    const head = ["날짜", "시각", "방문자ID", "세션ID", "첫방문", "유입", "유입출처", "기기", "OS", "브라우저", "지역", "머문초", "본곳"];
+    const head = ["사이트", "날짜", "시각", "주소", "방문자ID", "세션ID", "첫방문",
+                  "유입", "유입출처", "기기", "OS", "브라우저", "지역", "머문초", "본곳"];
     const q = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
     const body = rows.map((r) => [
-      r.day, r.ts ? timeKST(r.ts) : "", r.vid, r.sid, r.newVisitor ? "Y" : "N",
+      r.site, r.day, r.ts ? timeKST(r.ts) : "", r.path, r.vid, r.sid, r.newVisitor ? "Y" : "N",
       r.refType, r.refHost, r.device, r.os, r.browser, r.region, r.secs,
       r.views.map(labelOf).join(" / "),
     ].map(q).join(","));
     const blob = new Blob(["﻿" + [head.map(q).join(","), ...body].join("\r\n")], { type: "text/csv;charset=utf-8" });
-    const a = $$("a", { href: URL.createObjectURL(blob), download: `방문통계_${dayKST(new Date())}.csv` });
+    const name = `방문통계_${state.site ? state.site.replace(/[^\w가-힣.-]/g, "_") + "_" : ""}${dayKST(new Date())}.csv`;
+    const a = $$("a", { href: URL.createObjectURL(blob), download: name });
     document.body.append(a); a.click(); a.remove();
   }
 

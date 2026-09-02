@@ -4,6 +4,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { renderSite } from "./src/template.js";
+import { trackerFile, TRACKER_VERSION } from "./src/analytics.js";
 
 const root = dirname(fileURLToPath(import.meta.url));
 
@@ -34,5 +35,12 @@ if (base) {
     `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${base}sitemap.xml\n`, "utf8");
   console.log("  sitemap.xml / robots.txt");
 }
+
+// 다른 사이트에 붙일 수 있는 독립 수집기. 이 사이트는 안 쓰지만(페이지에 직접 심는다)
+// 다른 사이트가 script src 로 불러가도록 항상 만들어 둔다.
+mkdirSync(join(root, "analytics"), { recursive: true });
+const tracker = trackerFile();
+writeFileSync(join(root, "analytics/tracker.js"), tracker, "utf8");
+console.log(`  analytics/tracker.js           ${tracker.length.toLocaleString().padStart(9)}자  (v${TRACKER_VERSION})`);
 
 console.log(`페이지 ${pages.length}장 생성 완료 — 합계 ${total.toLocaleString()}자`);
