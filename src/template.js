@@ -419,11 +419,14 @@ const DEFAULT_HERO_BLOCKS = ["tags", "buttons", "meta"];
 const textAlignStyle = (v) => (v === "center" || v === "right" ? ` style="text-align:${v}"` : "");
 const rowAlignStyle = (v) => (v === "center" ? ` style="justify-content:center"` : v === "right" ? ` style="justify-content:flex-end"` : "");
 
-// 요약 정보 4칸의 정렬 + 위아래 여백(px) — 안 정하면 CSS 기본값(20px/24px) 그대로.
+// 요약 정보 4칸의 정렬 + 위아래·좌우 여백(px) — 안 정하면 CSS 기본값 그대로.
+// 좌우 값을 직접 정하면 첫/끝 칸을 컨테이너 끝에 맞추던 CSS 기본 동작(양끝 0)은 덮어써진다 —
+// 사용자가 직접 값을 넣은 것이므로 의도된 동작.
 function metaBoxStyle(m) {
   const parts = [];
   if (m.align === "center" || m.align === "right") parts.push(`text-align:${m.align}`);
   if (Number(m.padding) >= 0) parts.push(`padding-top:${m.padding}px`, `padding-bottom:${m.padding}px`);
+  if (Number(m.paddingX) >= 0) parts.push(`padding-left:${m.paddingX}px`, `padding-right:${m.paddingX}px`);
   return parts.length ? ` style="${parts.join(";")}"` : "";
 }
 

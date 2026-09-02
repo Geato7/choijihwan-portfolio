@@ -500,8 +500,10 @@ function renderForm() {
       (m, box) => {
         box.append(el("div", { class: "row" },
           field("항목 이름", m, "label"),
-          field("칸 폭 비율", m, "width", { placeholder: "1", hint: "숫자가 클수록 넓어짐 — 예: 1.3" }),
-          field("위·아래 안쪽 여백(px)", m, "padding", { placeholder: "20", hint: "비워두면 기본값" })));
+          field("칸 폭 비율", m, "width", { placeholder: "1", hint: "숫자가 클수록 넓어짐 — 예: 1.3" })));
+        box.append(el("div", { class: "row" },
+          field("위·아래 안쪽 여백(px)", m, "padding", { placeholder: "20", hint: "비워두면 기본값" }),
+          field("좌·우 안쪽 여백(px)", m, "paddingX", { placeholder: "28", hint: "첫/끝 칸은 원래 0 — 값을 넣으면 덮어씀" })));
         box.append(el("div", { class: "field" }, el("label", {}, "내용 (줄바꿈 단위)"), stringList(m.lines, "내용", "줄 추가")));
         box.append(alignToggle("이 칸 정렬", m, "align"));
       },
