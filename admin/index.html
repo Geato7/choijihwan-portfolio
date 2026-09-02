@@ -505,6 +505,9 @@ function renderForm() {
           field("위·아래 안쪽 여백(px)", m, "padding", { placeholder: "20", hint: "비워두면 기본값" }),
           field("좌·우 안쪽 여백(px)", m, "paddingX", { placeholder: "28", hint: "첫/끝 칸은 원래 0 — 값을 넣으면 덮어씀" })));
         box.append(el("div", { class: "field" }, el("label", {}, "내용 (줄바꿈 단위)"), stringList(m.lines, "내용", "줄 추가")));
+        box.append(el("div", { class: "row" },
+          field("내용 위·아래 여백(px)", m, "linesPadding", { placeholder: "0", hint: "비워두면 기본값" }),
+          field("내용 좌·우 여백(px)", m, "linesPaddingX", { placeholder: "0", hint: "비워두면 기본값" })));
         box.append(alignToggle("이 칸 정렬", m, "align"));
       },
       () => ({ label: "새 항목", lines: [""] }),

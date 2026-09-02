@@ -430,6 +430,14 @@ function metaBoxStyle(m) {
   return parts.length ? ` style="${parts.join(";")}"` : "";
 }
 
+// 칸 안 "내용(줄바꿈 단위)" 텍스트 자체의 위아래·좌우 여백 — 칸 전체 여백(metaBoxStyle)과는 별개.
+function metaLinesStyle(m) {
+  const parts = [];
+  if (Number(m.linesPadding) >= 0) parts.push(`padding-top:${m.linesPadding}px`, `padding-bottom:${m.linesPadding}px`);
+  if (Number(m.linesPaddingX) >= 0) parts.push(`padding-left:${m.linesPaddingX}px`, `padding-right:${m.linesPaddingX}px`);
+  return parts.length ? ` style="${parts.join(";")}"` : "";
+}
+
 function hero(h, prefix) {
   const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
   // 옛 앵커 주소를 새 페이지로 옮겨준다 (content.json 을 고치지 않아도 동작하도록)
@@ -439,7 +447,7 @@ function hero(h, prefix) {
     .map(
       (m) => `        <div${metaBoxStyle(m)}>
           <div class="meta-label">${esc(m.label)}</div>
-          <div class="meta-value">${(m.lines || []).map(esc).join("<br>")}</div>
+          <div class="meta-value"${metaLinesStyle(m)}>${(m.lines || []).map(esc).join("<br>")}</div>
         </div>`
     )
     .join("\n");
