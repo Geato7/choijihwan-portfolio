@@ -335,8 +335,9 @@
   .devlog-file:hover{border-color:var(--text);}
   .devlog-empty{margin:28px 0 10px; font-size:14px; color:var(--text-faint);}
   .devlog-entry:target{background:var(--card);}
-  .devlog-jump{font-size:12.5px; color:var(--text-dim); white-space:nowrap; border-bottom:1px solid var(--text-faint); transition:color .2s,border-color .2s;}
-  .devlog-jump:hover{color:var(--text); border-color:var(--text);}
+  .devlog-jump{display:inline-block; font-size:14px; text-decoration:none; opacity:.55; transition:opacity .2s;}
+  .devlog-jump:hover{opacity:1;}
+  .play-table th:last-child,.play-table td:last-child{width:1%; text-align:center; padding-left:8px; padding-right:8px;}
 
   /* CONTACT — contact.html 본문 */
   .contact-sec{padding:140px 0 90px;}
@@ -508,7 +509,7 @@
       </div>
 
       <div class="table-wrap">
-        <table class="price-table">
+        <table class="price-table play-table">
           <thead>
             <tr><th>구분</th><th>게임</th><th>장르</th><th>플레이 기간 · 시간</th><th>과금</th><th></th></tr>
           </thead>
@@ -520,7 +521,7 @@
           <tr><td>온라인</td><td>워크래프트</td><td>RTS</td><td>2개월</td><td>없음</td><td></td></tr>
           <tr><td>온라인</td><td>카운터스트라이크: 글로벌 오펜시브</td><td>택티컬 FPS</td><td>1개월</td><td>없음</td><td></td></tr>
           <tr><td>온라인</td><td>Counter-Strike 2</td><td>택티컬 FPS</td><td>24시간</td><td>없음</td><td></td></tr>
-          <tr><td>온라인</td><td>좀비고등학교</td><td>2D 술래잡기 대전</td><td>3년</td><td>없음</td><td><a class="devlog-jump" href="notes.html#note-4">기획 노트 ↗</a></td></tr>
+          <tr><td>온라인</td><td>좀비고등학교</td><td>2D 술래잡기 대전</td><td>3년</td><td>없음</td><td><a class="devlog-jump" href="notes.html#note-4" title="기획 노트로 이동" aria-label="기획 노트로 이동">🔗</a></td></tr>
           <tr><td>온라인</td><td>이터널 리턴</td><td>배틀로얄 MOBA</td><td>69.5시간</td><td>없음</td><td></td></tr>
           <tr><td>온라인</td><td>V Rising</td><td>오픈월드 생존 RPG</td><td>75.8시간</td><td>없음</td><td></td></tr>
           <tr><td>온라인</td><td>Black Squad</td><td>FPS</td><td>43.1시간</td><td>없음</td><td></td></tr>
@@ -539,7 +540,7 @@
           <tr><td>온라인</td><td>작혼: 리치 마작</td><td>마작 / 보드</td><td>15.3시간</td><td>없음</td><td></td></tr>
           <tr><td>온라인</td><td>Tabletop Simulator</td><td>보드게임 샌드박스</td><td>10.6시간</td><td>없음</td><td></td></tr>
           <tr><td>온라인</td><td>메이플스토리</td><td>2D MMORPG</td><td>1년</td><td>40만원</td><td></td></tr>
-          <tr><td>온라인</td><td>배틀그라운드</td><td>배틀로얄</td><td>4개월</td><td>3만원</td><td><a class="devlog-jump" href="notes.html#note-22">기획 노트 ↗</a></td></tr>
+          <tr><td>온라인</td><td>배틀그라운드</td><td>배틀로얄</td><td>4개월</td><td>3만원</td><td><a class="devlog-jump" href="notes.html#note-22" title="기획 노트로 이동" aria-label="기획 노트로 이동">🔗</a></td></tr>
           <tr><td>모바일</td><td>승리의 여신: NIKKE</td><td>수집형 건슈팅 RPG</td><td>5개월</td><td>20만원</td><td></td></tr>
           <tr><td>모바일</td><td>마비노기 모바일</td><td>MMORPG</td><td>3개월</td><td>3만원</td><td></td></tr>
           <tr><td>모바일</td><td>클래시 로얄</td><td>실시간 전략 카드</td><td>1개월</td><td>없음</td><td></td></tr>
@@ -566,7 +567,7 @@
           <tr><td>기타</td><td>For The King</td><td>턴제 로그라이크</td><td>24.8시간</td><td>없음</td><td></td></tr>
           <tr><td>기타</td><td>Northgard: Definitive Edition</td><td>RTS</td><td>23.8시간</td><td>없음</td><td></td></tr>
           <tr><td>기타</td><td>Stacklands</td><td>카드 빌딩 생존</td><td>22.4시간</td><td>없음</td><td></td></tr>
-          <tr><td>기타</td><td>Barony</td><td>로그라이크 RPG</td><td>20.8시간</td><td>없음</td><td><a class="devlog-jump" href="notes.html#note-27">기획 노트 ↗</a></td></tr>
+          <tr><td>기타</td><td>Barony</td><td>로그라이크 RPG</td><td>20.8시간</td><td>없음</td><td><a class="devlog-jump" href="notes.html#note-27" title="기획 노트로 이동" aria-label="기획 노트로 이동">🔗</a></td></tr>
           <tr><td>기타</td><td>Far Cry 3</td><td>오픈월드 FPS</td><td>18.5시간</td><td>없음</td><td></td></tr>
           <tr><td>기타</td><td>Stardew Valley</td><td>농장 경영 시뮬레이션</td><td>18.4시간</td><td>없음</td><td></td></tr>
           <tr><td>기타</td><td>불과 얼음의 춤</td><td>리듬</td><td>14.8시간</td><td>없음</td><td></td></tr>
@@ -577,7 +578,7 @@
           <tr><td>기타</td><td>메트로 2033 리덕스</td><td>서바이벌 FPS</td><td>12.7시간</td><td>없음</td><td></td></tr>
           <tr><td>기타</td><td>메트로: 라스트 라이트 리덕스</td><td>서바이벌 FPS</td><td>10.7시간</td><td>없음</td><td></td></tr>
           <tr><td>기타</td><td>팰월드</td><td>오픈월드 생존</td><td>4개월</td><td>3만원</td><td></td></tr>
-          <tr><td>기타</td><td>림월드</td><td>경영 시뮬레이션</td><td>6개월</td><td>3만원</td><td><a class="devlog-jump" href="notes.html#note-25">기획 노트 ↗</a></td></tr>
+          <tr><td>기타</td><td>림월드</td><td>경영 시뮬레이션</td><td>6개월</td><td>3만원</td><td><a class="devlog-jump" href="notes.html#note-25" title="기획 노트로 이동" aria-label="기획 노트로 이동">🔗</a></td></tr>
           <tr><td>기타</td><td>단간론파 시리즈</td><td>추리 비주얼 노벨</td><td>3개월</td><td>5만원</td><td></td></tr>
           </tbody>
         </table>

@@ -277,8 +277,9 @@
   .devlog-file:hover{border-color:var(--text);}
   .devlog-empty{margin:28px 0 10px; font-size:14px; color:var(--text-faint);}
   .devlog-entry:target{background:var(--card);}
-  .devlog-jump{font-size:12.5px; color:var(--text-dim); white-space:nowrap; border-bottom:1px solid var(--text-faint); transition:color .2s,border-color .2s;}
-  .devlog-jump:hover{color:var(--text); border-color:var(--text);}
+  .devlog-jump{display:inline-block; font-size:14px; text-decoration:none; opacity:.55; transition:opacity .2s;}
+  .devlog-jump:hover{opacity:1;}
+  .play-table th:last-child,.play-table td:last-child{width:1%; text-align:center; padding-left:8px; padding-right:8px;}
 
   /* CONTACT — contact.html 본문 */
   .contact-sec{padding:140px 0 90px;}

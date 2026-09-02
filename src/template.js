@@ -333,13 +333,13 @@ function playTable(t, dl) {
             (e.project && e.project.length >= 2 && game.includes(e.project)))
         : -1;
       const link = hit >= 0
-        ? `<td><a class="devlog-jump" href="notes.html#note-${hit}">기획 노트 ↗</a></td>`
+        ? `<td><a class="devlog-jump" href="notes.html#note-${hit}" title="기획 노트로 이동" aria-label="기획 노트로 이동">🔗</a></td>`
         : "<td></td>";
       return `          <tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}${link}</tr>`;
     })
     .join("\n");
   return `      <div class="table-wrap">
-        <table class="price-table">
+        <table class="price-table play-table">
           <thead>
             <tr>${head}</tr>
           </thead>
