@@ -415,6 +415,10 @@ ${cards}
 // 에디터에서 순서를 바꿀 수 있다 (프로젝트 페이지의 blocks 와 같은 방식).
 const DEFAULT_HERO_BLOCKS = ["tags", "buttons", "meta"];
 
+// 첫 화면(소개)만 필드마다 좌/중앙/우 정렬을 고를 수 있다 — 다른 페이지는 손대지 않는다.
+const textAlignStyle = (v) => (v === "center" || v === "right" ? ` style="text-align:${v}"` : "");
+const rowAlignStyle = (v) => (v === "center" ? ` style="justify-content:center"` : v === "right" ? ` style="justify-content:flex-end"` : "");
+
 function hero(h, prefix) {
   const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
   // 옛 앵커 주소를 새 페이지로 옮겨준다 (content.json 을 고치지 않아도 동작하도록)
@@ -422,7 +426,7 @@ function hero(h, prefix) {
   const buttons = (h.buttons || []).map((b) => (MAP[b.href] ? { ...b, href: MAP[b.href] } : b));
   const meta = (h.meta || [])
     .map(
-      (m) => `        <div>
+      (m) => `        <div${textAlignStyle(m.align)}>
           <div class="meta-label">${esc(m.label)}</div>
           <div class="meta-value">${(m.lines || []).map(esc).join("<br>")}</div>
         </div>`
@@ -433,8 +437,8 @@ function hero(h, prefix) {
   // 에디터에서 숫자만 바꾸면 폭이 바뀌도록.
   const metaCols = (h.meta || []).map((m) => `${Number(m.width) > 0 ? m.width : 1}fr`).join(" ");
   const renderers = {
-    tags: () => (tags ? `      <div class="tags">\n${tags}\n      </div>` : ""),
-    buttons: () => (has(buttons) ? `      <div class="cta-row">\n${buttons.map((b) => "        " + btn(b, prefix)).join("\n")}\n      </div>` : ""),
+    tags: () => (tags ? `      <div class="tags"${rowAlignStyle(h.tagsAlign)}>\n${tags}\n      </div>` : ""),
+    buttons: () => (has(buttons) ? `      <div class="cta-row"${rowAlignStyle(h.buttonsAlign)}>\n${buttons.map((b) => "        " + btn(b, prefix)).join("\n")}\n      </div>` : ""),
     meta: () => (meta ? `      <div class="meta-grid" style="grid-template-columns:${attr(metaCols)}">\n${meta}\n      </div>` : ""),
   };
   const order = has(h.blocks) ? h.blocks : DEFAULT_HERO_BLOCKS;
@@ -442,9 +446,9 @@ function hero(h, prefix) {
 
   return `  <section class="hero" id="home">
     <div class="wrap">
-      <div class="eyebrow">${esc(h.eyebrow)}</div>
-      <h1>${esc(h.name)}${has(h.subtitle) ? ` <span>${esc(h.subtitle)}</span>` : ""}</h1>
-${has(h.lead) ? `      <p class="lead">${esc(h.lead)}</p>\n` : ""}${body}
+      <div class="eyebrow"${textAlignStyle(h.eyebrowAlign)}>${esc(h.eyebrow)}</div>
+      <h1${textAlignStyle(h.nameAlign)}>${esc(h.name)}${has(h.subtitle) ? ` <span>${esc(h.subtitle)}</span>` : ""}</h1>
+${has(h.lead) ? `      <p class="lead"${textAlignStyle(h.leadAlign)}>${esc(h.lead)}</p>\n` : ""}${body}
     </div>
   </section>`;
 }

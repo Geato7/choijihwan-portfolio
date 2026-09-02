@@ -475,13 +475,18 @@ function renderForm() {
   const h = content.hero;
   form.append(group("첫 화면 (소개)", "",
     field("작은 머리말", h, "eyebrow"),
+    alignToggle("머리말 정렬", h, "eyebrowAlign"),
     el("div", { class: "row" }, field("이름", h, "name"), field("직함", h, "subtitle")),
+    alignToggle("이름 정렬", h, "nameAlign"),
     field("소개 문장", h, "lead", { multiline: true }),
+    alignToggle("소개 문장 정렬", h, "leadAlign"),
     el("div", { class: "sub-title" }, "태그 · 버튼 · 요약 정보 순서 (◀ ▶ 로 이동)"),
     blockOrderUI(h, HERO_BLOCKS, HERO_BLOCK_LABELS, heroBlockHasContent),
     el("div", { class: "sub-title" }, "태그"),
+    alignToggle("태그 줄 정렬", h, "tagsAlign"),
     stringList(h.tags, "예: 콘텐츠 기획", "태그 추가"),
     el("div", { class: "sub-title" }, "버튼"),
+    alignToggle("버튼 줄 정렬", h, "buttonsAlign"),
     listEditor(h.buttons,
       (b, box) => {
         box.append(field("버튼 글씨", b, "label"));
@@ -497,6 +502,7 @@ function renderForm() {
           field("항목 이름", m, "label"),
           field("칸 폭 비율", m, "width", { placeholder: "1", hint: "숫자가 클수록 넓어짐 — 예: 1.3" })));
         box.append(el("div", { class: "field" }, el("label", {}, "내용 (줄바꿈 단위)"), stringList(m.lines, "내용", "줄 추가")));
+        box.append(alignToggle("이 칸 정렬", m, "align"));
       },
       () => ({ label: "새 항목", lines: [""] }),
       { addLabel: "칸 추가", titleOf: (m) => m.label }),
@@ -524,6 +530,28 @@ function renderForm() {
     el("div", { class: "row" }, field("전화번호", c, "phone"), field("이메일", c, "email")),
     field("저작권 문구", c, "copyright"),
   ));
+}
+
+// 왼쪽/가운데/오른쪽 정렬 고르기 — 첫 화면(소개) 필드에서만 쓴다.
+function alignToggle(label, obj, key) {
+  const wrap = el("div", { class: "field" });
+  const btns = [];
+  const update = () => {
+    const v = obj[key] || "left";
+    btns.forEach(([val, b]) => { b.className = "btn btn-sm" + (val === v ? " btn-primary" : ""); });
+  };
+  const mk = (val, text) => {
+    const b = el("button", { class: "btn btn-sm", onclick: () => {
+      if (val === "left") delete obj[key]; else obj[key] = val;
+      update(); changed();
+    } }, text);
+    btns.push([val, b]);
+    return b;
+  };
+  wrap.append(el("label", {}, label),
+    el("div", { style: "display:flex; align-items:center; gap:6px" }, mk("left", "왼쪽"), mk("center", "가운데"), mk("right", "오른쪽")));
+  update();
+  return wrap;
 }
 
 function styleToggle(b) {
