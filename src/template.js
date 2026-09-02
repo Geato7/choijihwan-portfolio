@@ -207,8 +207,8 @@ ${next ? link(next, "next", "다음") : `        <span class="pager-link pager-e
 }
 
 // 기획 노트 — 월별로 묶은 타임라인. 위쪽 칩으로 분류를 걸러 볼 수 있다.
-function devlogEntry(e, prefix) {
-  return `        <article class="devlog-entry" data-tag="${attr(e.project || "")}">
+function devlogEntry(e, prefix, id) {
+  return `        <article class="devlog-entry" id="${attr(id)}" data-tag="${attr(e.project || "")}">
           <div class="devlog-meta">
 ${has(e.date) ? `            <span class="devlog-date">${esc(e.date)}</span>\n` : ""}${has(e.project) ? `            <span class="devlog-tag">${esc(e.project)}</span>\n` : ""}          </div>
           <h3 class="devlog-title">${esc(e.title)}</h3>
@@ -218,11 +218,18 @@ ${has(e.retro) ? `          <p class="devlog-retro">${esc(e.retro)}</p>\n` : ""}
 // "2026-06-22" -> "2026.06". 날짜가 없으면 빈 문자열.
 const devlogMonth = (v) => (/^\d{4}-\d{2}/.test(String(v || "")) ? String(v).slice(0, 7).replace("-", ".") : "");
 
+// 최신 글이 위로 오도록 날짜 내림차순 정렬 — devlogSection과 playTable이
+// 같은 순서를 써야 note-<i> 앵커가 서로 어긋나지 않는다.
+function sortedDevlogEntries(dl) {
+  return ((dl && dl.entries) || [])
+    .filter((e) => has(e.title))
+    .slice()
+    .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+}
+
 function devlogSection(dl, prefix) {
-  const entries = ((dl && dl.entries) || []).filter((e) => has(e.title));
-  if (!entries.length) return "";
-  // 최신 글이 위로 오도록 날짜 내림차순 정렬 (에디터에서 순서를 따로 관리할 필요 없게)
-  const sorted = entries.slice().sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+  const sorted = sortedDevlogEntries(dl);
+  if (!sorted.length) return "";
 
   // 요약 — 몇 편을, 언제부터 언제까지, 몇 갈래로
   const dated = sorted.map((e) => e.date).filter((v) => devlogMonth(v));
@@ -251,14 +258,14 @@ ${chips.map(([tag, n]) => `        <button type="button" class="dl-chip" data-ta
   // 월이 바뀌는 자리에 표시를 하나 끼워 넣는다
   let last = null;
   const items = [];
-  for (const e of sorted) {
+  sorted.forEach((e, i) => {
     const m = devlogMonth(e.date) || "날짜 미상";
     if (m !== last) {
       items.push(`        <div class="devlog-month" data-month="${attr(m)}"><span>${esc(m)}</span></div>`);
       last = m;
     }
-    items.push(devlogEntry(e, prefix));
-  }
+    items.push(devlogEntry(e, prefix, `note-${i}`));
+  });
 
   return `  <section class="project reveal" id="notes">
     <div class="wrap">
@@ -311,10 +318,42 @@ function devlogScript() {
 </script>`;
 }
 
+// 게임 이름이 기획 노트 글의 제목·회고에 나오면 그 글로 바로 가는 열을 붙인다.
+// 데이터에 링크를 따로 적어두지 않아도, 새 노트가 그 게임을 언급하는 순간 자동으로 이어진다.
+function playTable(t, dl) {
+  if (!t || !has(t.headers)) return "";
+  const notes = sortedDevlogEntries(dl);
+  const head = t.headers.map((h) => `<th>${esc(h)}</th>`).join("") + "<th></th>";
+  const body = (t.rows || [])
+    .map((r) => {
+      const game = String(r[1] || "").trim();
+      const hit = game.length >= 2
+        ? notes.findIndex((e) =>
+            e.title.includes(game) || (e.retro || "").includes(game) ||
+            (e.project && e.project.length >= 2 && game.includes(e.project)))
+        : -1;
+      const link = hit >= 0
+        ? `<td><a class="devlog-jump" href="notes.html#note-${hit}">기획 노트 ↗</a></td>`
+        : "<td></td>";
+      return `          <tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}${link}</tr>`;
+    })
+    .join("\n");
+  return `      <div class="table-wrap">
+        <table class="price-table">
+          <thead>
+            <tr>${head}</tr>
+          </thead>
+          <tbody>
+${body}
+          </tbody>
+        </table>
+      </div>`;
+}
+
 // 게임 경험 — 플레이 이력 한 장. 숫자 줄 + 표만 쓴다.
-function playSection(ph) {
+function playSection(ph, dl) {
   if (!ph || !has((ph.table || {}).rows)) return "";
-  const blocks = [stats(ph.stats), table(ph.table)].filter(Boolean).join("\n\n");
+  const blocks = [stats(ph.stats), playTable(ph.table, dl)].filter(Boolean).join("\n\n");
   return `  <section class="project reveal" id="play">
     <div class="wrap">
       <div class="section-head">
@@ -701,7 +740,7 @@ export function renderPage(content, css, key = "index") {
       prefix: "", nav: "play", canonicalPath: "play.html",
       title: `${ph.heading || "게임 경험"} — ${siteName}`,
       description: ph.lead || site.description,
-      body: playSection(ph),
+      body: playSection(ph, content.devlog),
     });
   }
 
