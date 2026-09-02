@@ -420,7 +420,7 @@ function hero(h, prefix) {
     .map(
       (m) => `        <div>
           <div class="meta-label">${esc(m.label)}</div>
-          <div class="meta-value">${(m.lines || []).map(esc).join("<br>")}</div>
+          <div class="meta-value">${(m.lines || []).map((l) => `・ ${esc(l)}`).join("<br>")}</div>
         </div>`
     )
     .join("\n");
