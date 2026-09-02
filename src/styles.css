@@ -49,6 +49,7 @@
     font-family:'Noto Sans KR', -apple-system, sans-serif;
     line-height:1.7;
     -webkit-font-smoothing:antialiased;
+    word-break:keep-all; overflow-wrap:break-word;
   }
   a{color:inherit; text-decoration:none;}
   img{max-width:100%; display:block;}
@@ -128,7 +129,7 @@
   .btn-copy.is-done{border-color:var(--text); color:var(--text);}
 
   .meta-grid{
-    margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+    margin-top:56px; display:grid; grid-template-columns:0.9fr 1.3fr 1fr 1fr; gap:0;
     border-top:1px solid var(--border);
   }
   .meta-grid div{padding:20px 28px 24px; border-right:1px solid var(--border);}
