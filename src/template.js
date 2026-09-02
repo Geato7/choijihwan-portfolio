@@ -419,6 +419,14 @@ const DEFAULT_HERO_BLOCKS = ["tags", "buttons", "meta"];
 const textAlignStyle = (v) => (v === "center" || v === "right" ? ` style="text-align:${v}"` : "");
 const rowAlignStyle = (v) => (v === "center" ? ` style="justify-content:center"` : v === "right" ? ` style="justify-content:flex-end"` : "");
 
+// 요약 정보 4칸의 정렬 + 위아래 여백(px) — 안 정하면 CSS 기본값(20px/24px) 그대로.
+function metaBoxStyle(m) {
+  const parts = [];
+  if (m.align === "center" || m.align === "right") parts.push(`text-align:${m.align}`);
+  if (Number(m.padding) >= 0) parts.push(`padding-top:${m.padding}px`, `padding-bottom:${m.padding}px`);
+  return parts.length ? ` style="${parts.join(";")}"` : "";
+}
+
 function hero(h, prefix) {
   const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
   // 옛 앵커 주소를 새 페이지로 옮겨준다 (content.json 을 고치지 않아도 동작하도록)
@@ -426,7 +434,7 @@ function hero(h, prefix) {
   const buttons = (h.buttons || []).map((b) => (MAP[b.href] ? { ...b, href: MAP[b.href] } : b));
   const meta = (h.meta || [])
     .map(
-      (m) => `        <div${textAlignStyle(m.align)}>
+      (m) => `        <div${metaBoxStyle(m)}>
           <div class="meta-label">${esc(m.label)}</div>
           <div class="meta-value">${(m.lines || []).map(esc).join("<br>")}</div>
         </div>`
