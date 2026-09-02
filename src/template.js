@@ -429,10 +429,13 @@ function hero(h, prefix) {
     )
     .join("\n");
 
+  // 칸마다 폭 비율(width, 기본 1)을 적어두면 그 값대로 fr 을 배분한다 —
+  // 에디터에서 숫자만 바꾸면 폭이 바뀌도록.
+  const metaCols = (h.meta || []).map((m) => `${Number(m.width) > 0 ? m.width : 1}fr`).join(" ");
   const renderers = {
     tags: () => (tags ? `      <div class="tags">\n${tags}\n      </div>` : ""),
     buttons: () => (has(buttons) ? `      <div class="cta-row">\n${buttons.map((b) => "        " + btn(b, prefix)).join("\n")}\n      </div>` : ""),
-    meta: () => (meta ? `      <div class="meta-grid">\n${meta}\n      </div>` : ""),
+    meta: () => (meta ? `      <div class="meta-grid" style="grid-template-columns:${attr(metaCols)}">\n${meta}\n      </div>` : ""),
   };
   const order = has(h.blocks) ? h.blocks : DEFAULT_HERO_BLOCKS;
   const body = order.map((key) => (renderers[key] ? renderers[key]() : "")).filter(Boolean).join("\n");

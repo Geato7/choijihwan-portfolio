@@ -129,7 +129,7 @@
   .btn-copy.is-done{border-color:var(--text); color:var(--text);}
 
   .meta-grid{
-    margin-top:56px; display:grid; grid-template-columns:0.9fr 1.3fr 1fr 1fr; gap:0;
+    margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:0;
     border-top:1px solid var(--border); align-items:start;
   }
   .meta-grid div{padding:20px 28px 24px; border-right:1px solid var(--border);}
@@ -378,7 +378,8 @@
     .nav-links.open{max-height:460px;}   /* 메뉴 항목이 늘어나도 잘리지 않도록 여유 있게 */
     .nav-links a{padding:16px 28px; border-top:1px solid var(--border);}
     .nav-toggle{display:flex;}
-    .meta-grid{grid-template-columns:repeat(2,1fr); row-gap:20px;}
+    /* 데스크톱 폭 비율은 인라인 style 로 들어오므로, 좁은 화면 2단은 !important 로 눌러야 이긴다 */
+    .meta-grid{grid-template-columns:repeat(2,1fr) !important; row-gap:20px;}
     .meta-grid div{border-right:none; border-bottom:1px solid var(--border); padding:20px 16px 16px;}
     .meta-grid div:nth-child(odd){padding-left:0;}
     .meta-grid div:nth-child(even){padding-right:0;}
