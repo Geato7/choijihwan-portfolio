@@ -472,6 +472,73 @@
     .index-grid{grid-template-columns:repeat(2,1fr);}
   }
 
+  /* ---------------------------------------------------------------
+     모바일 손보기 — 손가락으로 쓰는 화면에 맞춘 보정.
+     위쪽 규칙과 같은 특이성이면 뒤에 있는 이쪽이 이긴다.
+     --------------------------------------------------------------- */
+
+  /* 탭할 때 안드로이드 크롬이 씌우는 파란 사각형을 지우고,
+     대신 눌린 느낌을 직접 준다 (마우스가 없으면 :hover 가 안 보이므로). */
+  a, button{-webkit-tap-highlight-color:transparent;}
+  @media (hover:none){
+    .btn:active{opacity:.72;}
+    .dl-chip:active{border-color:var(--text-faint); color:var(--text);}
+    a.pcard:active, a.pager-link:active{border-color:var(--text-faint);}
+  }
+
+  /* 노치·둥근 모서리 기기에서 좌우 내용이 가려지지 않도록 여백을 더한다. */
+  .wrap, .nav-inner{
+    padding-left:max(28px, env(safe-area-inset-left));
+    padding-right:max(28px, env(safe-area-inset-right));
+  }
+  .site-foot{padding-bottom:max(44px, env(safe-area-inset-bottom));}
+
+  /* 가로로 넘치는 표 — 옆으로 밀 때 페이지까지 같이 밀리지 않게 막는다. */
+  .table-wrap{overscroll-behavior-x:contain;}
+
+  @media (max-width: 760px){
+    .wrap, .nav-inner{
+      padding-left:max(20px, env(safe-area-inset-left));
+      padding-right:max(20px, env(safe-area-inset-right));
+    }
+
+    /* 누를 곳은 최소 44px — 애플·구글 권장치. 보이는 크기는 그대로 두고
+       가짜 요소로 판정 범위만 넓힌다(레이아웃이 안 밀린다). */
+    .nav-toggle, .theme-toggle, .logo, .pager-index, .devlog-jump,
+    .foot-bottom a, .devlog-file{position:relative;}
+    .nav-toggle::after, .theme-toggle::after, .logo::after, .pager-index::after,
+    .devlog-jump::after, .foot-bottom a::after, .devlog-file::after{
+      content:""; position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:max(100%, 44px); height:max(100%, 44px);
+    }
+    .nav-toggle{padding:15px 11px; margin:-15px -11px;}
+    /* 햄버거의 넓힌 판정 범위가 테마 버튼을 덮지 않도록 사이를 벌린다 */
+    .nav-actions{gap:16px;}
+    .theme-toggle{width:40px; height:40px;}
+    .dl-chip{min-height:36px; padding:8px 13px; font-size:12.5px;}
+    .devlog-filter{gap:9px;}
+
+    /* 작은 글씨 올리기 — 11px 아래는 폰에서 읽기 힘들다. */
+    .pcard-num{font-size:11.5px;}
+    .devlog-tag{font-size:12px; padding:4px 10px;}
+    .case-label, .pager-dir, .mp-label{font-size:12px;}
+
+    /* 표는 화면 끝까지 써야 한 번에 보이는 칸이 는다.
+       옆으로 밀어도 첫 칸(무엇에 대한 값인지)은 왼쪽에 붙여 둔다. */
+    .table-wrap{margin-left:-20px; margin-right:-20px; padding:0;}
+    .price-table{margin-right:20px;}
+    .price-table th:first-child, .price-table td:first-child{
+      position:sticky; left:0; z-index:1; background:var(--bg); padding-left:20px;
+    }
+    .price-table th:first-child{background:var(--card);}
+
+    /* 아주 좁은 화면(320px 등)에서 칸 안의 글이 칸을 밀어내지 않도록.
+       1fr 의 기본 최소치는 auto 라서 내용이 길면 화면 밖으로 넘친다. */
+    .meta-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+    .pcard-body{min-width:0;}
+  }
+
   /* ---------- 미니게임 ---------- */
   .play-cta{
     display:flex; align-items:center; gap:16px; flex-wrap:wrap;
