@@ -2,7 +2,7 @@
   "site": {
     "lang": "ko",
     "title": "최지환 — Game Designer Portfolio",
-    "description": "최지환의 게임 기획 포트폴리오 — BELIEF, 좀비고등학교 게임 분석, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아",
+    "description": "최지환의 게임 기획 포트폴리오 — BELIEF, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아",
     "logo": "최지환",
     "homeNavLabel": "소개",
     "contactNavLabel": "연락처",
@@ -18,7 +18,11 @@
       "siteId": "choijihwan-portfolio"
     },
     "projectsNavLabel": "프로젝트",
-    "projectsIndexLead": "여섯 개의 프로젝트를 분류와 시기로 정리했습니다. 카드를 누르면 해당 프로젝트 페이지로 이동합니다."
+    "projectsIndexLead": "다섯 개의 프로젝트를 분류와 시기로 정리했습니다. 카드를 누르면 해당 프로젝트 페이지로 이동합니다.",
+    "homeProjectsTitle": "대표 프로젝트",
+    "homeProjectsLead": "설계 의도와 그 결과를 프로젝트마다 정리했습니다.",
+    "homeProjectsMore": "프로젝트 전체 보기",
+    "homeProjectCount": 3
   },
   "hero": {
     "eyebrow": "Game Designer Portfolio",
@@ -35,21 +39,9 @@
     ],
     "buttons": [
       {
-        "label": "연락처",
-        "href": "contact.html",
-        "style": "primary",
-        "newTab": false
-      },
-      {
         "label": "프로젝트 보기",
-        "href": "projects.html",
-        "style": "outline",
-        "newTab": false
-      },
-      {
-        "label": "기획 노트",
-        "href": "notes.html",
-        "style": "outline",
+        "href": "#projects",
+        "style": "primary",
         "newTab": false
       },
       {
@@ -74,7 +66,6 @@
         "width": 1.3,
         "lines": [
           "BELIEF (AI 해커톤)",
-          "좀비고등학교 게임 분석 (개인 작업)",
           "해룡의 둥지 (마비노기 모바일 기획서)",
           "SOS: Sands Of Sin (팀 프로젝트)",
           "부서진 요람 (팀 프로젝트)"
@@ -442,7 +433,8 @@
       ],
       "cardSummary": "12년차 라이브 게임을 MDA로 분석하고 신규 콘텐츠 2건 제안 — 개인 작업",
       "galleryFit": "contain",
-      "date": "2026.08"
+      "date": "2026.08",
+      "unlisted": true
     },
     {
       "id": "mabinogi",
@@ -1067,6 +1059,14 @@
     "heading": "기획 노트",
     "lead": "교육 과정과 개인 작업에서 연습하고 만든 것들을 날짜순으로 기록합니다. 완성작이 아니라 과정입니다.",
     "entries": [
+      {
+        "date": "2026-09-05",
+        "title": "좀비고등학교 — 12년차 라이브 게임을 MDA로 뜯어보다",
+        "project": "좀비고",
+        "retro": "4~5년간 플레이해온 게임을 유저가 아니라 기획자 시선으로 다시 봤습니다. MDA(Mechanics–Dynamics–Aesthetics) 로 나눠서, 어떤 규칙이 어떤 플레이를 만들고 그게 무슨 재미로 이어지는지 짚었습니다. 그 위에 신규 콘텐츠 2건을 제안했습니다.\n\n혼자 한 분석이라 회사의 사정이나 지표를 모르는 채로 쓴 제안입니다. 그래서 '이런 걸 넣자' 보다 '지금 구조에서 무엇이 비어 있나' 를 찾는 데 시간을 더 썼습니다. 분석 전문은 아래 링크에 있습니다.",
+        "fileHref": "projects/zombiehigh.html",
+        "fileLabel": "분석 전문 보기"
+      },
       {
         "date": "2026-09-04",
         "title": "닭의 요새 — 어떤 게임이고 어떻게 만들었나",

@@ -358,8 +358,16 @@
   .foot-bottom{border-top:1px solid var(--border); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
   .foot-bottom span{font-size:13px; color:var(--text-faint);}
 
-  /* 프로젝트 목차 / 기획 노트 페이지 — 헤더에 가리지 않도록 위쪽 여백 */
-  .index-sec{padding-top:140px;}
+  /* 프로젝트 목차 / 기획 노트 페이지 — 헤더에 가리지 않도록 위쪽 여백.
+     소개 페이지에서는 이 구역이 첫 화면 아래에 오므로 맨 위일 때만 준다. */
+  main > section.index-sec:first-of-type{padding-top:140px;}
+  /* 카드 아래 '전체 보기' — 더 있다는 신호 */
+  .index-more{
+    display:inline-block; margin-top:24px; font-size:15px; font-weight:500;
+    color:var(--text-dim); border-bottom:1px solid var(--border);
+    padding-bottom:3px; transition:color .2s, border-color .2s;
+  }
+  .index-more:hover{color:var(--text); border-color:var(--text-faint);}
   .index-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin:-14px 0 30px; font-weight:400;}
   main > section.project:first-of-type{padding-top:140px;}
 
@@ -458,7 +466,7 @@
     .project--featured .wrap{padding:28px 18px 32px; border-radius:12px; margin:0 14px;}
     .my-part{padding:22px 20px;}
     .contact-sec{padding:110px 0 70px;}
-    .index-sec{padding-top:110px;}
+    main > section.index-sec:first-of-type{padding-top:110px;}
     main > section.project:first-of-type{padding-top:110px;}
     .pager-row{grid-template-columns:1fr;}
     .pager-next{text-align:left;}
@@ -694,14 +702,8 @@
     <div class="wrap">
       <a class="pager-index" href="../projects.html">← 프로젝트 한눈에 보기 전체 보기</a>
       <div class="pager-row">
-        <a class="pager-link pager-prev" href="belief.html">
-          <span class="pager-dir">이전</span>
-          <span class="pager-title">BELIEF</span>
-        </a>
-        <a class="pager-link pager-next" href="mabinogi.html">
-          <span class="pager-dir">다음</span>
-          <span class="pager-title">해룡의 둥지</span>
-        </a>
+        <span class="pager-link pager-empty"></span>
+        <span class="pager-link pager-empty"></span>
       </div>
     </div>
   </nav>

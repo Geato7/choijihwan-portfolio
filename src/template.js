@@ -199,10 +199,14 @@ ${body}
   </section>`;
 }
 
-// 프로젝트 상세 페이지 맨 아래 — 목록으로 돌아가거나 앞뒤 프로젝트로 넘어간다
-function pager(projects, idx, indexLabel) {
-  const prev = projects[idx - 1];
-  const next = projects[idx + 1];
+// 프로젝트 상세 페이지 맨 아래 — 목록으로 돌아가거나 앞뒤 프로젝트로 넘어간다.
+// 앞뒤는 목록에 보이는 프로젝트끼리만 잇는다. 목록에서 뺀 프로젝트(unlisted)는
+// 이 줄에 끼지 않으므로 앞뒤 칸이 비고 '전체 보기' 만 남는다.
+function pager(projects, current, indexLabel) {
+  const row = listed(projects);
+  const idx = row.findIndex((p) => p.id === current.id);
+  const prev = idx < 0 ? undefined : row[idx - 1];
+  const next = idx < 0 ? undefined : row[idx + 1];
   const link = (p, dir, label) =>
     `        <a class="pager-link pager-${dir}" href="${attr(p.id)}.html">
           <span class="pager-dir">${esc(label)}</span>
@@ -378,8 +382,17 @@ ${blocks}
   </section>`;
 }
 
-// 프로젝트 카드 목차 — projects.html 의 본문. 카드를 누르면 그 프로젝트 페이지로 간다.
-function projectIndex(projects, title, lead, prefix) {
+// unlisted 를 켠 프로젝트는 카드 목록·앞뒤 이동·사이트맵에서 빠진다.
+// 페이지는 그대로 만들어지므로 주소를 아는 사람은 볼 수 있다 (기획 노트에서 링크한다).
+function listed(projects) {
+  return (projects || []).filter((p) => !p.unlisted);
+}
+
+// 프로젝트 카드 목차 — projects.html 의 본문이자 소개 페이지의 '대표 프로젝트' 구역.
+// opts.tag  : 소개 페이지에는 h1(이름)이 이미 있으므로 h2 로 낮춰 넣는다.
+// opts.more : 카드 아래 '전체 보기' 링크 { href, label }.
+function projectIndex(projects, title, lead, prefix, opts) {
+  const { tag = "h1", more = null } = opts || {};
   const cards = projects
     .map((p) => {
       // 썸네일은 따로 지정하지 않으면 큰 이미지 → 갤러리 첫 장 순으로 자동 선택
@@ -401,12 +414,15 @@ ${has(p.num) || has(p.date) ? `            <span class="pcard-num">${esc(p.num)}
     })
     .join("\n");
 
+  const moreLink = more && has(more.href)
+    ? `\n      <a class="index-more" href="${attr(resolve(more.href, prefix))}">${esc(more.label)} →</a>`
+    : "";
   return `  <section class="index-sec reveal" id="projects">
     <div class="wrap">
-      <h1 class="index-title">${esc(title)}</h1>
+      <${tag} class="index-title">${esc(title)}</${tag}>
 ${has(lead) ? `      <p class="index-lead">${esc(lead)}</p>\n` : ""}      <div class="index-grid">
 ${cards}
-      </div>
+      </div>${moreLink}
     </div>
   </section>`;
 }
@@ -441,7 +457,8 @@ function metaLinesStyle(m) {
 function hero(h, prefix) {
   const tags = (h.tags || []).filter(has).map((t) => `        <span class="tag">${esc(t)}</span>`).join("\n");
   // 옛 앵커 주소를 새 페이지로 옮겨준다 (content.json 을 고치지 않아도 동작하도록)
-  const MAP = { "#projects": "projects.html", "#contact": "contact.html", "#belief": "projects.html", "#home": "index.html", "#devlog": "notes.html", "devlog.html": "notes.html" };
+  // #projects 는 이제 소개 페이지 안의 '대표 프로젝트' 구역을 가리키므로 되돌리지 않는다
+  const MAP = { "#contact": "contact.html", "#belief": "projects.html", "#home": "index.html", "#devlog": "notes.html", "devlog.html": "notes.html" };
   const buttons = (h.buttons || []).map((b) => (MAP[b.href] ? { ...b, href: MAP[b.href] } : b));
   const meta = (h.meta || [])
     .map(
@@ -577,7 +594,12 @@ export function sitePages(content) {
     { key: "projects", path: "projects.html", label: "프로젝트 목차" },
   ];
   for (const p of projects) {
-    pages.push({ key: `project:${p.id}`, path: `projects/${p.id}.html`, label: `프로젝트 — ${p.title}` });
+    pages.push({
+      key: `project:${p.id}`, path: `projects/${p.id}.html`,
+      label: `프로젝트 — ${p.title}`,
+      // 목록에서 뺀 프로젝트는 검색엔진 색인에서도 뺀다. 페이지는 그대로 만들어진다.
+      noIndex: !!p.unlisted,
+    });
   }
   // 코드 안의 이름은 devlog 로 두고, 화면에 보이는 이름과 주소만 기획 노트/notes 로 쓴다
   if (devlogCount(content)) pages.push({ key: "devlog", path: "notes.html", label: "기획 노트" });
@@ -768,7 +790,7 @@ export function renderPage(content, css, key = "index") {
     return shell(content, css, {
       prefix: "", nav: "projects", canonicalPath: "projects.html",
       title: `${t} — ${siteName}`, description: site.description,
-      body: projectIndex(projects, t, site.projectsIndexLead, ""),
+      body: projectIndex(listed(projects), t, site.projectsIndexLead, ""),
     });
   }
 
@@ -815,15 +837,28 @@ export function renderPage(content, css, key = "index") {
       title: `${p.title} — ${siteName}`,
       description: p.cardSummary || p.role || site.description,
       body: [project(p, site.featuredLabel, "../"),
-             pager(projects, idx, site.projectsIndexTitle || "프로젝트")].join("\n\n"),
+             pager(projects, p, site.projectsIndexTitle || "프로젝트")].join("\n\n"),
     });
   }
 
-  // 기본값: 소개
+  // 기본값: 소개.
+  // 첫 화면 바로 아래에 대표 프로젝트 카드를 붙인다 — 방문자가 '무엇을 만들었나' 를
+  // 클릭 없이 보게 하려는 것. 몇 장을 보일지는 site.homeProjectCount (기본 3).
+  const row = listed(projects);
+  const shown = Number(site.homeProjectCount) > 0 ? Number(site.homeProjectCount) : 3;
+  const cards = row.length
+    ? projectIndex(row.slice(0, shown), site.homeProjectsTitle || "대표 프로젝트",
+        site.homeProjectsLead, "", {
+          tag: "h2",
+          more: row.length > shown
+            ? { href: "projects.html", label: site.homeProjectsMore || "프로젝트 전체 보기" }
+            : null,
+        })
+    : "";
   return shell(content, css, {
     prefix: "", nav: "index", canonicalPath: "index.html",
     title: site.title, description: site.description,
-    body: hero(h, ""),
+    body: [hero(h, ""), cards].filter(Boolean).join("\n\n"),
   });
 }
 
@@ -831,6 +866,7 @@ export function renderPage(content, css, key = "index") {
 export function renderSite(content, css) {
   const pages = sitePages(content).map((pg) => ({
     path: pg.path,
+    noIndex: !!pg.noIndex,
     html: renderPage(content, css, pg.key),
   }));
   // 404 와 옛 주소 안내는 목록/사이트맵에 넣지 않는다

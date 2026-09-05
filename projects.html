@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>프로젝트 한눈에 보기 — 최지환</title>
-<meta name="description" content="최지환의 게임 기획 포트폴리오 — BELIEF, 좀비고등학교 게임 분석, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아">
+<meta name="description" content="최지환의 게임 기획 포트폴리오 — BELIEF, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아">
 <link rel="canonical" href="https://geato7.github.io/choijihwan-portfolio/projects.html">
 <meta name="theme-color" content="#0a0a0a">
 
@@ -18,7 +18,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="최지환 — Game Designer Portfolio">
 <meta property="og:title" content="프로젝트 한눈에 보기 — 최지환">
-<meta property="og:description" content="최지환의 게임 기획 포트폴리오 — BELIEF, 좀비고등학교 게임 분석, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아">
+<meta property="og:description" content="최지환의 게임 기획 포트폴리오 — BELIEF, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:url" content="https://geato7.github.io/choijihwan-portfolio/projects.html">
 <meta property="og:image" content="https://geato7.github.io/choijihwan-portfolio/og-image.png?v=2">
@@ -28,7 +28,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="프로젝트 한눈에 보기 — 최지환">
-<meta name="twitter:description" content="최지환의 게임 기획 포트폴리오 — BELIEF, 좀비고등학교 게임 분석, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아">
+<meta name="twitter:description" content="최지환의 게임 기획 포트폴리오 — BELIEF, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아">
 <meta name="twitter:image" content="https://geato7.github.io/choijihwan-portfolio/og-image.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -358,8 +358,16 @@
   .foot-bottom{border-top:1px solid var(--border); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
   .foot-bottom span{font-size:13px; color:var(--text-faint);}
 
-  /* 프로젝트 목차 / 기획 노트 페이지 — 헤더에 가리지 않도록 위쪽 여백 */
-  .index-sec{padding-top:140px;}
+  /* 프로젝트 목차 / 기획 노트 페이지 — 헤더에 가리지 않도록 위쪽 여백.
+     소개 페이지에서는 이 구역이 첫 화면 아래에 오므로 맨 위일 때만 준다. */
+  main > section.index-sec:first-of-type{padding-top:140px;}
+  /* 카드 아래 '전체 보기' — 더 있다는 신호 */
+  .index-more{
+    display:inline-block; margin-top:24px; font-size:15px; font-weight:500;
+    color:var(--text-dim); border-bottom:1px solid var(--border);
+    padding-bottom:3px; transition:color .2s, border-color .2s;
+  }
+  .index-more:hover{color:var(--text); border-color:var(--text-faint);}
   .index-lead{font-size:16px; color:var(--text-dim); max-width:680px; margin:-14px 0 30px; font-weight:400;}
   main > section.project:first-of-type{padding-top:140px;}
 
@@ -458,7 +466,7 @@
     .project--featured .wrap{padding:28px 18px 32px; border-radius:12px; margin:0 14px;}
     .my-part{padding:22px 20px;}
     .contact-sec{padding:110px 0 70px;}
-    .index-sec{padding-top:110px;}
+    main > section.index-sec:first-of-type{padding-top:110px;}
     main > section.project:first-of-type{padding-top:110px;}
     .pager-row{grid-template-columns:1fr;}
     .pager-next{text-align:left;}
@@ -575,7 +583,7 @@
   <section class="index-sec reveal" id="projects">
     <div class="wrap">
       <h1 class="index-title">프로젝트 한눈에 보기</h1>
-      <p class="index-lead">여섯 개의 프로젝트를 분류와 시기로 정리했습니다. 카드를 누르면 해당 프로젝트 페이지로 이동합니다.</p>
+      <p class="index-lead">다섯 개의 프로젝트를 분류와 시기로 정리했습니다. 카드를 누르면 해당 프로젝트 페이지로 이동합니다.</p>
       <div class="index-grid">
         <a class="pcard" href="projects/belief.html">
           <span class="pcard-thumb"><img src="assets/belief/01_title.jpg" alt="" loading="lazy"></span>
@@ -583,14 +591,6 @@
             <span class="pcard-num">01 — HACKATHON · 2026.07 – 08</span>
             <span class="pcard-title">BELIEF</span>
             <span class="pcard-sum">정보를 퍼뜨려 NPC의 믿음을 움직이는 전략 시뮬레이션 — 콘텐츠 기획 · PM</span>
-          </span>
-        </a>
-        <a class="pcard" href="projects/zombiehigh.html">
-          <span class="pcard-thumb"><img src="assets/zombiehigh/lobby_channels.jpg" alt="" loading="lazy"></span>
-          <span class="pcard-body">
-            <span class="pcard-num">02 — GAME ANALYSIS · 2026.08</span>
-            <span class="pcard-title">좀비고등학교</span>
-            <span class="pcard-sum">12년차 라이브 게임을 MDA로 분석하고 신규 콘텐츠 2건 제안 — 개인 작업</span>
           </span>
         </a>
         <a class="pcard" href="projects/mabinogi.html">
