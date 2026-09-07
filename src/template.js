@@ -156,6 +156,16 @@ ${[row("문제", cs.problem), row("결정", cs.decision), row("결과", cs.resul
       </div>`;
 }
 
+// 프로젝트가 어떤 역량 카테고리에 드는지 칩으로 보인다 (콘텐츠 기획·시스템 기획 등).
+// 채용 담당자가 상세 첫 화면에서 역량을 바로 잡게 하려는 것. 첫 화면 태그와 같은 .tag 를 쓴다.
+function capTags(tags) {
+  const list = (tags || []).filter(has);
+  if (!list.length) return "";
+  return `        <div class="tags section-tags">\n` +
+    list.map((t) => `          <span class="tag">${esc(t)}</span>`).join("\n") +
+    `\n        </div>\n`;
+}
+
 function project(p, featuredLabel, prefix) {
   const renderers = {
     myPart: () => myPart(p.myPart),
@@ -190,7 +200,7 @@ function project(p, featuredLabel, prefix) {
     <div class="wrap">
       <div class="section-head">
 ${badge}${numLine}        <h2>${esc(p.title)}${subtitle}</h2>
-${has(p.role) ? `        <div class="role">${esc(p.role)}</div>\n` : ""}${has(p.lead) ? `        <p class="section-lead">${esc(p.lead)}</p>\n` : ""}      </div>
+${has(p.role) ? `        <div class="role">${esc(p.role)}</div>\n` : ""}${has(p.lead) ? `        <p class="section-lead">${esc(p.lead)}</p>\n` : ""}${capTags(p.capTags)}      </div>
 
 ${caseSummary(p.caseSummary)}
 
