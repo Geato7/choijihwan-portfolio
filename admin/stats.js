@@ -6,8 +6,15 @@
 
 const FB = "https://www.gstatic.com/firebasejs/10.12.2";
 const OWNER_KEY = "pf_owner";          // 내 방문을 집계에서 뺄지 (사이트와 같은 도메인이라 통한다)
+const OWNER_VIDS_KEY = "pf_owner_vids"; // 내 것으로 표시한 방문자 ID 들 (표에서 숨긴다)
 const RANGE_KEY = "pf_stats_range";
 const SITE_KEY = "pf_stats_site";      // 마지막으로 고른 사이트
+
+// 이 브라우저가 사이트에서 쓰던 방문자 ID. 같은 도메인이라 여기서도 읽힌다.
+// 수집기가 남긴 기록의 vid 와 같은 값이므로, 이걸로 내 방문을 골라낼 수 있다.
+const myVid = () => { try { return localStorage.getItem("pf_vid") || ""; } catch (e) { return ""; } };
+const ownerVids = () => { try { return new Set((localStorage.getItem(OWNER_VIDS_KEY) || "").split(",").filter(Boolean)); } catch (e) { return new Set(); } };
+const saveOwnerVids = (s) => { try { localStorage.setItem(OWNER_VIDS_KEY, [...s].join(",")); } catch (e) {} };
 
 /* ===================== 잡다한 도구 ===================== */
 const $$ = (tag, attrs = {}, ...kids) => {
@@ -273,9 +280,22 @@ export function mountStats({ pane, getContent, isDirty, save }) {
   }
 
   // 지금 고른 사이트의 기록만. state.site 가 비어 있으면 전부.
+  // "내 방문 제외" 가 켜져 있으면 내 것으로 표시한 vid 는 뺀다 (과거 기록까지).
   function visible() {
     const all = state.rows || [];
-    return state.site ? all.filter((r) => r.site === state.site) : all;
+    const bySite = state.site ? all.filter((r) => r.site === state.site) : all;
+    if (localStorage.getItem(OWNER_KEY) !== "1") return bySite;
+    const mine = ownerVids();
+    return mine.size ? bySite.filter((r) => !mine.has(r.vid)) : bySite;
+  }
+  // 지금 화면에서 숨긴 내 방문이 몇 건인지 (상태줄에 알려 준다).
+  function hiddenMineCount() {
+    if (localStorage.getItem(OWNER_KEY) !== "1") return 0;
+    const mine = ownerVids();
+    if (!mine.size) return 0;
+    const all = state.rows || [];
+    const bySite = state.site ? all.filter((r) => r.site === state.site) : all;
+    return bySite.filter((r) => mine.has(r.vid)).length;
   }
   function siteList() {
     return [...new Set((state.rows || []).map((r) => r.site))].sort();
@@ -539,8 +559,16 @@ export function mountStats({ pane, getContent, isDirty, save }) {
     const ownerCb = $$("input", { type: "checkbox" });
     ownerCb.checked = localStorage.getItem(OWNER_KEY) === "1";
     ownerCb.addEventListener("change", () => {
-      if (ownerCb.checked) localStorage.setItem(OWNER_KEY, "1");
-      else localStorage.removeItem(OWNER_KEY);
+      if (ownerCb.checked) {
+        localStorage.setItem(OWNER_KEY, "1");
+        // 이 브라우저의 방문자 ID 를 내 것으로 등록 → 이미 쌓인 내 방문까지 숨는다.
+        // 기기마다 한 번씩 켜 두면 그 기기의 방문도 걸러진다.
+        const v = myVid();
+        if (v) { const s = ownerVids(); s.add(v); saveOwnerVids(s); }
+      } else {
+        localStorage.removeItem(OWNER_KEY);
+      }
+      render();
     });
 
     // 사이트가 둘 이상 쌓였을 때만 고르는 상자를 낸다
@@ -562,10 +590,12 @@ export function mountStats({ pane, getContent, isDirty, save }) {
 
     const bar = $$("div", { class: "st-bar" },
       $$("div", { class: "grow", style: "font-size:13px; color:var(--dim)" },
-        `${rangeLabel} · ${rows.length.toLocaleString()}건 · ${ctx.user.email}`),
+        `${rangeLabel} · ${rows.length.toLocaleString()}건`
+        + (hiddenMineCount() ? ` · 내 방문 ${hiddenMineCount().toLocaleString()}건 숨김` : "")
+        + ` · ${ctx.user.email}`),
       sites.length > 1 ? sitePick : null,
       seg,
-      $$("label", { class: "st-check", title: "이 브라우저에서 내가 사이트를 열어도 통계에 안 잡힙니다" }, ownerCb, "내 방문 제외"),
+      $$("label", { class: "st-check", title: "이 브라우저의 방문을 내 것으로 표시합니다. 앞으로도 안 잡히고, 이미 쌓인 내 방문도 표에서 숨깁니다. 폰·다른 브라우저에서도 한 번씩 켜 두세요." }, ownerCb, "내 방문 제외"),
       $$("button", { class: "btn btn-sm", onclick: refresh }, "새로고침"),
       $$("button", { class: "btn btn-sm", onclick: purge, title: "180일 지난 기록 삭제" }, "오래된 기록 정리"),
       $$("button", { class: "btn btn-sm", onclick: () => downloadCsv(rows) }, "CSV"),
