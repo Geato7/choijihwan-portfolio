@@ -10,7 +10,7 @@
     "url": "https://geato7.github.io/choijihwan-portfolio/",
     "ogImage": "og-image.png",
     "ogImageVersion": "2",
-    "themeColor": "#f7f5ef",
+    "themeColor": "#ffffff",
     "featuredLabel": "대표 프로젝트",
     "analytics": {
       "projectId": "github-portfolio-choijihwan",
@@ -28,7 +28,7 @@
     "eyebrow": "Game Designer Portfolio",
     "name": "최지환",
     "subtitle": "Game Designer",
-    "lead": "연극에서 배운 인물과 이야기의 감각을 게임의 규칙으로 옮깁니다. Unity로 직접 구현하고, 실제 플레이와 유저 반응을 보며 기획을 다듬습니다.",
+    "lead": "팀 프로젝트와 AI 해커톤, Unity 구현부터 ZEPETO World 출시까지 다양한 제작 경험을 쌓았습니다. 중국 산동성 웨이하이에서 5년간 생활했으며, 중국어 회화와 비즈니스 중국어를 활용할 수 있습니다.",
     "tags": [
       "콘텐츠 기획",
       "시스템 기획",
@@ -98,7 +98,8 @@
       "tags",
       "buttons",
       "meta"
-    ]
+    ],
+    "headline": "풍부한 프로젝트 경험과\n비즈니스 중국어 역량을 갖춘\n게임 기획자"
   },
   "projects": [
     {
@@ -1990,8 +1991,8 @@
     "backToTop": "맨 위로 ↑"
   },
   "profile": {
-    "heading": "플레이에서 시작해, 만드는 사람으로.",
-    "intro": "다른 문화 속에서 생활하고, 무대 위 인물의 선택을 공부하고, 게임을 직접 만들었습니다. 지금은 플레이어가 왜 선택하고 다시 돌아오는지 묻는 게임 기획자입니다.",
+    "heading": "다양한 프로젝트와 문화 속에서 쌓은 경험.",
+    "intro": "연극과 디지털콘텐츠를 전공하고, 게임 기획과 구현, 출시를 경험했습니다. 중국에서 보낸 5년과 다양한 팀 작업을 바탕으로 콘텐츠를 만들고 협업하는 게임 기획자입니다.",
     "residence": "중국 산동성 웨이하이",
     "duration": "5년 거주",
     "languages": [
@@ -2035,7 +2036,7 @@
         "text": "인물과 서사가 플레이에 남기는 인상을 경험했습니다."
       }
     ],
-    "portrait": "assets/profile/choi-jihwan.jpg",
+    "portrait": "assets/profile/choi-jihwan-suit.png",
     "skills": [
       {
         "title": "제작 · 디자인",
