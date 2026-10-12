@@ -2,7 +2,7 @@
   "site": {
     "lang": "ko",
     "title": "최지환 — Game Designer Portfolio",
-    "description": "최지환의 게임 기획 포트폴리오 — BELIEF, 해룡의 둥지(마비노기 모바일), SOS: Sands Of Sin, 부서진 요람, 엘브네아",
+    "description": "최지환의 게임 기획·제작 포트폴리오 — Flower Rush, Flower Shop Tycoon, Aftermath, Remate와 팀 프로젝트",
     "logo": "최지환",
     "homeNavLabel": "소개",
     "contactNavLabel": "연락처",
@@ -18,7 +18,7 @@
       "siteId": "choijihwan-portfolio"
     },
     "projectsNavLabel": "프로젝트",
-    "projectsIndexLead": "다섯 개의 프로젝트를 분류와 시기로 정리했습니다. 카드를 누르면 해당 프로젝트 페이지로 이동합니다.",
+    "projectsIndexLead": "게임과 앱 프로젝트를 플랫폼과 작업 유형으로 정리했습니다. 카드를 누르면 소개와 담당 작업을 볼 수 있습니다.",
     "homeProjectsTitle": "대표 프로젝트",
     "homeProjectsLead": "설계 의도와 그 결과를 프로젝트마다 정리했습니다.",
     "homeProjectsMore": "프로젝트 전체 보기",
@@ -102,6 +102,251 @@
     "headline": "풍부한 프로젝트 경험과\n비즈니스 중국어 역량을\n갖춘 게임 기획자"
   },
   "projects": [
+    {
+      "id": "flower-rush",
+      "title": "Flower Rush",
+      "num": "ZEPETO WORLD · 출시",
+      "date": "2026.09 출시",
+      "role": "기획 · 개발 · 아트 · 출시 운영",
+      "lead": "씨앗을 심고 꽃을 키워 다듬기·꽃꽂이·포장·배달로 이어가는 꽃집 게임입니다. ZEPETO World에 출시한 뒤 실제 유저의 플레이에 맞춰 솔로 밸런스와 첫 경험을 개선했습니다.",
+      "cardSummary": "ZEPETO에 출시한 꽃 배달 게임 — 기획·개발·아트부터 운영 개선까지",
+      "capTags": [
+        "콘텐츠 기획",
+        "시스템 기획",
+        "Unity",
+        "라이브 운영"
+      ],
+      "thumb": "assets/flower-rush/gameplay-background.png",
+      "blocks": [
+        "wideShot",
+        "details",
+        "buttons"
+      ],
+      "wideShot": {
+        "src": "assets/flower-rush/gameplay-background.png",
+        "alt": "Flower Rush 프로젝트 소개 이미지",
+        "caption": "게임에 사용한 꽃집 배경 아트 · 실제 플레이 화면과 구분한 제작 자료"
+      },
+      "details": [
+        {
+          "term": "핵심 플레이",
+          "desc": "심기 → 물 주기 → 수확 → 다듬기 → 꽃꽂이 → 포장 → 배달의 공정을 제한 시간 안에 수행합니다."
+        },
+        {
+          "term": "담당 범위",
+          "desc": "게임 기획, Unity 기반 시스템 구현, 아트 제작, ZEPETO World 출시와 업데이트를 진행했습니다."
+        },
+        {
+          "term": "유저 반응에 따른 개선",
+          "desc": "4인 협동을 전제로 한 설계를 실제 솔로 플레이에 맞춰 조정했습니다. 작업대 경로와 제작 시간을 계산해 물 주기 유예와 주문 수명을 수정했습니다."
+        },
+        {
+          "term": "서비스와 UX",
+          "desc": "글로벌 유저를 위한 영어 UI, 화면 비율 문제 재현과 수정, 월드 재화·장비·레벨·주간 랭킹·따라 하기 튜토리얼을 구성했습니다."
+        },
+        {
+          "term": "진행 기록",
+          "desc": "출시 후 문제와 판단 근거, 구현·검증 과정을 기획 노트에 기록했습니다."
+        }
+      ],
+      "buttons": [
+        {
+          "label": "Flower Rush 기획 노트 보기",
+          "href": "notes.html?project=Flower%20Rush",
+          "style": "primary",
+          "newTab": false
+        },
+        {
+          "label": "GitHub 작업 자료 ↗",
+          "href": "https://github.com/Geato7/FlowerRush",
+          "style": "outline",
+          "newTab": true
+        }
+      ]
+    },
+    {
+      "id": "flower-shop-tycoon",
+      "title": "Flower Shop Tycoon",
+      "num": "ROBLOX · 개발 중",
+      "date": "2026.10 – 진행 중",
+      "role": "게임 기획 · 시스템 구현",
+      "lead": "꽃집의 주문 제작과 정원의 장기 성장을 연결한 Roblox 타이쿤 프로젝트입니다. 정원에서 생산한 꽃 재고를 꽃집 판에 사용하고, 판에서 번 보상으로 다시 정원과 가게를 확장합니다.",
+      "cardSummary": "정원과 주문 제작을 연결한 Roblox 꽃집 타이쿤 — 경제·성장·자동화 설계",
+      "capTags": [
+        "Roblox",
+        "콘텐츠 기획",
+        "경제 설계",
+        "Luau"
+      ],
+      "thumb": "assets/flower-shop-tycoon/cover.svg",
+      "blocks": [
+        "wideShot",
+        "details",
+        "buttons"
+      ],
+      "wideShot": {
+        "src": "assets/flower-shop-tycoon/cover.svg",
+        "alt": "Flower Shop Tycoon 프로젝트 소개 이미지",
+        "caption": ""
+      },
+      "details": [
+        {
+          "term": "핵심 루프",
+          "desc": "정원 생산 → 꽃 재고 → 주문 제작 → 팁·평판·꽃잎 → 씨앗·장비·직원·정원 확장으로 두 플레이 루프를 연결했습니다."
+        },
+        {
+          "term": "꽃집 콘텐츠",
+          "desc": "리본·꽃병·염색 공정, 프리미엄 주문, 손님 NPC, 만족도와 평판, 스테이지 4~6을 구성했습니다."
+        },
+        {
+          "term": "자동화와 수집",
+          "desc": "정원사·다듬기·포장 직원 3종과 단계별 고용, 꽃 교배, 도감, 벌집과 나비를 구현했습니다."
+        },
+        {
+          "term": "경제 검증",
+          "desc": "스테이지가 높아져도 시간당 수입이 줄어드는 문제와 방치 화단 수입의 격차를 경제표로 확인했습니다. 스테이지 보상 배율과 소비 구조를 조정했습니다."
+        },
+        {
+          "term": "상태",
+          "desc": "Git 개발 기록 기준 개발 중입니다. 모바일 조작과 일부 멀티플레이 항목 등 직접 플레이 검증이 남아 있습니다."
+        }
+      ],
+      "buttons": [
+        {
+          "label": "GitHub 프로젝트 보기 ↗",
+          "href": "https://github.com/Geato7/FlowerShop_Tycoon",
+          "style": "primary",
+          "newTab": true
+        },
+        {
+          "label": "경제 설계 자료 ↗",
+          "href": "https://github.com/Geato7/FlowerShop_Tycoon/blob/HEAD/tools/economy.md",
+          "style": "outline",
+          "newTab": true
+        }
+      ]
+    },
+    {
+      "id": "aftermath",
+      "title": "Aftermath",
+      "num": "TEAM PROJECT · 개발 중",
+      "date": "2026.09 – 진행 중",
+      "role": "레벨 디자인 · 웨이브 및 데이터 설계",
+      "lead": "국왕·귀족·기사 세 역할이 각자의 자원과 기능을 활용해 본성을 지키는 온라인 협동 타워 디펜스입니다. 낮의 준비와 밤의 방어전을 연결하며, 역할 간 협업과 맵·거점의 선택을 설계하는 팀 프로젝트입니다.",
+      "cardSummary": "국왕·귀족·기사의 3인 협동 디펜스 — 레벨·웨이브·데이터 설계",
+      "capTags": [
+        "레벨 디자인",
+        "경제 설계",
+        "Unity",
+        "협동 디펜스"
+      ],
+      "thumb": "assets/aftermath/map-overview.png",
+      "blocks": [
+        "wideShot",
+        "details",
+        "buttons"
+      ],
+      "wideShot": {
+        "src": "assets/aftermath/map-overview.png",
+        "alt": "Aftermath 프로젝트 소개 이미지",
+        "caption": "Aftermath 맵 블록아웃 자료 · 완성 화면이 아닌 개발 중 레벨 구조"
+      },
+      "details": [
+        {
+          "term": "게임 구조",
+          "desc": "국왕·귀족·기사 3인이 건물과 병력을 만들고, 낮의 준비와 밤의 웨이브를 통해 본성을 방어합니다."
+        },
+        {
+          "term": "레벨 기획",
+          "desc": "본편 맵과 점령지·토벌 기지의 공간을 설계합니다. 거점의 입구, 수비대 배치, 원정과 귀환 동선을 문서와 구현 단위로 정리했습니다."
+        },
+        {
+          "term": "수치와 검증",
+          "desc": "경제 흐름, 웨이브와 적 역할, 거점 수치와 데이터 테이블을 정리하고 계산·시뮬레이션으로 불균형을 점검했습니다."
+        },
+        {
+          "term": "협업 방식",
+          "desc": "팀 명세와 레벨·웨이브 문서의 연결 관계를 관리하고, 구현 중 드러난 충돌과 확인이 필요한 값을 결정 기록으로 남겼습니다."
+        },
+        {
+          "term": "상태",
+          "desc": "팀 개발 진행 중입니다. 구현된 내용과 팀 검토 전 기획안을 구분하며 레벨·웨이브를 개선하고 있습니다."
+        }
+      ],
+      "buttons": []
+    },
+    {
+      "id": "remate",
+      "title": "Remate",
+      "num": "ANDROID APP · 개발 중",
+      "date": "",
+      "role": "게임화 기반 루틴 앱 · 제품 기획과 UX",
+      "lead": "일상의 루틴 완료를 경험치와 코인으로 보상하는 Android 루틴 트래커입니다. 하루를 놓쳤을 때 진행도를 빼앗기보다 스트릭 보호를 통해 다시 시작할 수 있게 만드는 경험을 지향합니다.",
+      "cardSummary": "경험치·코인·스트릭 보호로 일상 루틴을 돕는 Android 앱",
+      "capTags": [
+        "게임화",
+        "제품 기획",
+        "보상 설계",
+        "UI · UX"
+      ],
+      "thumb": "assets/remate/cover.svg",
+      "blocks": [
+        "wideShot",
+        "gallery",
+        "details",
+        "buttons"
+      ],
+      "wideShot": {
+        "src": "assets/remate/cover.svg",
+        "alt": "Remate 프로젝트 소개 이미지",
+        "caption": ""
+      },
+      "details": [
+        {
+          "term": "제품 방향",
+          "desc": "루틴을 끝낼 때 경험치와 코인을 즉시 지급하고, 하루를 놓쳤을 때도 진행도를 잃지 않는 회복 중심 경험을 설계합니다."
+        },
+        {
+          "term": "다시 시작하는 장치",
+          "desc": "스트릭 실드가 연속 기록을 보호합니다. 실패에 대한 벌보다 다음 행동을 이어갈 동기에 초점을 맞춥니다."
+        },
+        {
+          "term": "홈 화면 위젯",
+          "desc": "앱을 열지 않아도 오늘의 할 일과 스트릭을 볼 수 있도록 위젯을 구성했습니다."
+        },
+        {
+          "term": "상태",
+          "desc": "Git 제품 소개 기준 개발 중이며 Google Play 출시 준비 단계입니다."
+        }
+      ],
+      "buttons": [
+        {
+          "label": "제품 소개 사이트 ↗",
+          "href": "https://ganadasoft.com/#remate",
+          "style": "primary",
+          "newTab": true
+        },
+        {
+          "label": "GitHub 자료 ↗",
+          "href": "https://github.com/Geato7/remate",
+          "style": "outline",
+          "newTab": true
+        }
+      ],
+      "galleryFit": "contain",
+      "gallery": [
+        {
+          "src": "assets/remate/widget_preview_today.png",
+          "alt": "Remate 오늘의 루틴 위젯",
+          "caption": "오늘의 할 일을 확인하는 홈 화면 위젯"
+        },
+        {
+          "src": "assets/remate/widget_preview_streak.png",
+          "alt": "Remate 스트릭 위젯",
+          "caption": "연속 기록과 보호 상태를 보여주는 위젯"
+        }
+      ]
+    },
     {
       "id": "belief",
       "navLabel": "BELIEF",
@@ -2210,7 +2455,7 @@
       "중국어 회화 가능",
       "비즈니스 중국어 활용 가능"
     ],
-    "resume": "files/최지환_이력서_자기소개서.pdf",
+    "resume": "files/최지환_이력서_자기소개서.pdf?v=links-20261012",
     "chapters": [
       {
         "label": "01 / 다른 문화를 경험하다",

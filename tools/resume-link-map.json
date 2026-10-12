@@ -1,0 +1,706 @@
+[
+  {
+    "page": 3,
+    "rect": [
+      35,
+      63.7,
+      155,
+      100.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-0",
+    "label": "제작 · 디자인 도구 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      178,
+      69.7,
+      222,
+      102.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-0",
+    "label": "Unity 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      233,
+      69.7,
+      277,
+      102.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-0",
+    "label": "VS Code 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      288,
+      69.7,
+      332,
+      102.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-0",
+    "label": "Figma 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      343,
+      69.7,
+      387,
+      102.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-0",
+    "label": "FigJam 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      35,
+      109.7,
+      155,
+      146.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-1",
+    "label": "협업 · 프로젝트 관리 도구 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      178,
+      115.7,
+      222,
+      148.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-1",
+    "label": "GitHub 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      233,
+      115.7,
+      277,
+      148.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-1",
+    "label": "Git 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      288,
+      115.7,
+      332,
+      148.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-1",
+    "label": "Notion 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      343,
+      115.7,
+      387,
+      148.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-1",
+    "label": "Jira 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      398,
+      115.7,
+      442,
+      148.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-1",
+    "label": "Confluence 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      35,
+      155.7,
+      155,
+      192.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-2",
+    "label": "AI · 콘텐츠 생성 도구 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      178,
+      161.7,
+      222,
+      194.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-2",
+    "label": "Claude 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      233,
+      161.7,
+      277,
+      194.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-2",
+    "label": "ChatGPT 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      288,
+      161.7,
+      332,
+      194.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-2",
+    "label": "Codex 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      343,
+      161.7,
+      387,
+      194.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-2",
+    "label": "Gemini 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      398,
+      161.7,
+      442,
+      194.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-2",
+    "label": "Suno 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      453,
+      161.7,
+      497,
+      194.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-2",
+    "label": "Midjourney 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      35,
+      201.7,
+      155,
+      238.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-3",
+    "label": "문서 · 데이터 도구 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      178,
+      207.7,
+      222,
+      240.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-3",
+    "label": "Word 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      233,
+      207.7,
+      277,
+      240.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-3",
+    "label": "Excel 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      288,
+      207.7,
+      332,
+      240.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-3",
+    "label": "PowerPoint 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      343,
+      207.7,
+      387,
+      240.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-3",
+    "label": "Google Docs 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      398,
+      207.7,
+      442,
+      240.7
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#skill-group-3",
+    "label": "Google Sheets 활용 기술 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      70,
+      389,
+      251,
+      435
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html",
+    "label": "66개 게임 전체 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      70,
+      446,
+      251,
+      492
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html#genre-hours",
+    "label": "누적 플레이 시간의 장르별 분포"
+  },
+  {
+    "page": 3,
+    "rect": [
+      70,
+      503,
+      251,
+      548
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html#game-collection",
+    "label": "플랫폼별 게임 이력"
+  },
+  {
+    "page": 3,
+    "rect": [
+      290,
+      380,
+      525,
+      572
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html#genre-overview",
+    "label": "장르별 게임 경험 시각화"
+  },
+  {
+    "page": 3,
+    "rect": [
+      42,
+      633,
+      138,
+      650
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=moba",
+    "label": "경쟁 · 팀 플레이 장르별 이력"
+  },
+  {
+    "page": 3,
+    "rect": [
+      42,
+      658,
+      138,
+      675
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=rpg",
+    "label": "RPG · 성장 장르별 이력"
+  },
+  {
+    "page": 3,
+    "rect": [
+      42,
+      683,
+      138,
+      700
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=strategy",
+    "label": "전략 · 경영 장르별 이력"
+  },
+  {
+    "page": 3,
+    "rect": [
+      42,
+      708,
+      138,
+      725
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=survival",
+    "label": "생존 · 협동 장르별 이력"
+  },
+  {
+    "page": 3,
+    "rect": [
+      42,
+      733,
+      138,
+      750
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=action",
+    "label": "액션 · 스토리 장르별 이력"
+  },
+  {
+    "page": 3,
+    "rect": [
+      386,
+      384,
+      411,
+      399
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=rpg",
+    "label": "게임 경험 해당 장르 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      469,
+      426,
+      495,
+      440
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=action",
+    "label": "게임 경험 해당 장르 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      454,
+      512,
+      510,
+      527
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html#game-collection",
+    "label": "게임 경험 해당 장르 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      371,
+      552,
+      427,
+      567
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=strategy",
+    "label": "게임 경험 해당 장르 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      309,
+      512,
+      339,
+      527
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=strategy",
+    "label": "게임 경험 해당 장르 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      323,
+      429,
+      348,
+      443
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?genre=shooter",
+    "label": "게임 경험 해당 장르 보기"
+  },
+  {
+    "page": 1,
+    "rect": [
+      135,
+      117,
+      405,
+      137
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/#about-me",
+    "label": "거주 경험과 자기소개 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      145.0,
+      634.68152334,
+      201.60000000000002,
+      646.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=%EB%A6%AC%EA%B7%B8%EC%98%A4%EB%B8%8C%EB%A0%88%EC%A0%84%EB%93%9C",
+    "label": "리그오브레전드 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      221.62890585999997,
+      634.68152334,
+      254.82890586,
+      646.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=%EC%98%A4%EB%B2%84%EC%9B%8C%EC%B9%98",
+    "label": "오버워치 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      274.85781172,
+      634.68152334,
+      318.59999922000003,
+      646.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=%EC%9D%B4%ED%84%B0%EB%84%90%20%EB%A6%AC%ED%84%B4",
+    "label": "이터널 리턴 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      145.0,
+      659.68152334,
+      193.8,
+      671.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=%EB%A9%94%EC%9D%B4%ED%94%8C%EC%8A%A4%ED%86%A0%EB%A6%AC",
+    "label": "메이플스토리 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      213.82890586,
+      659.68152334,
+      273.17109336,
+      671.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=%EB%A7%88%EB%B9%84%EB%85%B8%EA%B8%B0%20%EB%AA%A8%EB%B0%94%EC%9D%BC",
+    "label": "마비노기 모바일 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      300.99999922,
+      659.68152334,
+      324.31669722,
+      671.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=NIKKE",
+    "label": "NIKKE 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      145.0,
+      684.68152334,
+      185.3563479,
+      696.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=TFT",
+    "label": "TFT 모바일 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      205.38525376,
+      684.68152334,
+      232.78095629999999,
+      696.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=Civilization%20VI",
+    "label": "문명 VI 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      270.90829887999996,
+      684.68152334,
+      332.99267388000004,
+      696.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=%EB%8D%B0%EC%9D%B4%EB%B8%8C%20%EB%8D%94%20%EB%8B%A4%EC%9D%B4%EB%B2%84",
+    "label": "데이브 더 다이버 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      145.0,
+      709.68152334,
+      193.73525298,
+      721.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=Once%20Human",
+    "label": "Once Human 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      236.15868891999997,
+      709.68152334,
+      267.02783052,
+      721.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=V%20Rising",
+    "label": "V Rising 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      305.1551731,
+      709.68152334,
+      364.57353228,
+      721.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=Lethal%20Company",
+    "label": "Lethal Company 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      145.0,
+      734.68152334,
+      161.6097666,
+      746.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=Skul",
+    "label": "Skul 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      199.73710918,
+      734.68152334,
+      259.72294644,
+      746.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=Cyberpunk%202077",
+    "label": "Cyberpunk 2077 관련 자료"
+  },
+  {
+    "page": 3,
+    "rect": [
+      297.85028902000005,
+      734.68152334,
+      331.0502890200001,
+      746.48152334
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/play.html?game=%EB%8B%A8%EA%B0%84%EB%A1%A0%ED%8C%8C",
+    "label": "단간론파 관련 자료"
+  },
+  {
+    "page": 4,
+    "rect": [
+      384.70435247898456,
+      73.74999684375007,
+      451.60511430766104,
+      88.99999637500002
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects/flower-rush.html",
+    "label": "Flower Rush 관련 자료"
+  },
+  {
+    "page": 4,
+    "rect": [
+      314.63106279870516,
+      598.74997496875,
+      377.20510708713647,
+      613.24997453125
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects/flower-rush.html",
+    "label": "Flower Rush 관련 자료"
+  },
+  {
+    "page": 5,
+    "rect": [
+      406.6847205131359,
+      468.2499804062499,
+      442.526206032674,
+      482.7499799687499
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects/belief.html",
+    "label": "BELIEF 관련 자료"
+  },
+  {
+    "page": 5,
+    "rect": [
+      49.999997875,
+      292.74998771874994,
+      112.57403083843184,
+      307.2499872812499
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects/flower-rush.html",
+    "label": "Flower Rush 관련 자료"
+  },
+  {
+    "page": 6,
+    "rect": [
+      49.999997875,
+      162.99999312500017,
+      112.57403083843184,
+      177.49999268750014
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects/flower-rush.html",
+    "label": "Flower Rush 관련 자료"
+  },
+  {
+    "page": 6,
+    "rect": [
+      286.0293030904452,
+      348.999985375,
+      348.6033473788765,
+      363.4999849375
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects/flower-rush.html",
+    "label": "Flower Rush 관련 자료"
+  },
+  {
+    "page": 1,
+    "rect": [
+      432,
+      815,
+      557,
+      832
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects.html",
+    "label": "최신 프로젝트 전체 보기"
+  },
+  {
+    "page": 2,
+    "rect": [
+      432,
+      815,
+      557,
+      832
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects.html",
+    "label": "최신 프로젝트 전체 보기"
+  },
+  {
+    "page": 3,
+    "rect": [
+      432,
+      815,
+      557,
+      832
+    ],
+    "url": "https://geato7.github.io/choijihwan-portfolio/projects.html",
+    "label": "최신 프로젝트 전체 보기"
+  }
+]
