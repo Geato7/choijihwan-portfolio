@@ -549,6 +549,9 @@
     .pcard-body{min-width:0;}
   }
 
+/* 소개: 거주 경험, 플레이 기록, 삶의 흐름 */
+.profile-hero{padding:150px 0 80px}.profile-grid{display:grid;grid-template-columns:1.7fr 1fr;gap:64px;align-items:center}.profile-hero h1{font-size:24px;margin-bottom:28px}.profile-hero h1 span{font-size:14px}.profile-statement{font-size:clamp(32px,4vw,50px);line-height:1.35;letter-spacing:-.05em;margin-bottom:24px}.profile-hero .lead{font-size:16px;max-width:540px}.residence-card{padding:34px;border:1px solid var(--border);border-radius:20px;background:var(--bg-alt)}.residence-card .eyebrow{font-size:10px}.residence-years{font-size:100px;line-height:1.1;letter-spacing:-.07em;font-weight:500}.residence-years span{font-size:24px;margin-left:10px;letter-spacing:0}.residence-card h2{font-size:21px;margin-top:24px}.residence-card p{color:var(--text-faint);font-size:14px}.language-list{display:grid;gap:8px;margin-top:25px;padding-top:22px;border-top:1px solid var(--border);font-size:14px}.profile-play,.profile-about{padding:85px 0;border-bottom:1px solid var(--border)}.profile-section-top{display:flex;align-items:end;justify-content:space-between;gap:24px}.profile-play h2,.profile-about h2{font-size:clamp(28px,3.5vw,40px);line-height:1.4;letter-spacing:-.045em}.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);margin:38px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.profile-stats>div{padding:25px 20px}.profile-stats>div:first-child{padding-left:0}.profile-stats strong{display:block;font-size:clamp(28px,4vw,48px);letter-spacing:-.04em;font-weight:500}.profile-stats span{font-size:12px;color:var(--text-faint)}.play-insights{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}.play-insights h3{font-size:18px}.play-insights p{font-size:13px;color:var(--text-dim);margin-top:10px}.play-insights .play-record{font-size:12px;color:var(--text-faint)}.profile-footnote{font-size:11px;color:var(--text-faint);margin-top:26px}.profile-about{scroll-margin-top:90px;background:var(--bg-alt)}.profile-intro{max-width:680px;margin:20px 0 40px;color:var(--text-dim);font-size:16px}.life-chapters article{display:grid;grid-template-columns:230px 1fr;gap:30px;padding:30px 0;border-top:1px solid var(--border)}.chapter-label,.chapter-date{font-size:12px;color:var(--text-faint)}.life-chapters h3{font-size:23px;font-weight:500;letter-spacing:-.03em}.life-chapters p{font-size:14px;max-width:620px;margin-top:12px;color:var(--text-dim)}.resume-panel{padding:28px;margin-top:24px;border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;gap:28px;justify-content:space-between;background:var(--bg)}.resume-panel h3{font-size:18px}.resume-panel p{font-size:13px;color:var(--text-dim);max-width:500px;margin-top:8px}.resume-panel .btn{flex-shrink:0}a:focus-visible{outline:2px solid var(--text);outline-offset:5px}@media(max-width:760px){.profile-grid{grid-template-columns:1fr;gap:35px}.profile-hero{padding:125px 0 55px}.residence-card{padding:25px}.residence-years{font-size:70px}.profile-section-top{align-items:start;flex-direction:column}.profile-play,.profile-about{padding:55px 0}.play-insights{grid-template-columns:1fr;gap:24px}.profile-stats>div{padding:18px 8px}.profile-stats span{font-size:10px}.life-chapters article{grid-template-columns:1fr;gap:12px}.resume-panel{flex-direction:column;align-items:start;padding:22px}}
+
 </style>
 </head>
 <body>
@@ -582,43 +585,15 @@
 
 <main>
 
-  <section class="hero" id="home">
-    <div class="wrap">
-      <div class="eyebrow">Game Designer Portfolio</div>
-      <h1>최지환 <span>Game Designer</span></h1>
-      <p class="lead">연극 전공에서 다져진 스토리텔링·캐릭터 감각과, Unity 기반 시스템 구현 경험을 결합해 “플레이어가 왜 그 선택을 하고 싶어지는가”를 설계하는 게임 기획자입니다.</p>
-      <div class="tags">
-        <span class="tag">콘텐츠 기획</span>
-        <span class="tag">시스템 기획</span>
-        <span class="tag">스토리텔링 / 캐릭터 설계</span>
-        <span class="tag">프로젝트 관리(PM)</span>
-        <span class="tag">Unity(C#)</span>
-        <span class="tag">Notion 기획 문서화</span>
-      </div>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#projects">프로젝트 보기</a>
-        <a class="btn btn-outline" href="files/이력서_최지환.pdf" target="_blank" rel="noopener">이력서 (PDF) ↗</a>
-      </div>
-      <div class="meta-grid" style="grid-template-columns:0.9fr 1.3fr 1fr 1fr">
-        <div>
-          <div class="meta-label">학력</div>
-          <div class="meta-value" style="padding-left:1px;padding-right:1px">상명대학교 졸업<br>연극전공 / 디지털콘텐츠전공</div>
-        </div>
-        <div style="padding-left:px;padding-right:px">
-          <div class="meta-label">진행 프로젝트</div>
-          <div class="meta-value" style="padding-left:1px;padding-right:1px">BELIEF (AI 해커톤)<br>해룡의 둥지 (마비노기 모바일 기획서)<br>SOS: Sands Of Sin (팀 프로젝트)<br>부서진 요람 (팀 프로젝트)</div>
-        </div>
-        <div style="padding-left:px;padding-right:px">
-          <div class="meta-label">개발 경험</div>
-          <div class="meta-value" style="padding-left:1px;padding-right:1px">엘브네아 — Unity 3D 액션 어드벤처<br>졸업전시 프로젝트</div>
-        </div>
-        <div>
-          <div class="meta-label">연락처</div>
-          <div class="meta-value" style="padding-left:1px;padding-right:1px">010-9968-9860<br>choijihwan123@gmail.com<br>서울특별시 동대문구</div>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="hero profile-hero" id="home"><div class="wrap profile-grid">
+    <div><div class="eyebrow">Game Designer Portfolio</div><h1>최지환 <span>Game Designer</span></h1><h2 class="profile-statement">플레이어의 선택에<br>이유를 설계합니다.</h2><p class="lead">플레이어의 선택에 이유를 설계합니다. 연극에서 배운 인물과 이야기의 감각을 게임의 규칙으로 옮기고, Unity로 구현해 실제 플레이까지 이어갑니다.</p>      <div class="cta-row">
+        <a class="btn btn-primary" href="#about-me">나에 대해 알아보기 ↓</a>
+        <a class="btn btn-outline" href="#projects">프로젝트 보기</a>
+      </div></div>
+    <aside class="residence-card" aria-label="거주 경험과 언어 역량"><div class="eyebrow">LIFE & LANGUAGE</div><span class="residence-years">5<span>년</span></span><h2>중국 산동성 웨이하이</h2><p>5년 거주</p><div class="language-list"><span>중국어 회화 가능</span><span>비즈니스 중국어 활용 가능</span></div></aside>
+  </div></section>
+  <section class="profile-play"><div class="wrap"><div class="profile-section-top"><div><div class="eyebrow">PLAYER BEFORE DESIGNER</div><h2>오래 플레이한 경험이,<br>기획의 출발점입니다.</h2></div><a class="btn btn-outline" href="play.html">플레이 이력 전체 보기 ↗</a></div><div class="profile-stats"><div><strong>66개</strong><span>플레이 타이틀</span></div><div><strong>1,612시간</strong><span>누적 플레이 시간 (47개 타이틀)</span></div><div><strong>6년</strong><span>최장 플레이 · 리그오브레전드</span></div></div><div class="play-insights"><article><h3>경쟁과 협동</h3><p class="play-record">리그오브레전드 6년 · Once Human 156.9시간</p><p>팀의 선택과 역할이 함께 만드는 플레이를 경험했습니다.</p></article><article><h3>전략과 성장</h3><p class="play-record">문명 VI 51.1시간 · Skul 77.7시간</p><p>자원을 쓰는 판단과 반복 속 성장이 주는 재미를 경험했습니다.</p></article><article><h3>캐릭터와 이야기</h3><p class="play-record">Cyberpunk 2077 43.2시간 · 단간론파 시리즈 3개월</p><p>인물과 서사가 플레이에 남기는 인상을 경험했습니다.</p></article></div><p class="profile-footnote">누적 시간은 시간 기록이 있는 47개 타이틀의 합계입니다. 플레이 기간과 누적 시간은 구분해 기록했습니다.</p></div></section>
+  <section class="profile-about" id="about-me"><div class="wrap"><div class="eyebrow">ABOUT JIHWAN</div><h2>플레이에서 시작해, 만드는 사람으로.</h2><p class="profile-intro">다른 문화 속에서 생활하고, 무대 위 인물의 선택을 공부하고, 게임을 직접 만들었습니다. 지금은 플레이어가 왜 선택하고 다시 돌아오는지 묻는 게임 기획자입니다.</p><div class="life-chapters"><article><span class="chapter-label">01 / 다른 문화를 경험하다</span><div><h3>중국에서 보낸 5년</h3><p>중국 산동성 웨이하이에서 5년간 생활했습니다. 현지 거주 경험을 바탕으로 중국어 회화와 비즈니스 중국어를 활용할 수 있습니다.</p></div></article><article><span class="chapter-label">02 / 사람과 이야기를 공부하다</span><div><h3>연극 × 디지털콘텐츠</h3><span class="chapter-date">2020.03–2026.02</span><p>상명대학교에서 연극과 디지털콘텐츠를 전공했습니다. 인물이 무엇을 믿고 왜 행동하는지 보는 시선을 게임의 캐릭터와 선택 구조로 이어갑니다.</p></div></article><article><span class="chapter-label">03 / 생각을 플레이로 옮기다</span><div><h3>기획하고, 구현하고, 출시하다</h3><span class="chapter-date">2026 / 게임 기획 과정 · 해커톤 · 월드 출시</span><p>게임 기획 과정을 수료하고 팀 프로젝트와 AI 해커톤을 경험했습니다. Flower Rush는 기획·개발·아트를 직접 맡아 ZEPETO World에 출시했습니다.</p></div></article></div><div class="resume-panel"><div><h3>이력과 작업 방식까지 더 자세히.</h3><p>프로젝트별 역할과 결과, 게임 경험, 출시 후 개선 과정을 통합 이력서와 자기소개서에 담았습니다.</p></div><a class="btn btn-primary" href="files/최지환_이력서_자기소개서.pdf" target="_blank" rel="noopener">이력서 · 자기소개서 PDF ↗</a></div></div></section>
 
   <section class="index-sec reveal" id="projects">
     <div class="wrap">

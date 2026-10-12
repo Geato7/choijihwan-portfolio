@@ -499,6 +499,17 @@ ${has(h.lead) ? `      <p class="lead"${textAlignStyle(h.leadAlign)}>${esc(h.lea
   </section>`;
 }
 
+function profileHome(content) {
+  const h = content.hero, p = content.profile;
+  if (!p) return hero(h, "");
+  return `<section class="hero profile-hero" id="home"><div class="wrap profile-grid">
+    <div><div class="eyebrow">${esc(h.eyebrow)}</div><h1>${esc(h.name)} <span>${esc(h.subtitle)}</span></h1><h2 class="profile-statement">플레이어의 선택에<br>이유를 설계합니다.</h2><p class="lead">${esc(h.lead)}</p>${buttonRow(h.buttons, "")}</div>
+    <aside class="residence-card" aria-label="거주 경험과 언어 역량"><div class="eyebrow">LIFE & LANGUAGE</div><span class="residence-years">5<span>년</span></span><h2>${esc(p.residence)}</h2><p>${esc(p.duration)}</p><div class="language-list">${p.languages.map(x=>`<span>${esc(x)}</span>`).join("")}</div></aside>
+  </div></section>
+  <section class="profile-play"><div class="wrap"><div class="profile-section-top"><div><div class="eyebrow">PLAYER BEFORE DESIGNER</div><h2>오래 플레이한 경험이,<br>기획의 출발점입니다.</h2></div><a class="btn btn-outline" href="play.html">플레이 이력 전체 보기 ↗</a></div><div class="profile-stats">${content.playHistory.stats.slice(0,3).map(x=>`<div><strong>${esc(x.num)}</strong><span>${esc(x.label)}</span></div>`).join("")}</div><div class="play-insights">${p.playNotes.map(x=>`<article><h3>${esc(x.title)}</h3><p class="play-record">${esc(x.record)}</p><p>${esc(x.text)}</p></article>`).join("")}</div><p class="profile-footnote">누적 시간은 시간 기록이 있는 47개 타이틀의 합계입니다. 플레이 기간과 누적 시간은 구분해 기록했습니다.</p></div></section>
+  <section class="profile-about" id="about-me"><div class="wrap"><div class="eyebrow">ABOUT JIHWAN</div><h2>${esc(p.heading)}</h2><p class="profile-intro">${esc(p.intro)}</p><div class="life-chapters">${p.chapters.map(x=>`<article><span class="chapter-label">${esc(x.label)}</span><div><h3>${esc(x.title)}</h3>${x.date?`<span class="chapter-date">${esc(x.date)}</span>`:""}<p>${esc(x.text)}</p></div></article>`).join("")}</div><div class="resume-panel"><div><h3>이력과 작업 방식까지 더 자세히.</h3><p>프로젝트별 역할과 결과, 게임 경험, 출시 후 개선 과정을 통합 이력서와 자기소개서에 담았습니다.</p></div><a class="btn btn-primary" href="${attr(p.resume)}" target="_blank" rel="noopener">이력서 · 자기소개서 PDF ↗</a></div></div></section>`;
+}
+
 // 연락처 — contact.html 의 본문
 function contactSection(c, gameCta) {
   const links = [];
@@ -868,7 +879,7 @@ export function renderPage(content, css, key = "index") {
   return shell(content, css, {
     prefix: "", nav: "index", canonicalPath: "index.html",
     title: site.title, description: site.description,
-    body: [hero(h, ""), cards].filter(Boolean).join("\n\n"),
+    body: [profileHome(content), cards].filter(Boolean).join("\n\n"),
   });
 }
 
