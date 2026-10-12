@@ -235,11 +235,13 @@ ${next ? link(next, "next", "다음") : `        <span class="pager-link pager-e
 
 // 기획 노트 — 월별로 묶은 타임라인. 위쪽 칩으로 분류를 걸러 볼 수 있다.
 function devlogEntry(e, prefix, id) {
-  return `        <article class="devlog-entry" id="${attr(id)}" data-tag="${attr(e.project || "")}">
-          <div class="devlog-meta">
-${has(e.date) ? `            <span class="devlog-date">${esc(e.date)}</span>\n` : ""}${has(e.project) ? `            <span class="devlog-tag">${esc(e.project)}</span>\n` : ""}          </div>
-          <h3 class="devlog-title">${esc(e.title)}</h3>
-${has(e.retro) ? `          <p class="devlog-retro">${esc(e.retro)}</p>\n` : ""}${has(e.fileHref) ? `          <a class="devlog-file" href="${attr(resolve(e.fileHref, prefix))}" target="_blank" rel="noopener">${esc(e.fileLabel || "파일 보기")} ↗</a>\n` : ""}        </article>`;
+  const excerpt = String(e.retro || "").split("\n")[0];
+  return `<article class="devlog-entry note-card" id="${attr(id)}" data-tag="${attr(e.project || "")}" data-genre="${attr(e.genre || "공통 기획 · 제작")}">
+    <div class="note-card-top"><span class="note-genre">${esc(e.genre || "공통 기획 · 제작")}</span><time>${esc(e.date)}</time></div>
+    <span class="note-project">${esc(e.project)}</span><h3 class="devlog-title">${esc(e.title)}</h3><p class="note-excerpt">${esc(excerpt)}</p>
+    ${has(e.retro) ? `<details class="note-details"><summary>기획 과정 읽기 <span>＋</span></summary><p class="devlog-retro">${esc(e.retro)}</p></details>` : ""}
+    ${has(e.fileHref) ? `<a class="devlog-file" href="${attr(resolve(e.fileHref, prefix))}" target="_blank" rel="noopener">${esc(e.fileLabel || "자료 보기")} ↗</a>` : ""}
+  </article>`.replace(/^[ \t]+$/gm, "");
 }
 
 // "2026-06-22" -> "2026.06". 날짜가 없으면 빈 문자열.
@@ -257,92 +259,23 @@ function sortedDevlogEntries(dl) {
 function devlogSection(dl, prefix) {
   const sorted = sortedDevlogEntries(dl);
   if (!sorted.length) return "";
-
-  // 요약 — 몇 편을, 언제부터 언제까지, 몇 갈래로
-  const dated = sorted.map((e) => e.date).filter((v) => devlogMonth(v));
-  const span = dated.length
-    ? (devlogMonth(dated[dated.length - 1]) === devlogMonth(dated[0])
-        ? devlogMonth(dated[0])
-        : `${devlogMonth(dated[dated.length - 1])} – ${devlogMonth(dated[0]).slice(5)}`)
-    : "—";
-  const counts = new Map();
-  for (const e of sorted) if (has(e.project)) counts.set(e.project, (counts.get(e.project) || 0) + 1);
-  const summary = stats([
-    { num: String(sorted.length), label: "기록" },
-    { num: span, label: "기간" },
-    { num: String(counts.size), label: "분류" },
-  ]);
-
-  // 분류 칩 — 많이 쓴 분류가 앞에 온다
-  const chips = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  const filter = chips.length > 1
-    ? `      <div class="devlog-filter" id="devlogFilter">
-        <button type="button" class="dl-chip is-on" data-tag="">전체 <b>${sorted.length}</b></button>
-${chips.map(([tag, n]) => `        <button type="button" class="dl-chip" data-tag="${attr(tag)}">${esc(tag)} <b>${n}</b></button>`).join("\n")}
-      </div>`
-    : "";
-
-  // 월이 바뀌는 자리에 표시를 하나 끼워 넣는다
-  let last = null;
-  const items = [];
-  sorted.forEach((e, i) => {
-    const m = devlogMonth(e.date) || "날짜 미상";
-    if (m !== last) {
-      items.push(`        <div class="devlog-month" data-month="${attr(m)}"><span>${esc(m)}</span></div>`);
-      last = m;
-    }
-    items.push(devlogEntry(e, prefix, `note-${i}`));
-  });
-
-  return `  <section class="project reveal" id="notes">
-    <div class="wrap">
-      <div class="section-head">
-        <h1>${esc(dl.heading || "기획 노트")}</h1>
-${has(dl.lead) ? `        <p class="section-lead">${esc(dl.lead)}</p>\n` : ""}      </div>
-
-${summary}
-
-${filter}
-      <div class="devlog-list" id="devlogList">
-${items.join("\n")}
-      </div>
-      <p class="devlog-empty" id="devlogEmpty" hidden>이 분류에는 아직 글이 없습니다.</p>
-    </div>
-  </section>`;
+  const genres = new Map(), projects = new Map();
+  sorted.forEach(e => { const g=e.genre || "공통 기획 · 제작"; genres.set(g,(genres.get(g)||0)+1); if(e.project) projects.set(e.project,(projects.get(e.project)||0)+1); });
+  const genreChips=[...genres].sort((a,b)=>b[1]-a[1]);
+  return `<section class="project notes-studio" id="notes"><div class="wrap">
+    <div class="notes-heading"><div><div class="eyebrow">DESIGN JOURNAL</div><h1>${esc(dl.heading || "기획 노트")}</h1><p class="section-lead">${esc(dl.lead)}</p></div><div class="notes-count"><strong>${sorted.length}</strong><span>개의 작업 기록</span></div></div>
+    <div class="notes-controls"><span class="filter-caption">장르로 찾아보기</span><div class="devlog-filter" id="devlogFilter"><button type="button" class="dl-chip is-on" data-genre="" aria-pressed="true">전체 <b>${sorted.length}</b></button>${genreChips.map(([g,n])=>`<button type="button" class="dl-chip" data-genre="${attr(g)}" aria-pressed="false">${esc(g)} <b>${n}</b></button>`).join("")}</div><div class="notes-search-row"><label>프로젝트<select id="noteProject"><option value="">전체 프로젝트</option>${[...projects].map(([p,n])=>`<option value="${attr(p)}">${esc(p)} (${n})</option>`).join("")}</select></label><label class="note-search">글 검색<input type="search" id="noteSearch" placeholder="제목, 게임 이름, 기획 내용 검색"></label><button type="button" id="noteReset">필터 초기화</button></div></div>
+    <p id="noteResult" class="note-result" role="status">전체 ${sorted.length}개의 기록</p><div class="devlog-list note-grid" id="devlogList">${sorted.map((e,i)=>devlogEntry(e,prefix,`note-${i}`)).join("\n")}</div><p class="devlog-empty" id="devlogEmpty" hidden>조건에 맞는 글이 없습니다. 다른 장르를 고르거나 필터를 초기화해 보세요.</p>
+  </div></section>`;
 }
-
-// 분류 칩 동작 — 고른 분류만 남기고, 남는 글이 없는 월 표시는 함께 감춘다
 function devlogScript() {
-  return `<script>
-(function(){
-  var bar = document.getElementById('devlogFilter');
-  if (!bar) return;
-  var list = document.getElementById('devlogList');
-  var empty = document.getElementById('devlogEmpty');
-  bar.addEventListener('click', function (ev) {
-    var btn = ev.target.closest('.dl-chip');
-    if (!btn) return;
-    var tag = btn.getAttribute('data-tag');
-    bar.querySelectorAll('.dl-chip').forEach(function (b) { b.classList.toggle('is-on', b === btn); });
-    var shown = 0;
-    list.querySelectorAll('.devlog-entry').forEach(function (el) {
-      var on = !tag || el.getAttribute('data-tag') === tag;
-      el.hidden = !on;
-      if (on) shown++;
-    });
-    // 뒤따르는 글이 하나도 없는 월 표시는 숨긴다
-    list.querySelectorAll('.devlog-month').forEach(function (h) {
-      var n = h.nextElementSibling, any = false;
-      while (n && !n.classList.contains('devlog-month')) {
-        if (n.classList.contains('devlog-entry') && !n.hidden) { any = true; break; }
-        n = n.nextElementSibling;
-      }
-      h.hidden = !any;
-    });
-    if (empty) empty.hidden = shown > 0;
-  });
-})();
-</script>`;
+ return `<script>(function(){
+ const bar=document.getElementById('devlogFilter'); if(!bar)return;
+ const project=document.getElementById('noteProject'), search=document.getElementById('noteSearch'), cards=[...document.querySelectorAll('.note-card')];let genre='';
+ function apply(){let shown=0;const q=search.value.trim().toLocaleLowerCase();cards.forEach(el=>{const on=(!genre||el.dataset.genre===genre)&&(!project.value||el.dataset.tag===project.value)&&(!q||el.textContent.toLocaleLowerCase().includes(q));el.hidden=!on;if(on)shown++;});document.getElementById('devlogEmpty').hidden=shown>0;document.getElementById('noteResult').textContent=shown+'개의 기록'+(genre?' · '+genre:'');bar.querySelectorAll('button').forEach(b=>{const on=b.dataset.genre===genre;b.classList.toggle('is-on',on);b.setAttribute('aria-pressed',String(on));});}
+ bar.addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){genre=b.dataset.genre;apply();}});project.addEventListener('change',apply);search.addEventListener('input',apply);document.getElementById('noteReset').addEventListener('click',()=>{genre='';project.value='';search.value='';apply();});
+ function openHash(){const el=document.getElementById(location.hash.slice(1));if(el&&el.classList.contains('note-card')){genre='';project.value='';search.value='';apply();const d=el.querySelector('details');if(d)d.open=true;el.scrollIntoView();}}window.addEventListener('hashchange',openHash);if(location.hash)setTimeout(openHash,100);
+ })();</script>`;
 }
 
 // 게임 이름이 기획 노트 글의 제목·회고에 나오면 그 글로 바로 가는 열을 붙인다.
@@ -499,15 +432,25 @@ ${has(h.lead) ? `      <p class="lead"${textAlignStyle(h.leadAlign)}>${esc(h.lea
   </section>`;
 }
 
+function skillSection(p) {
+  return `<section class="skills-section"><div class="wrap"><div class="profile-section-top"><div><div class="eyebrow">TOOLKIT</div><h2>아이디어를 실현하는 도구들.</h2></div><p class="skills-caption">만들고, 협업하고, 검증할 때 활용합니다.</p></div><div class="skill-grid">${(p.skills||[]).map((g,i)=>`<article class="skill-group skill-${i}"><span class="skill-index">0${i+1}</span><h3>${esc(g.title)}</h3><p>${esc(g.description)}</p><div class="tool-tags">${g.tools.map(t=>`<span>${esc(t)}</span>`).join("")}</div></article>`).join("")}</div></div></section>`;
+}
+function experienceVisuals(content) {
+  const rows=content.playHistory.table.rows, counts=new Map();rows.forEach(r=>counts.set(r[0],(counts.get(r[0])||0)+1));
+  const timed=rows.filter(r=>/^[\d,.]+시간$/.test(r[3])).map(r=>({name:r[1],hours:Number(r[3].replace(/[^\d.]/g,''))})).sort((a,b)=>b.hours-a.hours).slice(0,5);
+  const max=timed[0]?.hours||1;
+  return `<div class="experience-visuals"><figure class="platform-chart"><figcaption><span class="eyebrow">PLAY LIBRARY</span><h3>플랫폼을 넘나든 66개의 경험</h3></figcaption><div class="platform-donut" role="img" aria-label="온라인 27개, 모바일 7개, 그 외 32개"><span><strong>66</strong>타이틀</span></div><ul>${[...counts].map(([name,n],i)=>`<li><i class="platform-dot dot-${i}"></i>${esc(name)}<strong>${n}개</strong></li>`).join("")}</ul></figure><figure class="time-chart"><figcaption><span class="eyebrow">TIME WELL PLAYED</span><h3>시간을 쌓으며 깊게 경험한 게임</h3></figcaption><div class="time-bars">${timed.map(r=>`<div><span>${esc(r.name)}</span><strong>${r.hours}시간</strong><div class="bar-track"><i style="width:${r.hours/max*100}%"></i></div></div>`).join("")}</div><p>시간 기록이 있는 타이틀 중 상위 5개 · 기간으로 기록한 게임 제외</p></figure></div>`;
+}
+
 function profileHome(content) {
   const h = content.hero, p = content.profile;
   if (!p) return hero(h, "");
   return `<section class="hero profile-hero" id="home"><div class="wrap profile-grid">
     <div><div class="eyebrow">${esc(h.eyebrow)}</div><h1>${esc(h.name)} <span>${esc(h.subtitle)}</span></h1><h2 class="profile-statement">플레이어의 선택에<br>이유를 설계합니다.</h2><p class="lead">${esc(h.lead)}</p>${buttonRow(h.buttons, "")}</div>
-    <aside class="residence-card" aria-label="거주 경험과 언어 역량"><div class="eyebrow">LIFE & LANGUAGE</div><span class="residence-years">5<span>년</span></span><h2>${esc(p.residence)}</h2><p>${esc(p.duration)}</p><div class="language-list">${p.languages.map(x=>`<span>${esc(x)}</span>`).join("")}</div></aside>
+    <aside class="profile-side"><figure class="portrait-frame"><img src="${attr(p.portrait)}" alt="게임 기획자 최지환의 프로필 사진" width="202" height="260"><figcaption>최지환 <span>GAME DESIGNER</span></figcaption></figure><div class="residence-card" aria-label="거주 경험과 언어 역량"><div class="eyebrow">LIFE & LANGUAGE</div><span class="residence-years">5<span>년</span></span><h2>${esc(p.residence)}</h2><p>${esc(p.duration)}</p><div class="language-list">${p.languages.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div></aside>
   </div></section>
-  <section class="profile-play"><div class="wrap"><div class="profile-section-top"><div><div class="eyebrow">PLAYER BEFORE DESIGNER</div><h2>오래 플레이한 경험이,<br>기획의 출발점입니다.</h2></div><a class="btn btn-outline" href="play.html">플레이 이력 전체 보기 ↗</a></div><div class="profile-stats">${content.playHistory.stats.slice(0,3).map(x=>`<div><strong>${esc(x.num)}</strong><span>${esc(x.label)}</span></div>`).join("")}</div><div class="play-insights">${p.playNotes.map(x=>`<article><h3>${esc(x.title)}</h3><p class="play-record">${esc(x.record)}</p><p>${esc(x.text)}</p></article>`).join("")}</div><p class="profile-footnote">누적 시간은 시간 기록이 있는 47개 타이틀의 합계입니다. 플레이 기간과 누적 시간은 구분해 기록했습니다.</p></div></section>
-  <section class="profile-about" id="about-me"><div class="wrap"><div class="eyebrow">ABOUT JIHWAN</div><h2>${esc(p.heading)}</h2><p class="profile-intro">${esc(p.intro)}</p><div class="life-chapters">${p.chapters.map(x=>`<article><span class="chapter-label">${esc(x.label)}</span><div><h3>${esc(x.title)}</h3>${x.date?`<span class="chapter-date">${esc(x.date)}</span>`:""}<p>${esc(x.text)}</p></div></article>`).join("")}</div><div class="resume-panel"><div><h3>이력과 작업 방식까지 더 자세히.</h3><p>프로젝트별 역할과 결과, 게임 경험, 출시 후 개선 과정을 통합 이력서와 자기소개서에 담았습니다.</p></div><a class="btn btn-primary" href="${attr(p.resume)}" target="_blank" rel="noopener">이력서 · 자기소개서 PDF ↗</a></div></div></section>`;
+  <section class="profile-play"><div class="wrap"><div class="profile-section-top"><div><div class="eyebrow">PLAYER BEFORE DESIGNER</div><h2>오래 플레이한 경험이,<br>기획의 출발점입니다.</h2></div><a class="btn btn-outline" href="play.html">플레이 이력 전체 보기 ↗</a></div><div class="profile-stats">${content.playHistory.stats.slice(0,3).map(x=>`<div><strong>${esc(x.num)}</strong><span>${esc(x.label)}</span></div>`).join("")}</div><div class="play-insights">${p.playNotes.map(x=>`<article><h3>${esc(x.title)}</h3><p class="play-record">${esc(x.record)}</p><p>${esc(x.text)}</p></article>`).join("")}</div>${experienceVisuals(content)}<p class="profile-footnote">누적 시간은 시간 기록이 있는 47개 타이틀의 합계입니다. 플레이 기간과 누적 시간은 구분해 기록했습니다.</p></div></section>
+  ${skillSection(p)}<section class="profile-about" id="about-me"><div class="wrap"><div class="eyebrow">ABOUT JIHWAN</div><h2>${esc(p.heading)}</h2><p class="profile-intro">${esc(p.intro)}</p><div class="life-chapters">${p.chapters.map(x=>`<article><span class="chapter-label">${esc(x.label)}</span><div><h3>${esc(x.title)}</h3>${x.date?`<span class="chapter-date">${esc(x.date)}</span>`:""}<p>${esc(x.text)}</p></div></article>`).join("")}</div><div class="resume-panel"><div><h3>이력과 작업 방식까지 더 자세히.</h3><p>프로젝트별 역할과 결과, 게임 경험, 출시 후 개선 과정을 통합 이력서와 자기소개서에 담았습니다.</p></div><a class="btn btn-primary" href="${attr(p.resume)}" target="_blank" rel="noopener">이력서 · 자기소개서 PDF ↗</a></div></div></section>`;
 }
 
 // 연락처 — contact.html 의 본문
@@ -696,9 +639,9 @@ ${pageUrl ? `<link rel="canonical" href="${attr(pageUrl)}">` : ""}
     var el = document.documentElement;
     try{
       var saved = localStorage.getItem('theme');
-      el.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+      el.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
     }catch(e){
-      el.setAttribute('data-theme','dark');
+      el.setAttribute('data-theme','light');
     }
     // 등장 애니메이션의 '숨김' 상태는 이 클래스가 있을 때만 걸린다.
     // 스크립트가 아예 실행되지 못하면 클래스가 없으니 내용이 그대로 보인다.
