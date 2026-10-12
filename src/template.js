@@ -313,17 +313,29 @@ ${body}
 // 게임 경험 — 플레이 이력 한 장. 숫자 줄 + 표만 쓴다.
 function playSection(ph, dl) {
   if (!ph || !has((ph.table || {}).rows)) return "";
-  const blocks = [stats(ph.stats), playTable(ph.table, dl)].filter(Boolean).join("\n\n");
-  return `  <section class="project reveal" id="play">
-    <div class="wrap">
-      <div class="section-head">
-        <h1>${esc(ph.heading || "게임 경험")}</h1>
-${has(ph.role) ? `        <div class="role">${esc(ph.role)}</div>\n` : ""}${has(ph.lead) ? `        <p class="section-lead">${esc(ph.lead)}</p>\n` : ""}      </div>
-
-${blocks}
-    </div>
-  </section>`;
+  const rows=ph.table.rows, groups=ph.genreGroups || [], mapping=ph.gameGenres || {};
+  const count=rows.length, timed=rows.filter(r=>/^[\d,.]+시간$/.test(r[3]));
+  const total=timed.reduce((n,r)=>n+Number(r[3].replace(/[^\d.]/g,'')),0);
+  const data=groups.map(g=>({...g,rows:rows.filter(r=>mapping[r[1]]===g.id)})).filter(g=>g.rows.length);
+  const largest=Math.max(...data.map(g=>g.rows.length),1);
+  const withHours=data.map(g=>({...g,hours:g.rows.filter(r=>r[3].endsWith('시간')).reduce((n,r)=>n+parseFloat(r[3]),0)}));
+  const maxHours=Math.max(...withHours.map(g=>g.hours),1);
+  const chart=data.map(g=>`<button class="genre-chart-row" type="button" data-choose-genre="${attr(g.id)}"><span>${esc(g.label)}</span><b>${g.rows.length}개</b><div class="genre-bar-track"><i style="width:${g.rows.length/largest*100}%;background:${attr(g.color)}"></i></div></button>`).join("");
+  const hourChart=[...withHours].sort((a,b)=>b.hours-a.hours).map(g=>`<div class="hour-chart-row"><span>${esc(g.label)}</span><b>${Math.round(g.hours*10)/10}시간</b><div class="genre-bar-track"><i style="width:${g.hours/maxHours*100}%;background:${attr(g.color)}"></i></div></div>`).join("");
+  const notes=sortedDevlogEntries(dl);
+  function gameCard(r){const game=r[1],hit=game.length>=2?notes.findIndex(e=>e.title.includes(game)||(e.retro||'').includes(game)||(e.project&&e.project.length>=2&&game.includes(e.project))):-1;
+    return `<article class="game-record" data-genre="${attr(mapping[game]||'')}" data-platform="${attr(r[0])}"><div class="game-record-top"><span>${esc(r[0])}</span><strong>${esc(r[3])}</strong></div><h3>${esc(game)}</h3><p>${esc(r[2])}</p><div class="game-record-bottom"><span>과금 ${esc(r[4])}</span>${hit>=0?`<a href="notes.html#note-${hit}">관련 기획 노트 ↗</a>`:''}</div></article>`;
+  }
+  return `<section class="play-library" id="play"><div class="wrap"><div class="play-heading"><div class="eyebrow">PLAYER'S LIBRARY</div><h1>${esc(ph.heading || '게임 경험')}</h1><p>${esc(ph.lead)}</p></div>
+  <div class="play-summary">${[{n:count+'개',l:'플레이 타이틀'},{n:Math.round(total).toLocaleString()+'시간',l:'시간 기록이 있는 '+timed.length+'개 타이틀'},{n:data.length+'개',l:'장르 분류'},{n:'6년',l:'최장 플레이 · 리그오브레전드'}].map(x=>`<div><strong>${esc(x.n)}</strong><span>${esc(x.l)}</span></div>`).join('')}</div>
+  <div class="play-visual-grid"><figure class="genre-overview"><figcaption><span class="eyebrow">BREADTH OF PLAY</span><h2>어떤 장르를 경험했을까?</h2><p>타이틀 수로 보는 장르별 분포 · 막대를 누르면 해당 이력으로 이동합니다.</p></figcaption>${chart}</figure><figure class="genre-hours"><figcaption><span class="eyebrow">DEPTH OF PLAY</span><h2>시간을 들여 깊게 즐긴 장르</h2><p>누적 시간이 기록된 게임만 합산했습니다.</p></figcaption>${hourChart}</figure></div>
+  <p class="play-data-note">복합 장르는 대표 플레이 특성에 따라 한 분류에만 배치했습니다. 장르별 타이틀 수의 합계는 ${count}개이며, 기간 기록(년·개월)은 시간으로 환산하지 않았습니다.</p>
+  ${experienceVisuals({playHistory:ph})}
+  <div class="play-highlights"><div><span class="eyebrow">LONG-TERM PLAY</span><h2>오래 즐긴 게임의 기록</h2></div>${['리그오브레전드','TFT 모바일','좀비고등학교'].map(name=>{const r=rows.find(r=>r[1]===name);return r?`<article><strong>${esc(r[3])}</strong><h3>${esc(r[1])}</h3><span>${esc(r[2])}</span></article>`:''}).join('')}</div>
+  <section class="game-collection" id="game-collection"><div class="collection-heading"><div><div class="eyebrow">EXPLORE THE COLLECTION</div><h2>장르별 플레이 이력</h2></div><button id="gameReset" type="button">필터 초기화</button></div><div id="gameGenreFilter" class="game-genre-filter"><button type="button" data-genre="" class="is-on" aria-pressed="true">전체 <b>${count}</b></button>${data.map(g=>`<button type="button" data-genre="${attr(g.id)}" aria-pressed="false">${esc(g.label)} <b>${g.rows.length}</b></button>`).join('')}</div><div class="game-search-row"><label>플랫폼<select id="gamePlatform"><option value="">전체 플랫폼</option>${[...new Set(rows.map(r=>r[0]))].map(x=>`<option>${esc(x)}</option>`).join('')}</select></label><label>게임 검색<input type="search" id="gameSearch" placeholder="게임 이름이나 세부 장르 검색"></label></div><p class="game-result" id="gameResult" role="status">전체 ${count}개 타이틀</p>
+  ${data.map(g=>`<section class="game-genre-group" data-group="${attr(g.id)}"><div class="genre-group-heading"><span class="genre-color-mark" style="background:${attr(g.color)}"></span><div><h2>${esc(g.label)} <span class="group-count">${g.rows.length}개</span></h2><p>${esc(g.description)}</p></div></div><div class="game-record-grid">${g.rows.map(gameCard).join('')}</div></section>`).join('')}<p id="gameEmpty" hidden>조건에 맞는 게임이 없습니다. 검색어나 필터를 바꿔보세요.</p></section></div></section>`;
 }
+function playScript(){return `<script>(function(){const bar=document.getElementById('gameGenreFilter');if(!bar)return;let genre='';const platform=document.getElementById('gamePlatform'),search=document.getElementById('gameSearch'),cards=[...document.querySelectorAll('.game-record')];function apply(){let shown=0;const q=search.value.trim().toLocaleLowerCase();cards.forEach(el=>{const on=(!genre||el.dataset.genre===genre)&&(!platform.value||el.dataset.platform===platform.value)&&(!q||el.textContent.toLocaleLowerCase().includes(q));el.hidden=!on;if(on)shown++;});document.querySelectorAll('.game-genre-group').forEach(group=>{const n=group.querySelectorAll('.game-record:not([hidden])').length;group.hidden=n===0;group.querySelector('.group-count').textContent=n+'개';});bar.querySelectorAll('button').forEach(b=>{const on=b.dataset.genre===genre;b.classList.toggle('is-on',on);b.setAttribute('aria-pressed',String(on));});document.getElementById('gameResult').textContent=shown+'개 타이틀';document.getElementById('gameEmpty').hidden=shown>0;}bar.addEventListener('click',e=>{const b=e.target.closest('button');if(b){genre=b.dataset.genre;apply();}});platform.addEventListener('change',apply);search.addEventListener('input',apply);document.getElementById('gameReset').addEventListener('click',()=>{genre='';platform.value='';search.value='';apply();});document.querySelectorAll('[data-choose-genre]').forEach(b=>b.addEventListener('click',()=>{genre=b.dataset.chooseGenre;platform.value='';search.value='';apply();document.getElementById('game-collection').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}));})();</script>`;}
 
 // unlisted 를 켠 프로젝트는 카드 목록·앞뒤 이동·사이트맵에서 빠진다.
 // 페이지는 그대로 만들어지므로 주소를 아는 사람은 볼 수 있다 (기획 노트에서 링크한다).
@@ -433,7 +445,7 @@ ${has(h.lead) ? `      <p class="lead"${textAlignStyle(h.leadAlign)}>${esc(h.lea
 }
 
 function skillSection(p) {
-  return `<section class="skills-section"><div class="wrap"><div class="profile-section-top"><div><div class="eyebrow">TOOLKIT</div><h2>아이디어를 실현하는 도구들.</h2></div><p class="skills-caption">만들고, 협업하고, 검증할 때 활용합니다.</p></div><div class="skill-grid">${(p.skills||[]).map((g,i)=>`<article class="skill-group skill-${i}"><span class="skill-index">0${i+1}</span><h3>${esc(g.title)}</h3><p>${esc(g.description)}</p><div class="tool-tags">${g.tools.map(t=>`<span>${esc(t)}</span>`).join("")}</div></article>`).join("")}</div></div></section>`;
+  return `<section class="skills-section"><div class="wrap"><div class="profile-section-top"><div><div class="eyebrow">TOOLKIT</div><h2>아이디어를 실현하는 도구들.</h2></div><p class="skills-caption">만들고, 협업하고, 검증할 때 활용합니다.</p></div><div class="skill-grid">${(p.skills||[]).map((g,i)=>`<article class="skill-group skill-${i}"><span class="skill-index">0${i+1}</span><h3>${esc(g.title)}</h3><p>${esc(g.description)}</p><div class="tool-icons">${g.tools.map(t=>`<div class="tool-item"><span class="tool-icon-wrap"><img src="assets/tools/${attr(p.toolIcons[t])}.svg" width="28" height="28" alt="" loading="lazy"></span><span>${esc(t)}</span></div>`).join("")}</div></article>`).join("")}</div></div></section>`;
 }
 function experienceVisuals(content) {
   const rows=content.playHistory.table.rows, counts=new Map();rows.forEach(r=>counts.set(r[0],(counts.get(r[0])||0)+1));
@@ -776,6 +788,7 @@ export function renderPage(content, css, key = "index") {
       title: `${ph.heading || "게임 경험"} — ${siteName}`,
       description: ph.lead || site.description,
       body: playSection(ph, content.devlog),
+      script: playScript(),
     });
   }
 

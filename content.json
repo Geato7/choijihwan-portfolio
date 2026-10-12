@@ -1587,7 +1587,7 @@
     "navLabel": "게임 경험",
     "heading": "게임 경험",
     "role": "온라인 27 · 모바일 7 · 그 외 32 — 총 66개 타이틀",
-    "lead": "장르를 가리지 않고 플레이해 온 기록입니다. 플레이 시간이 집계되는 타이틀은 누적 시간을, 그 외에는 플레이한 기간을 적었습니다.",
+    "lead": "66개 타이틀에서 쌓은 경험을 장르별로 정리했습니다. 오래 즐긴 게임과 시간 기록을 살펴보고, 관심 있는 장르의 전체 이력을 찾아보세요.",
     "stats": [
       {
         "num": "66개",
@@ -2078,6 +2078,118 @@
           "5만원"
         ]
       ]
+    },
+    "genreGroups": [
+      {
+        "id": "moba",
+        "label": "MOBA · 팀 경쟁",
+        "description": "역할과 팀의 선택이 만드는 경쟁",
+        "color": "#b7c8ee"
+      },
+      {
+        "id": "shooter",
+        "label": "슈팅 · 배틀로얄",
+        "description": "조준과 판단, 전장의 흐름",
+        "color": "#b9dced"
+      },
+      {
+        "id": "strategy",
+        "label": "전략 · 시뮬레이션",
+        "description": "자원과 선택이 쌓이는 구조",
+        "color": "#c8bceb"
+      },
+      {
+        "id": "rpg",
+        "label": "RPG · 성장",
+        "description": "캐릭터 육성과 성장의 동기",
+        "color": "#edbed1"
+      },
+      {
+        "id": "survival",
+        "label": "생존 · 협동",
+        "description": "위험 속에서 함께 만드는 해법",
+        "color": "#b5decc"
+      },
+      {
+        "id": "action",
+        "label": "액션 · 로그라이크",
+        "description": "조작의 손맛과 반복의 변화",
+        "color": "#f1c7b0"
+      },
+      {
+        "id": "casual",
+        "label": "퍼즐 · 추리 · 보드",
+        "description": "규칙을 이해하고 풀어내는 재미",
+        "color": "#d6dcae"
+      }
+    ],
+    "gameGenres": {
+      "리그오브레전드": "moba",
+      "오버워치": "shooter",
+      "발로란트": "shooter",
+      "스타크래프트": "strategy",
+      "워크래프트": "strategy",
+      "카운터스트라이크: 글로벌 오펜시브": "shooter",
+      "Counter-Strike 2": "shooter",
+      "좀비고등학교": "survival",
+      "이터널 리턴": "moba",
+      "V Rising": "survival",
+      "Black Squad": "shooter",
+      "톰 클랜시의 레인보우식스 시즈": "shooter",
+      "THE FINALS": "shooter",
+      "Rust": "survival",
+      "Arma 3": "strategy",
+      "Among Us": "casual",
+      "Lethal Company": "survival",
+      "PAYDAY 2": "shooter",
+      "Don't Starve Together": "survival",
+      "Escape from Duckov": "shooter",
+      "Digimon Masters Online": "rpg",
+      "Z1 Battle Royale": "shooter",
+      "Left 4 Dead 2": "shooter",
+      "작혼: 리치 마작": "casual",
+      "Tabletop Simulator": "casual",
+      "메이플스토리": "rpg",
+      "배틀그라운드": "shooter",
+      "승리의 여신: NIKKE": "rpg",
+      "마비노기 모바일": "rpg",
+      "클래시 로얄": "strategy",
+      "클래시 오브 클랜": "strategy",
+      "우마무스메 프리티 더비": "strategy",
+      "메멘토 모리": "rpg",
+      "TFT 모바일": "strategy",
+      "Once Human": "survival",
+      "Grand Theft Auto V 레거시": "action",
+      "Tricky Towers": "casual",
+      "Skul: The Hero Slayer": "action",
+      "Stellaris": "strategy",
+      "Sid Meier's Civilization VI": "strategy",
+      "Cyberpunk 2077": "rpg",
+      "Mount & Blade: Warband": "rpg",
+      "Football Manager 2020": "strategy",
+      "데이브 더 다이버": "strategy",
+      "Project Zomboid": "survival",
+      "Sid Meier's Civilization V": "strategy",
+      "Lobotomy Corporation": "strategy",
+      "Monster Hunter: World": "rpg",
+      "토탈워: 삼국": "strategy",
+      "Prison Architect": "strategy",
+      "For The King": "rpg",
+      "Northgard: Definitive Edition": "strategy",
+      "Stacklands": "survival",
+      "Barony": "rpg",
+      "Far Cry 3": "shooter",
+      "Stardew Valley": "strategy",
+      "불과 얼음의 춤": "casual",
+      "Euro Truck Simulator 2": "strategy",
+      "Fallout 4": "rpg",
+      "래트로폴리스": "strategy",
+      "Cities: Skylines": "strategy",
+      "메트로 2033 리덕스": "shooter",
+      "메트로: 라스트 라이트 리덕스": "shooter",
+      "팰월드": "survival",
+      "림월드": "strategy",
+      "단간론파 시리즈": "casual"
     }
   },
   "contact": {
@@ -2181,6 +2293,28 @@
           "Google Sheets"
         ]
       }
-    ]
+    ],
+    "toolIcons": {
+      "Unity / C#": "unity",
+      "VS Code": "vscode",
+      "Figma": "figma",
+      "FigJam": "figma",
+      "GitHub": "github",
+      "Git": "git",
+      "Notion": "notion",
+      "Jira": "jira",
+      "Confluence": "confluence",
+      "Claude": "claude",
+      "ChatGPT": "chatgpt",
+      "Codex": "chatgpt",
+      "Gemini": "gemini",
+      "Suno": "suno",
+      "Midjourney": "midjourney",
+      "Word": "word",
+      "Excel": "excel",
+      "PowerPoint": "powerpoint",
+      "Google Docs": "google-docs",
+      "Google Sheets": "google-sheets"
+    }
   }
 }
