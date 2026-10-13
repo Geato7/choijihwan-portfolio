@@ -22,7 +22,15 @@
     "homeProjectsTitle": "대표 프로젝트",
     "homeProjectsLead": "설계 의도와 그 결과를 프로젝트마다 정리했습니다.",
     "homeProjectsMore": "프로젝트 전체 보기",
-    "homeProjectCount": 3
+    "homeProjectCount": 6,
+    "homeProjectIds": [
+      "flower-shop-tycoon",
+      "flower-rush",
+      "belief",
+      "aftermath",
+      "sos",
+      "broken-cradle"
+    ]
   },
   "hero": {
     "eyebrow": "Game Designer Portfolio",

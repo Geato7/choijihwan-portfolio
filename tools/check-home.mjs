@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const html=readFileSync(resolve(root,'index.html'),'utf8');
+const cards=[...html.matchAll(/class="overview-project pastel-\d+" href="([^"]+)"/g)].map(m=>m[1]);
+assert.equal(cards.length,6);
+for(const id of ['belief','flower-rush','flower-shop-tycoon']) assert(cards.includes(`projects/${id}.html`));
+for(const path of cards) assert(existsSync(resolve(root,path)),`Missing project: ${path}`);
+assert.equal((html.match(/class="overview-tool"/g)||[]).length,20);
+for(const anchor of ['about-me','toolkit','skill-group-0','skill-group-1','skill-group-2','skill-group-3']) assert(html.includes(`id="${anchor}"`),`Resume destination missing: ${anchor}`);
+for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)) new Function(match[1]);
+console.log('Home check passed: representative projects, assets, resume anchors, script syntax');
