@@ -604,6 +604,8 @@
 @media(max-width:760px){.portfolio-overview{padding-top:100px}.overview-hero{grid-template-columns:1fr;gap:18px;padding-top:8px}.overview-identity{gap:16px}.overview-identity>img{width:72px;height:96px}.overview-hero h1{font-size:26px}.overview-hero p{font-size:13px}.overview-facts{border:0;padding:16px;background:var(--mint);border-radius:10px}.overview-facts p{font-size:12px}.overview-projects{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.overview-project-image{height:86px}.overview-heading{gap:10px}.overview-heading h2{font-size:18px;gap:10px}.overview-heading h2>span{font-size:17px}.overview-heading>a{font-size:10px}.overview-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}.overview-tool-category>div{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-tool .tool-icon-wrap{width:45px;height:45px}.overview-bottom{grid-template-columns:1fr;gap:0}.overview-story,.overview-methods{grid-template-columns:1fr}.overview-stats strong{font-size:19px}.overview-education article{padding:16px}.overview-section{padding:22px 0}.overview-hero .eyebrow{font-size:8px}.overview-project h3{font-size:13px}.overview-project p{font-size:9px}}
 .portfolio-overview{--mint:#e8f5ef;--pink:#faeaf1;--lavender:#efebfa} :root[data-theme="dark"] .portfolio-overview{--mint:#17362c;--pink:#382332;--lavender:#2b2540}.overview-platforms button{min-height:36px}.overview-tool{min-height:78px}.overview-genre{min-height:24px}a:focus-visible{outline:2px solid var(--solid);outline-offset:4px}.overview-project-image img{object-position:center}
 .overview-resume{margin-top:16px;font-size:12px;padding:10px 16px}
+/* 좁은 폰(320px)에서 게임 경험 차트가 1px 넘치던 것: 그리드 칸이 내용 폭 밑으로 줄어들게 한다 */
+.experience-visuals>figure{min-width:0}@media(max-width:760px){.platform-chart{grid-template-columns:minmax(0,150px) minmax(0,1fr)}}
 
 </style>
 </head>
@@ -674,45 +676,45 @@
       </div>
 
       <figure class="wide-shot">
-        <img src="../assets/broken-cradle/01_title.jpg" alt="부서진 요람 타이틀 화면" loading="lazy">
+        <img src="../assets/broken-cradle/01_title.webp" alt="부서진 요람 타이틀 화면" loading="lazy">
         <figcaption>타이틀 화면 — 자신이 무너뜨린 도시의 잔해 위에 앉은 고스트</figcaption>
       </figure>
 
       <div class="gallery">
         <figure>
-          <img src="../assets/broken-cradle/02_prologue_news.jpg" alt="프롤로그 뉴스 화면" loading="lazy">
+          <img src="../assets/broken-cradle/02_prologue_news.webp" alt="프롤로그 뉴스 화면" loading="lazy">
           <figcaption>프롤로그 — 낡은 TV 뉴스로 2050년 핵무기 무력화부터 도시국가 성립까지를 압축해 전달</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/03_prologue_child.jpg" alt="불타는 수용소에서 아이를 안은 고스트" loading="lazy">
+          <img src="../assets/broken-cradle/03_prologue_child.webp" alt="불타는 수용소에서 아이를 안은 고스트" loading="lazy">
           <figcaption>“…결국, 난 아무도 구하지 못했군.” — 주인공을 피해자가 아닌 원인 제공자로 못 박는 장면</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/05_hud_shanty.jpg" alt="1일차 버려진 판자촌과 HUD" loading="lazy">
+          <img src="../assets/broken-cradle/05_hud_shanty.webp" alt="1일차 버려진 판자촌과 HUD" loading="lazy">
           <figcaption>1일차 버려진 판자촌 — 정신력 · 식량 게이지가 항상 떠 있어 남은 시간을 계속 의식하게 한다</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/06_food_map.jpg" alt="한스의 식량 매장지 지도" loading="lazy">
+          <img src="../assets/broken-cradle/06_food_map.webp" alt="한스의 식량 매장지 지도" loading="lazy">
           <figcaption>스테이지 핵심 아이템 — 도움으로 얻으면 ‘공존의 약속’, 약탈로 얻으면 ‘짓밟힌 일생’</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/07_factory_blueprint.jpg" alt="부서진 공장 내부 설계도" loading="lazy">
+          <img src="../assets/broken-cradle/07_factory_blueprint.webp" alt="부서진 공장 내부 설계도" loading="lazy">
           <figcaption>공장 설계도 — 다음 구역으로 가는 열쇠를 NPC가 쥐고 있어 조우가 곧 진행 조건이 된다</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/08_caroline.jpg" alt="제단 앞에서 기도하는 캐롤라인" loading="lazy">
+          <img src="../assets/broken-cradle/08_caroline.webp" alt="제단 앞에서 기도하는 캐롤라인" loading="lazy">
           <figcaption>4일차 캐롤라인 — 붕괴를 신의 뜻이라 믿는 광신도. 이 지점부터 ‘살해’ 선택지가 열린다</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/09_bob.jpg" alt="식량을 쌓아둔 밥" loading="lazy">
+          <img src="../assets/broken-cradle/09_bob.webp" alt="식량을 쌓아둔 밥" loading="lazy">
           <figcaption>6일차 밥 — 식량 앞에서 자제력을 잃은 소시민. 플레이어가 타락했을 때의 미래를 미리 보여준다</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/10_fortress.jpg" alt="요새 앞의 지휘관과 병력" loading="lazy">
+          <img src="../assets/broken-cradle/10_fortress.webp" alt="요새 앞의 지휘관과 병력" loading="lazy">
           <figcaption>7일차 요새 — 파밍을 걷어내고 전투와 서사에만 집중시키는 최종장</figcaption>
         </figure>
         <figure>
-          <img src="../assets/broken-cradle/12_true_ending.jpg" alt="진엔딩 — 미나와 재건" loading="lazy">
+          <img src="../assets/broken-cradle/12_true_ending.webp" alt="진엔딩 — 미나와 재건" loading="lazy">
           <figcaption>진엔딩 — 카르마 40 이하일 때만 도달. 속죄가 보상이 아니라 자격으로 주어진다</figcaption>
         </figure>
       </div>

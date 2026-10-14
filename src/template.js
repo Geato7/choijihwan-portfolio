@@ -236,9 +236,9 @@ ${next ? link(next, "next", "다음") : `        <span class="pager-link pager-e
 // 기획 노트 — 월별로 묶은 타임라인. 위쪽 칩으로 분류를 걸러 볼 수 있다.
 function devlogEntry(e, prefix, id) {
   const excerpt = String(e.retro || "").split("\n")[0];
-  return `<article class="devlog-entry note-card" id="${attr(id)}" data-tag="${attr(e.project || "")}" data-genre="${attr(e.genre || "공통 기획 · 제작")}">
+  return `<article class="devlog-entry note-card" id="${attr(id)}" data-tag="${attr(e.project || "")}" data-cat="${attr(e.category || "")}" data-genre="${attr(e.genre || "공통 기획 · 제작")}">
     <div class="note-card-top"><span class="note-genre">${esc(e.genre || "공통 기획 · 제작")}</span><time>${esc(e.date)}</time></div>
-    <span class="note-project">${esc(e.project)}</span><h3 class="devlog-title">${esc(e.title)}</h3><p class="note-excerpt">${esc(excerpt)}</p>
+    <span class="note-project">${esc([e.project, e.category].filter(has).join(" · "))}</span><h3 class="devlog-title">${esc(e.title)}</h3><p class="note-excerpt">${esc(excerpt)}</p>
     ${has(e.retro) ? `<details class="note-details"><summary>기획 과정 읽기 <span>＋</span></summary><p class="devlog-retro">${esc(e.retro)}</p></details>` : ""}
     ${has(e.fileHref) ? `<a class="devlog-file" href="${attr(resolve(e.fileHref, prefix))}" target="_blank" rel="noopener">${esc(e.fileLabel || "자료 보기")} ↗</a>` : ""}
   </article>`.replace(/^[ \t]+$/gm, "");
@@ -259,22 +259,22 @@ function sortedDevlogEntries(dl) {
 function devlogSection(dl, prefix) {
   const sorted = sortedDevlogEntries(dl);
   if (!sorted.length) return "";
-  const genres = new Map(), projects = new Map();
-  sorted.forEach(e => { const g=e.genre || "공통 기획 · 제작"; genres.set(g,(genres.get(g)||0)+1); if(e.project) projects.set(e.project,(projects.get(e.project)||0)+1); });
+  const genres = new Map(), projects = new Map(), cats = new Map();
+  sorted.forEach(e => { const g=e.genre || "공통 기획 · 제작"; genres.set(g,(genres.get(g)||0)+1); if(e.project) projects.set(e.project,(projects.get(e.project)||0)+1); if(e.category) cats.set(e.category,(cats.get(e.category)||0)+1); });
   const genreChips=[...genres].sort((a,b)=>b[1]-a[1]);
   return `<section class="project notes-studio" id="notes"><div class="wrap">
     <div class="notes-heading"><div><div class="eyebrow">DESIGN JOURNAL</div><h1>${esc(dl.heading || "기획 노트")}</h1><p class="section-lead">${esc(dl.lead)}</p></div><div class="notes-count"><strong>${sorted.length}</strong><span>개의 작업 기록</span></div></div>
-    <div class="notes-controls"><span class="filter-caption">장르로 찾아보기</span><div class="devlog-filter" id="devlogFilter"><button type="button" class="dl-chip is-on" data-genre="" aria-pressed="true">전체 <b>${sorted.length}</b></button>${genreChips.map(([g,n])=>`<button type="button" class="dl-chip" data-genre="${attr(g)}" aria-pressed="false">${esc(g)} <b>${n}</b></button>`).join("")}</div><div class="notes-search-row"><label>프로젝트<select id="noteProject"><option value="">전체 프로젝트</option>${[...projects].map(([p,n])=>`<option value="${attr(p)}">${esc(p)} (${n})</option>`).join("")}</select></label><label class="note-search">글 검색<input type="search" id="noteSearch" placeholder="제목, 게임 이름, 기획 내용 검색"></label><button type="button" id="noteReset">필터 초기화</button></div></div>
+    <div class="notes-controls"><span class="filter-caption">장르로 찾아보기</span><div class="devlog-filter" id="devlogFilter"><button type="button" class="dl-chip is-on" data-genre="" aria-pressed="true">전체 <b>${sorted.length}</b></button>${genreChips.map(([g,n])=>`<button type="button" class="dl-chip" data-genre="${attr(g)}" aria-pressed="false">${esc(g)} <b>${n}</b></button>`).join("")}</div><div class="notes-search-row"><label>프로젝트<select id="noteProject"><option value="">전체 프로젝트</option>${[...projects].map(([p,n])=>`<option value="${attr(p)}">${esc(p)} (${n})</option>`).join("")}</select></label>${cats.size?`<label>작업 종류<select id="noteCat"><option value="">전체 작업</option>${[...cats].sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<option value="${attr(c)}">${esc(c)} (${n})</option>`).join("")}</select></label>`:""}<label class="note-search">글 검색<input type="search" id="noteSearch" placeholder="제목, 게임 이름, 기획 내용 검색"></label><button type="button" id="noteReset">필터 초기화</button></div></div>
     <p id="noteResult" class="note-result" role="status">전체 ${sorted.length}개의 기록</p><div class="devlog-list note-grid" id="devlogList">${sorted.map((e,i)=>devlogEntry(e,prefix,`note-${i}`)).join("\n")}</div><p class="devlog-empty" id="devlogEmpty" hidden>조건에 맞는 글이 없습니다. 다른 장르를 고르거나 필터를 초기화해 보세요.</p>
   </div></section>`;
 }
 function devlogScript() {
  return `<script>(function(){
  const bar=document.getElementById('devlogFilter'); if(!bar)return;
- const project=document.getElementById('noteProject'), search=document.getElementById('noteSearch'), cards=[...document.querySelectorAll('.note-card')];let genre='';
- function apply(){let shown=0;const q=search.value.trim().toLocaleLowerCase();cards.forEach(el=>{const on=(!genre||el.dataset.genre===genre)&&(!project.value||el.dataset.tag===project.value)&&(!q||el.textContent.toLocaleLowerCase().includes(q));el.hidden=!on;if(on)shown++;});document.getElementById('devlogEmpty').hidden=shown>0;document.getElementById('noteResult').textContent=shown+'개의 기록'+(genre?' · '+genre:'');bar.querySelectorAll('button').forEach(b=>{const on=b.dataset.genre===genre;b.classList.toggle('is-on',on);b.setAttribute('aria-pressed',String(on));});}
- bar.addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){genre=b.dataset.genre;apply();}});project.addEventListener('change',apply);search.addEventListener('input',apply);document.getElementById('noteReset').addEventListener('click',()=>{genre='';project.value='';search.value='';apply();});
- function openHash(){const el=document.getElementById(location.hash.slice(1));if(el&&el.classList.contains('note-card')){genre='';project.value='';search.value='';apply();const d=el.querySelector('details');if(d)d.open=true;el.scrollIntoView();}}window.addEventListener('hashchange',openHash);const params=new URLSearchParams(location.search);if(params.has('project')){project.value=params.get('project');apply();}if(location.hash)setTimeout(openHash,100);
+ const project=document.getElementById('noteProject'), search=document.getElementById('noteSearch'),cat=document.getElementById('noteCat')||{value:'',addEventListener(){}}, cards=[...document.querySelectorAll('.note-card')];let genre='';
+ function apply(){let shown=0;const q=search.value.trim().toLocaleLowerCase();cards.forEach(el=>{const on=(!genre||el.dataset.genre===genre)&&(!project.value||el.dataset.tag===project.value)&&(!cat.value||el.dataset.cat===cat.value)&&(!q||el.textContent.toLocaleLowerCase().includes(q));el.hidden=!on;if(on)shown++;});document.getElementById('devlogEmpty').hidden=shown>0;document.getElementById('noteResult').textContent=shown+'개의 기록'+(genre?' · '+genre:'');bar.querySelectorAll('button').forEach(b=>{const on=b.dataset.genre===genre;b.classList.toggle('is-on',on);b.setAttribute('aria-pressed',String(on));});}
+ bar.addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){genre=b.dataset.genre;apply();}});project.addEventListener('change',apply);cat.addEventListener('change',apply);search.addEventListener('input',apply);document.getElementById('noteReset').addEventListener('click',()=>{genre='';project.value='';cat.value='';search.value='';apply();});
+ function openHash(){const el=document.getElementById(location.hash.slice(1));if(el&&el.classList.contains('note-card')){genre='';project.value='';cat.value='';search.value='';apply();const d=el.querySelector('details');if(d)d.open=true;el.scrollIntoView();}}window.addEventListener('hashchange',openHash);const params=new URLSearchParams(location.search);if(params.has('project')){project.value=params.get('project');apply();}if(params.has('category')){cat.value=params.get('category');apply();}if(location.hash)setTimeout(openHash,100);
  })();</script>`;
 }
 

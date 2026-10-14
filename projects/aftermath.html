@@ -604,6 +604,8 @@
 @media(max-width:760px){.portfolio-overview{padding-top:100px}.overview-hero{grid-template-columns:1fr;gap:18px;padding-top:8px}.overview-identity{gap:16px}.overview-identity>img{width:72px;height:96px}.overview-hero h1{font-size:26px}.overview-hero p{font-size:13px}.overview-facts{border:0;padding:16px;background:var(--mint);border-radius:10px}.overview-facts p{font-size:12px}.overview-projects{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.overview-project-image{height:86px}.overview-heading{gap:10px}.overview-heading h2{font-size:18px;gap:10px}.overview-heading h2>span{font-size:17px}.overview-heading>a{font-size:10px}.overview-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}.overview-tool-category>div{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-tool .tool-icon-wrap{width:45px;height:45px}.overview-bottom{grid-template-columns:1fr;gap:0}.overview-story,.overview-methods{grid-template-columns:1fr}.overview-stats strong{font-size:19px}.overview-education article{padding:16px}.overview-section{padding:22px 0}.overview-hero .eyebrow{font-size:8px}.overview-project h3{font-size:13px}.overview-project p{font-size:9px}}
 .portfolio-overview{--mint:#e8f5ef;--pink:#faeaf1;--lavender:#efebfa} :root[data-theme="dark"] .portfolio-overview{--mint:#17362c;--pink:#382332;--lavender:#2b2540}.overview-platforms button{min-height:36px}.overview-tool{min-height:78px}.overview-genre{min-height:24px}a:focus-visible{outline:2px solid var(--solid);outline-offset:4px}.overview-project-image img{object-position:center}
 .overview-resume{margin-top:16px;font-size:12px;padding:10px 16px}
+/* 좁은 폰(320px)에서 게임 경험 차트가 1px 넘치던 것: 그리드 칸이 내용 폭 밑으로 줄어들게 한다 */
+.experience-visuals>figure{min-width:0}@media(max-width:760px){.platform-chart{grid-template-columns:minmax(0,150px) minmax(0,1fr)}}
 
 </style>
 </head>
@@ -657,8 +659,8 @@
 
 
       <figure class="wide-shot">
-        <img src="../assets/aftermath/map-overview.png" alt="Aftermath 프로젝트 소개 이미지" loading="lazy">
-        <figcaption>Aftermath 맵 블록아웃 자료 · 완성 화면이 아닌 개발 중 레벨 구조</figcaption>
+        <img src="../assets/aftermath/cover.webp" alt="Aftermath 게임 컨셉 발표 표지 — 국왕·귀족·기사 세 역할 아이콘" loading="lazy">
+        <figcaption>게임 컨셉 발표 표지 · 한 명이라도 빠지면, 성은 무너진다</figcaption>
       </figure>
 
       <div class="detail-list">
@@ -682,6 +684,31 @@
           <dt>상태</dt>
           <dd>팀 개발 진행 중입니다. 구현된 내용과 팀 검토 전 기획안을 구분하며 레벨·웨이브를 개선하고 있습니다.</dd>
         </div>
+      </div>
+
+      <div class="gallery gallery-natural">
+        <figure>
+          <img src="../assets/aftermath/spawn-map.webp" alt="8방향 스폰 지점 24곳과 거점 고리 도해" loading="lazy">
+          <figcaption>160×160칸 생성형 맵 · 8방향 스폰 지점 24곳과 점령지·토벌 기지 고리</figcaption>
+        </figure>
+        <figure>
+          <img src="../assets/aftermath/wave-curve.webp" alt="12일 적 수와 난이도 곡선 그래프" loading="lazy">
+          <figcaption>아군 성장에서 거꾸로 계산한 12일 웨이브 곡선 (10/14 하향 전 값)</figcaption>
+        </figure>
+        <figure>
+          <img src="../assets/aftermath/outpost-capture.webp" alt="점령지 소형 성채 평면도" loading="lazy">
+          <figcaption>점령지 소형 성채 · 돌담, 입구 2곳, 수비대 자리</figcaption>
+        </figure>
+        <figure>
+          <img src="../assets/aftermath/outpost-hunt.webp" alt="토벌 기지 세력 3종 평면도" loading="lazy">
+          <figcaption>토벌 기지 세력 3종 · 입구 수와 병과 비율로 구분</figcaption>
+        </figure>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="../files/devlog/20261014_Aftermath_레벨디자인변경이력_최지환.pdf" target="_blank" rel="noopener">레벨 디자인 변경 이력 PDF ↗</a>
+        <a class="btn btn-outline" href="../files/devlog/20261014_Aftermath_개발봇AI_최지환.pdf" target="_blank" rel="noopener">개발 봇 AI 기획서 PDF ↗</a>
+        <a class="btn btn-outline" href="../notes.html?project=Aftermath">관련 기획 노트</a>
       </div>
     </div>
   </section>

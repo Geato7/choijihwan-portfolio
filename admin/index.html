@@ -787,6 +787,8 @@ function devlogGroup() {
         box.append(field("날짜", e, "date", { placeholder: "2026-08-31", hint: "YYYY-MM-DD 형식 — 최신 날짜가 위로 올라갑니다" }));
         box.append(field("제목", e, "title", { hint: "비워두면 이 글이 사이트에서 사라집니다" }));
         box.append(field("연결 프로젝트 (태그)", e, "project", { placeholder: "BELIEF" }));
+        box.append(field("작업 종류", e, "category", { placeholder: "레벨 디자인", hint: "기획 노트의 작업 종류 필터에 쓰입니다" }));
+        box.append(field("장르", e, "genre", { placeholder: "전략 · 시뮬레이션", hint: "비워두면 '공통 기획 · 제작'" }));
         box.append(field("회고", e, "retro", { multiline: true }));
         box.append(fileField("첨부 파일", e, "fileHref"));
         box.append(field("파일 버튼 이름", e, "fileLabel", { placeholder: "예: 기획서 PDF 보기" }));
@@ -797,7 +799,7 @@ function devlogGroup() {
 }
 
 function newDevlogEntry() {
-  return { date: new Date().toISOString().slice(0, 10), title: "", project: "", retro: "", fileHref: "", fileLabel: "" };
+  return { date: new Date().toISOString().slice(0, 10), title: "", project: "", category: "", genre: "", retro: "", fileHref: "", fileLabel: "" };
 }
 
 function newProject() {

@@ -604,6 +604,8 @@
 @media(max-width:760px){.portfolio-overview{padding-top:100px}.overview-hero{grid-template-columns:1fr;gap:18px;padding-top:8px}.overview-identity{gap:16px}.overview-identity>img{width:72px;height:96px}.overview-hero h1{font-size:26px}.overview-hero p{font-size:13px}.overview-facts{border:0;padding:16px;background:var(--mint);border-radius:10px}.overview-facts p{font-size:12px}.overview-projects{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.overview-project-image{height:86px}.overview-heading{gap:10px}.overview-heading h2{font-size:18px;gap:10px}.overview-heading h2>span{font-size:17px}.overview-heading>a{font-size:10px}.overview-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}.overview-tool-category>div{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-tool .tool-icon-wrap{width:45px;height:45px}.overview-bottom{grid-template-columns:1fr;gap:0}.overview-story,.overview-methods{grid-template-columns:1fr}.overview-stats strong{font-size:19px}.overview-education article{padding:16px}.overview-section{padding:22px 0}.overview-hero .eyebrow{font-size:8px}.overview-project h3{font-size:13px}.overview-project p{font-size:9px}}
 .portfolio-overview{--mint:#e8f5ef;--pink:#faeaf1;--lavender:#efebfa} :root[data-theme="dark"] .portfolio-overview{--mint:#17362c;--pink:#382332;--lavender:#2b2540}.overview-platforms button{min-height:36px}.overview-tool{min-height:78px}.overview-genre{min-height:24px}a:focus-visible{outline:2px solid var(--solid);outline-offset:4px}.overview-project-image img{object-position:center}
 .overview-resume{margin-top:16px;font-size:12px;padding:10px 16px}
+/* 좁은 폰(320px)에서 게임 경험 차트가 1px 넘치던 것: 그리드 칸이 내용 폭 밑으로 줄어들게 한다 */
+.experience-visuals>figure{min-width:0}@media(max-width:760px){.platform-chart{grid-template-columns:minmax(0,150px) minmax(0,1fr)}}
 
 </style>
 </head>
@@ -644,7 +646,7 @@
       <p class="index-lead">게임과 앱 프로젝트를 플랫폼과 작업 유형으로 정리했습니다. 카드를 누르면 소개와 담당 작업을 볼 수 있습니다.</p>
       <div class="index-grid">
         <a class="pcard" href="projects/flower-rush.html">
-          <span class="pcard-thumb"><img src="assets/flower-rush/gameplay-background.png" alt="" loading="lazy"></span>
+          <span class="pcard-thumb"><img src="assets/flower-rush/gameplay-background.webp" alt="" loading="lazy"></span>
           <span class="pcard-body">
             <span class="pcard-num">ZEPETO WORLD · 출시 · 2026.09 출시</span>
             <span class="pcard-title">Flower Rush</span>
@@ -660,7 +662,7 @@
           </span>
         </a>
         <a class="pcard" href="projects/aftermath.html">
-          <span class="pcard-thumb"><img src="assets/aftermath/map-overview.png" alt="" loading="lazy"></span>
+          <span class="pcard-thumb"><img src="assets/aftermath/cover.webp" alt="" loading="lazy"></span>
           <span class="pcard-body">
             <span class="pcard-num">TEAM PROJECT · 개발 중 · 2026.09 – 진행 중</span>
             <span class="pcard-title">Aftermath</span>
@@ -676,7 +678,7 @@
           </span>
         </a>
         <a class="pcard" href="projects/belief.html">
-          <span class="pcard-thumb"><img src="assets/belief/01_title.jpg" alt="" loading="lazy"></span>
+          <span class="pcard-thumb"><img src="assets/belief/01_title.webp" alt="" loading="lazy"></span>
           <span class="pcard-body">
             <span class="pcard-num">01 — HACKATHON · 2026.07 – 08</span>
             <span class="pcard-title">BELIEF</span>
@@ -684,7 +686,7 @@
           </span>
         </a>
         <a class="pcard" href="projects/mabinogi.html">
-          <span class="pcard-thumb"><img src="assets/mabinogi/01_floorplan.jpg" alt="" loading="lazy"></span>
+          <span class="pcard-thumb"><img src="assets/mabinogi/01_floorplan.webp" alt="" loading="lazy"></span>
           <span class="pcard-body">
             <span class="pcard-num">03 — LEVEL DESIGN · 2026.06</span>
             <span class="pcard-title">해룡의 둥지</span>
@@ -692,7 +694,7 @@
           </span>
         </a>
         <a class="pcard" href="projects/sos.html">
-          <span class="pcard-thumb"><img src="assets/sos/title.jpg" alt="" loading="lazy"></span>
+          <span class="pcard-thumb"><img src="assets/sos/title.webp" alt="" loading="lazy"></span>
           <span class="pcard-body">
             <span class="pcard-num">04 — TEAM PROJECT · 2026.06</span>
             <span class="pcard-title">SOS: Sands Of Sin</span>
@@ -700,7 +702,7 @@
           </span>
         </a>
         <a class="pcard" href="projects/broken-cradle.html">
-          <span class="pcard-thumb"><img src="assets/broken-cradle/01_title.jpg" alt="" loading="lazy"></span>
+          <span class="pcard-thumb"><img src="assets/broken-cradle/01_title.webp" alt="" loading="lazy"></span>
           <span class="pcard-body">
             <span class="pcard-num">05 — TEAM PROJECT · 2026.04</span>
             <span class="pcard-title">부서진 요람</span>
@@ -708,7 +710,7 @@
           </span>
         </a>
         <a class="pcard" href="projects/elvenea.html">
-          <span class="pcard-thumb"><img src="assets/elvenea/main_visual.jpg" alt="" loading="lazy"></span>
+          <span class="pcard-thumb"><img src="assets/elvenea/main_visual.webp" alt="" loading="lazy"></span>
           <span class="pcard-body">
             <span class="pcard-num">06 — GRADUATION PROJECT · 2025.10</span>
             <span class="pcard-title">엘브네아</span>
