@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aftermath — 최지환</title>
-<meta name="description" content="국왕·귀족·기사의 3인 협동 디펜스 — 레벨·웨이브·데이터 설계">
+<meta name="description" content="국왕·귀족·기사의 3인 협동 디펜스 — 팀장·레벨 디자인, 맵 생성과 검증">
 <link rel="canonical" href="https://geato7.github.io/choijihwan-portfolio/projects/aftermath.html">
 <meta name="theme-color" content="#ffffff">
 
@@ -18,7 +18,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="최지환 — Game Designer Portfolio">
 <meta property="og:title" content="Aftermath — 최지환">
-<meta property="og:description" content="국왕·귀족·기사의 3인 협동 디펜스 — 레벨·웨이브·데이터 설계">
+<meta property="og:description" content="국왕·귀족·기사의 3인 협동 디펜스 — 팀장·레벨 디자인, 맵 생성과 검증">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:url" content="https://geato7.github.io/choijihwan-portfolio/projects/aftermath.html">
 <meta property="og:image" content="https://geato7.github.io/choijihwan-portfolio/og-image.png?v=2">
@@ -28,7 +28,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Aftermath — 최지환">
-<meta name="twitter:description" content="국왕·귀족·기사의 3인 협동 디펜스 — 레벨·웨이브·데이터 설계">
+<meta name="twitter:description" content="국왕·귀족·기사의 3인 협동 디펜스 — 팀장·레벨 디자인, 맵 생성과 검증">
 <meta name="twitter:image" content="https://geato7.github.io/choijihwan-portfolio/og-image.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -646,8 +646,8 @@
       <div class="section-head">
         <div class="section-num">TEAM PROJECT · 개발 중 · <span class="section-date">2026.09 – 진행 중</span></div>
         <h2>Aftermath</h2>
-        <div class="role">레벨 디자인 · 웨이브 및 데이터 설계</div>
-        <p class="section-lead">국왕·귀족·기사 세 역할이 각자의 자원과 기능을 활용해 본성을 지키는 온라인 협동 타워 디펜스입니다. 낮의 준비와 밤의 방어전을 연결하며, 역할 간 협업과 맵·거점의 선택을 설계하는 팀 프로젝트입니다.</p>
+        <div class="role">팀장/PD · 레벨 디자인 · 통합</div>
+        <p class="section-lead">국왕·귀족·기사 세 역할이 각자의 자원과 기능을 활용해 본성을 지키는 온라인 협동 타워 디펜스입니다. 낮의 준비와 밤의 방어전을 연결하며, 역할 간 협업과 맵·거점의 선택을 설계하는 5인 팀 프로젝트입니다. 저는 팀장이자 레벨 디자인 담당으로 맵·웨이브·거점을 기획하고, AI 에이전트와 함께 구현과 검증까지 이어 왔습니다.</p>
         <div class="tags section-tags">
           <span class="tag">레벨 디자인</span>
           <span class="tag">경제 설계</span>
@@ -658,10 +658,32 @@
 
 
 
+      <div class="my-part">
+        <div class="mp-label">MY PART</div>
+        <h3>팀장/PD · 레벨 디자인 · 통합</h3>
+        <p>맵·웨이브·거점 기획을 맡고, 기획이 실제 게임에 들어갔는지 확인하는 일까지 이어서 했습니다. 문서와 구현 초안의 상당 부분은 AI 에이전트로 만들었고, 방향과 범위는 제가 정했습니다. 대부분의 수치와 문서는 아직 초안이거나 팀 승인 전이라, 결정과 초안을 문서마다 구분해 적었습니다.</p>
+        <ul>
+          <li><b>맵 구조를 전제가 바뀔 때마다 다시 설계</b> — 레인 2개 고정 맵에서 60×60칸 프로토타입, 160칸 생성형, 240칸 A/B 유형을 거쳐 지금의 360칸 맵까지 왔습니다. 11월 3일 플레이테스트에서 '거점이 너무 붙어 있다'는 피드백을 받고 한 변을 1.5배로 넓혔습니다.</li>
+          <li><b>넓힌 맵의 밀도를 규칙으로 채우기</b> — 걸어가는 동안 20~30초마다 무언가를 만나도록 기준을 정했습니다. 면적 비례(56곳) 대신 필드 캠프 38곳을 구역별 4/8/12/14로 나누고, 구역마다 세력과 지형 분위기를 다르게 했습니다.</li>
+          <li><b>무작위 맵이 공정한지 시드로 검증</b> — 경로 길이 공정성, 도달 가능성, 통로 폭을 생성 뒤 검사합니다. 시드 1~100에서 결정성 실패와 규칙 위반 0건을 확인했습니다.</li>
+          <li><b>웨이브와 거점을 아군 성장에서 거꾸로 계산</b> — W001은 아군이 얼마나 강해질지를 먼저 정한 뒤 12일 적 규모를 계산했고, L002는 거점 안쪽 공간을 정했습니다. 토벌 기지는 10월 19일 결정으로 폐지되어, 해당 설계는 기록으로 남아 있습니다.</li>
+          <li><b>3인 협동을 혼자 측정할 수 있는 봇</b> — 사람과 같은 입력으로 세 역할을 플레이하는 개발 봇과 배치 실행 도구를 만들었습니다. 봇 결과는 막힌 경로를 찾는 데 쓰고, 난이도 판단의 근거로는 쓰지 않았습니다.</li>
+          <li><b>다섯 명과 AI가 함께 일하는 규칙</b> — 파일별 담당을 사람별 작업 공간 소유로 바꾸고, 공용 브랜치에는 PR로만 들어가게 했습니다. 승인 기획과 명세를 대조해 충돌 38건을 정리했고, 답이 없는 항목은 억지로 채우지 않고 팀에 물었습니다.</li>
+          <li><b>AI와 역할을 나누는 방식</b> — AI에게는 문서 초안, 구현, 측정 실행을 맡기고 맵의 방향과 범위는 제가 정했습니다. 추천값은 ASSUMPTION으로 표시하고, 실행하지 않은 검증은 통과로 적지 않았습니다.</li>
+        </ul>
+      </div>
+
       <figure class="wide-shot">
         <img src="../assets/aftermath/title.webp" alt="Aftermath 타이틀 화면 시안 — 석양 아래 성채와 금광, 숲" loading="lazy">
         <figcaption>타이틀 화면 시안 · 메인 메뉴 배경과 로고 (개발 중 픽셀 아트)</figcaption>
       </figure>
+
+      <div class="stat-row">
+        <div class="stat"><div class="num">360×360</div><div class="lbl">칸 생성형 맵 (240칸에서 1.5배 확대)</div></div>
+        <div class="stat"><div class="num">100시드</div><div class="lbl">맵 검증 · 결정성 실패·규칙 위반 0건</div></div>
+        <div class="stat"><div class="num">2판</div><div class="lbl">개발 봇 12일 완주 · 경로 실패 0건</div></div>
+        <div class="stat"><div class="num">38건</div><div class="lbl">승인 기획과 명세의 충돌 대조</div></div>
+      </div>
 
       <div class="detail-list">
         <div class="detail-row">
@@ -670,26 +692,26 @@
         </div>
         <div class="detail-row">
           <dt>레벨 기획</dt>
-          <dd>본편 맵과 점령지·토벌 기지의 공간을 설계합니다. 거점의 입구, 수비대 배치, 원정과 귀환 동선을 문서와 구현 단위로 정리했습니다.</dd>
+          <dd>본편 맵은 시드로 만드는 360×360칸 생성형입니다. 본성을 중심으로 구역 4개를 두고 점령지 36곳, 필드 캠프 38곳을 배치합니다. 본성 둘레에는 돌담과 네 변의 문을 두어 벽 한 줄로 막을 수 있는 초크를 만들었습니다.</dd>
         </div>
         <div class="detail-row">
           <dt>수치와 검증</dt>
-          <dd>경제 흐름, 웨이브와 적 역할, 거점 수치와 데이터 테이블을 정리하고 계산·시뮬레이션으로 불균형을 점검했습니다.</dd>
+          <dd>경제 흐름과 12일 수지, 승격 면적을 계산하고, 시드별 맵 검사와 개발 봇 판으로 확인했습니다. 봇 12일 완주는 맵과 진행이 끝까지 도는지 본 것이며 난이도의 근거로 쓰지 않습니다.</dd>
         </div>
         <div class="detail-row">
           <dt>협업 방식</dt>
-          <dd>팀 명세와 레벨·웨이브 문서의 연결 관계를 관리하고, 구현 중 드러난 충돌과 확인이 필요한 값을 결정 기록으로 남겼습니다.</dd>
+          <dd>팀 명세와 레벨·웨이브 문서의 연결 관계를 관리하고, 구현 중 드러난 충돌과 확인이 필요한 값을 결정 기록으로 남겼습니다. 작업 공간 단위 소유와 PR 규칙을 팀 합의로 정했습니다.</dd>
         </div>
         <div class="detail-row">
           <dt>상태</dt>
-          <dd>팀 개발 진행 중입니다. 구현된 내용과 팀 검토 전 기획안을 구분하며 레벨·웨이브를 개선하고 있습니다.</dd>
+          <dd>팀 개발 진행 중입니다. 11월 3일 플레이테스트 피드백을 반영하고 있습니다. 대부분의 값은 팀 승인 전 초안이고, 3인 사람 판에서의 체감과 일부 화면은 아직 확인이 남아 있습니다.</dd>
         </div>
       </div>
 
       <div class="gallery gallery-natural">
         <figure>
           <img src="../assets/aftermath/spawn-map.webp" alt="8방향 스폰 지점 24곳과 거점 고리 도해" loading="lazy">
-          <figcaption>160×160칸 생성형 맵 · 8방향 스폰 지점 24곳과 점령지·토벌 기지 고리</figcaption>
+          <figcaption>초기 160×160칸 생성형 맵 · 8방향 스폰 지점 24곳과 점령지·토벌 기지 고리 (10월 초 설계, 현재 360칸)</figcaption>
         </figure>
         <figure>
           <img src="../assets/aftermath/wave-curve.webp" alt="12일 적 수와 난이도 곡선 그래프" loading="lazy">
@@ -701,7 +723,7 @@
         </figure>
         <figure>
           <img src="../assets/aftermath/outpost-hunt.webp" alt="토벌 기지 세력 3종 평면도" loading="lazy">
-          <figcaption>토벌 기지 세력 3종 · 입구 수와 병과 비율로 구분</figcaption>
+          <figcaption>토벌 기지 세력 3종 · 입구 수와 병과 비율로 구분 (10월 19일 폐지 전 설계)</figcaption>
         </figure>
       </div>
 
