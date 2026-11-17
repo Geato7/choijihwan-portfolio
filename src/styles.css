@@ -548,3 +548,4 @@
 .overview-resume{margin-top:16px;font-size:12px;padding:10px 16px}
 /* 좁은 폰(320px)에서 게임 경험 차트가 1px 넘치던 것: 그리드 칸이 내용 폭 밑으로 줄어들게 한다 */
 .experience-visuals>figure{min-width:0}@media(max-width:760px){.platform-chart{grid-template-columns:minmax(0,150px) minmax(0,1fr)}}
+  .play-heading .cta-row{margin:18px 0 28px;}

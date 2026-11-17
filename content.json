@@ -2203,6 +2203,14 @@
     "heading": "게임 경험",
     "role": "온라인 27 · 모바일 7 · 그 외 32 — 총 66개 타이틀",
     "lead": "66개 타이틀에서 쌓은 경험을 장르별로 정리했습니다. 오래 즐긴 게임과 시간 기록을 살펴보고, 관심 있는 장르의 전체 이력을 찾아보세요.",
+    "buttons": [
+      {
+        "label": "Steam 2025 연말 결산 보기 ↗",
+        "href": "https://s.team/y25/kjkhvff?l=koreana",
+        "style": "outline",
+        "newTab": true
+      }
+    ],
     "stats": [
       {
         "num": "66개",
